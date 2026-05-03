@@ -1,54 +1,92 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+import { COLORS } from '../../../../constants/colors';
+import { FONT_WEIGHT } from '../../../../constants/typography';
+
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
-    paddingHorizontal: 24,
-    paddingTop: 60,
+    backgroundColor: COLORS.white,
   },
+
+  header: {
+    height: '32%',
+    position: 'relative',
+  },
+
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
+  },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: COLORS.primary,
+    opacity: 0.85,
+  },
+
+  logoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  logo: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+  },
+
+  formContainer: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+    padding: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+
   title: {
     fontSize: 28,
-    fontWeight: "800",
-    marginBottom: 8,
-    color: "#000",
+    fontWeight: FONT_WEIGHT.bold,
+    color: COLORS.text,
+    marginBottom: 6,
   },
-  subtitle: {
-    fontSize: 16,
-    color: "#64748B",
-    marginBottom: 32,
-  },
-  form: {
-    gap: 20,
-  },
-  inputContainer: {
-    gap: 8,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#334155",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#CBD5E1",
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: "#FFFFFF",
-  },
-  button: {
-    backgroundColor: "#2563EB",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 12,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-});
 
-export default styles;
+  subtitle: {
+    fontSize: 14,
+    fontWeight: FONT_WEIGHT.regular,
+    color: COLORS.text,
+    marginBottom: 24,
+  },
+
+  formTitle: {
+    fontSize: 18,
+    fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.text,
+    marginBottom: 16,
+  },
+
+  inputLabel: {
+    fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.text,
+  },
+
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: COLORS.gray,
+  },
+
+  dividerText: {
+    marginHorizontal: 10,
+    color: COLORS.text,
+  },
+
+});
