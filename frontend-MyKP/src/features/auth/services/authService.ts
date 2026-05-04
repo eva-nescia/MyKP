@@ -1,6 +1,6 @@
 import { LoginPayload, AuthResponse } from '../model/auth.types';
 
-const API_URL = 'https://your-api-url.com/api'; // TODO: replace with Laravel API
+const API_URL = 'http://192.168.1.8:8000/api';
 
 export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
   try {

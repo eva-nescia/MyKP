@@ -3,6 +3,7 @@ import {
   View,
   Text,
   Image,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
@@ -24,14 +25,18 @@ const LoginScreen = ({ navigation }: any) => {
   const handleLogin = async () => {
     console.log("LOGIN BUTTON PRESSED");
 
-    const userRole: 'student' | 'admin' =
-      email === 'admin' ? 'admin' : 'student';
+    try {
+      const response = await login({ email, password });
+      const userRole = response.user.role;
 
-    if (userRole === 'admin') {
-      navigation.replace('AdminStack');
-    } else {
-      console.log("NAVIGATING TO DASHBOARD");
-      navigation.replace('StudentStack');
+      if (userRole === 'admin') {
+        navigation.replace('AdminStack');
+      } else {
+        console.log("NAVIGATING TO DASHBOARD");
+        navigation.replace('StudentStack');
+      }
+    } catch {
+      Alert.alert('Login failed', 'Please check your email and password.');
     }
   };
 
