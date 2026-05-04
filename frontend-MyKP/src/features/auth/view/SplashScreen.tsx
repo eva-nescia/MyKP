@@ -10,7 +10,7 @@ export default function SplashScreen() {
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Start animation
+    // start animation
     Animated.parallel([
       Animated.spring(scale, {
         toValue: 1,
