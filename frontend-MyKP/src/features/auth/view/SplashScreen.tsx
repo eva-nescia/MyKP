@@ -1,11 +1,11 @@
 import { View, Image, Animated } from "react-native";
 import { useEffect, useRef } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 
 import styles from "./styles/Splash.styles";
 
 export default function SplashScreen() {
-  const navigation = useNavigation<any>();
+  const router = useRouter();
   const scale = useRef(new Animated.Value(0.8)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
@@ -41,21 +41,21 @@ export default function SplashScreen() {
         const role = null;  // "student" | "admin"
 
         if (!token) {
-          navigation.replace("Login");
+          router.replace("/login");
           return;
         }
 
         if (role === "student") {
-          navigation.replace("StudentStack");
+          router.replace("/dashboard");
         } else if (role === "admin") {
-          navigation.replace("AdminStack");
+          router.replace("/admin");
         } else {
-          navigation.replace("Login");
+          router.replace("/login");
         }
 
       } catch (error) {
         console.log("Splash error:", error);
-        navigation.replace("Login");
+        router.replace("/login");
       }
     };
 
@@ -63,7 +63,7 @@ export default function SplashScreen() {
     setTimeout(() => {
       initApp();
     }, 1200);
-  }, [navigation]);
+  }, [router]);
 
   return (
     <View style={styles.container}>

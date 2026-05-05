@@ -1,3 +1,5 @@
-import AppNavigator from "../src/core/navigation/AppNavigator";
+import { Redirect } from "expo-router";
 
-export default AppNavigator;
+export default function IndexRoute() {
+	return <Redirect href="/splash" />;
+}

@@ -8,11 +8,16 @@ interface Props {
   title: string;
   onPress?: () => void;
   Icon: React.FC<any>;
+  disabled?: boolean;
 }
 
-const GoogleButton: React.FC<Props> = ({ title, onPress, Icon }) => {
+const GoogleButton: React.FC<Props> = ({ title, onPress, Icon, disabled = false }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.button, disabled && styles.disabledButton]}
+      onPress={onPress}
+      disabled={disabled}
+    >
       <View style={styles.content}>
         <Icon width={18} height={18} />
         <Text style={styles.text}>{title}</Text>
@@ -23,4 +28,3 @@ const GoogleButton: React.FC<Props> = ({ title, onPress, Icon }) => {
 
 
 export default GoogleButton;
-

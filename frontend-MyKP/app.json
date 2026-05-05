@@ -37,6 +37,12 @@
         }
       ]
     ],
+    "extra": {
+      "googleWebClientId": "193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com",
+      "googleAuthProxyRedirectUri": "https://auth.expo.io/@KeaneKen/frontend-MyKP",
+      "apiBaseUrl": "auto",
+      "apiPort": "8000"
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
