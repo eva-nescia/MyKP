@@ -20,7 +20,6 @@ export const styles = StyleSheet.create({
     color: COLORS.text,
   },
 
-  // ✅ HEADER
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
