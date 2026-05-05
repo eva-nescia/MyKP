@@ -19,7 +19,7 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        {/* hedaer */}
+        {/* header */}
         <DashboardHeader
           userName={data.userName}
           onPressNotification={() => {

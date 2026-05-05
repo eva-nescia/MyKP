@@ -13,7 +13,7 @@ export const fetchDashboard = async (): Promise<DashboardData> => {
             id: "1",
             title: "Seminar Bela Negara & Anti Narkoba",
             image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"), 
-            type: "Talkshow Wajib BMA",
+            type: "Talkshow Wajib",
             points: 6,
             date: "Sat, 29 November 2025",
           },

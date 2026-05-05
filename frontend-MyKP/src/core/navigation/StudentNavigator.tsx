@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, Text } from "react-native";
 
 import DashboardScreen from "src/features/student/dashboard/view/DashboardScreen";
+import ActivityListScreen from "@/features/student/activityList/view/ActivityListScreen";
 import { COLORS } from "@/constants/colors";
 
 import TabIcon from "src/components/navbar/TabIcon";
@@ -54,10 +55,16 @@ export default function StudentNavigator() {
         ),
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Activities">
-        {() => <Placeholder label="Activities" />}
-      </Tab.Screen>
+      <Tab.Screen 
+        name="Dashboard" 
+        component={DashboardScreen} 
+      />
+
+      <Tab.Screen
+        name="Activities"
+        component={ActivityListScreen}
+      />
+      
       <Tab.Screen name="Saved">
         {() => <Placeholder label="Saved" />}
       </Tab.Screen>
