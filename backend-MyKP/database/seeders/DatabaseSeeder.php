@@ -26,7 +26,5 @@ class DatabaseSeeder extends Seeder
             'Password' => 'password',
             'Role' => 'student',
         ]);
-
-        $this->call(ActivitySeeder::class);
     }
 }
