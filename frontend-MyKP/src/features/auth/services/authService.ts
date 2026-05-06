@@ -1,6 +1,8 @@
 import { LoginPayload, AuthResponse } from '../model/auth.types';
 
-const API_URL = 'http://192.168.1.8:8000/api';
+// const API_URL = 'http://192.168.1.8:8000/api';
+const API_URL = 'http://192.168.100.29:8000/api'; // michele wifi rumah
+// const API_URL = 'http://10.1.76.93/api'; // michele hotspot
 
 export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
   try {

@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { useRouter } from "expo-router";
 
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
 
@@ -18,25 +19,25 @@ import LoginButton from '../components/LoginBtn';
 import GoogleButton from '../components/GoogleBtn';
 import { login } from '../services/authService';
 
-const LoginScreen = ({ navigation }: any) => {
+const LoginScreen = () => {
+  const router = useRouter();
+
+  // ✅ FIX HERE
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    console.log("LOGIN BUTTON PRESSED");
-
     try {
       const response = await login({ email, password });
       const userRole = response.user.role;
 
-      if (userRole === 'admin') {
-        navigation.replace('AdminStack');
+      if (userRole === "admin") {
+        router.replace("/activities");
       } else {
-        console.log("NAVIGATING TO DASHBOARD");
-        navigation.replace('StudentStack');
+        router.replace("/dashboard");
       }
     } catch {
-      Alert.alert('Login failed', 'Please check your email and password.');
+      Alert.alert("Login failed", "Please check your email and password.");
     }
   };
 
@@ -101,7 +102,6 @@ const LoginScreen = ({ navigation }: any) => {
             Icon={GoogleIcon}
             onPress={() => {
               console.log('Google login pressed');
-              // TODO: integrate Google Auth
             }}
           />
         </View>
