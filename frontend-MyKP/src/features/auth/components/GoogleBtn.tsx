@@ -11,13 +11,9 @@ interface Props {
   disabled?: boolean;
 }
 
-const GoogleButton: React.FC<Props> = ({ title, onPress, Icon, disabled = false }) => {
+const GoogleButton: React.FC<Props> = ({ title, onPress, Icon, disabled }) => {
   return (
-    <TouchableOpacity
-      style={[styles.button, disabled && styles.disabledButton]}
-      onPress={onPress}
-      disabled={disabled}
-    >
+    <TouchableOpacity style={[styles.button, disabled && { opacity: 0.5 }]} onPress={onPress} disabled={disabled}>
       <View style={styles.content}>
         <Icon width={18} height={18} />
         <Text style={styles.text}>{title}</Text>
@@ -28,3 +24,4 @@ const GoogleButton: React.FC<Props> = ({ title, onPress, Icon, disabled = false 
 
 
 export default GoogleButton;
+

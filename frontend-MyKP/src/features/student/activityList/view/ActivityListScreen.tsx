@@ -3,8 +3,9 @@ import {
   Text,
   FlatList,
 } from "react-native";
-
 import { useState } from "react";
+import { useRouter } from "expo-router";
+
 import ActivityCard from "@/components/activityCard/ActivityCard";
 import SearchBar from "../components/SearchBar";
 import FilterDropdown from "../components/FilterDropdown";
@@ -14,6 +15,7 @@ import { styles } from "./styles/ActivityList.styles";
 export default function ActivityListScreen() {
   const vm = useActivityListViewModel();
   const [showFilter, setShowFilter] = useState(false);
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -35,7 +37,15 @@ export default function ActivityListScreen() {
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
-          <ActivityCard {...item} />
+          <ActivityCard
+            {...item}
+            onPress={() =>
+              router.push({
+                pathname: "/(student)/activities/details",
+                params: { id: item.id },
+              })
+            }
+          />
         )}
       />
 
