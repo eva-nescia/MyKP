@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,22 +9,62 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import Constants from 'expo-constants';
 
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 
 import { styles } from './styles/Login.styles';
 import InputField from '../components/InputField';
 import LoginButton from '../components/LoginBtn';
 import GoogleButton from '../components/GoogleBtn';
-import { login } from '../services/authService';
+import { login, googleLogin } from '../services/authService';
+
+// Must be called at module level so the auth redirect is handled on every render
+WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    console.log("LOGIN BUTTON PRESSED");
+  const googleClientId =
+    Constants.expoConfig?.extra?.googleClientId ??
+    '193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com';
 
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: googleClientId,
+    scopes: ['openid', 'profile', 'email'],
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const accessToken = response.authentication?.accessToken;
+      if (accessToken) {
+        handleGoogleAuth(accessToken);
+      } else {
+        Alert.alert('Google login failed', 'Could not retrieve token. Please try again.');
+      }
+    } else if (response?.type === 'error') {
+      console.error('Google OAuth error:', response.error);
+      Alert.alert('Google login failed', 'Authentication error. Please try again.');
+    }
+  }, [response]);
+
+  const handleGoogleAuth = async (accessToken: string) => {
+    try {
+      const res = await googleLogin(accessToken);
+      if (res.user.role === 'admin') {
+        navigation.replace('AdminStack');
+      } else {
+        navigation.replace('StudentStack');
+      }
+    } catch {
+      Alert.alert('Google login failed', 'Your Google account is not registered in the system.');
+    }
+  };
+
+  const handleLogin = async () => {
     try {
       const response = await login({ email, password });
       const userRole = response.user.role;
@@ -32,7 +72,6 @@ const LoginScreen = ({ navigation }: any) => {
       if (userRole === 'admin') {
         navigation.replace('AdminStack');
       } else {
-        console.log("NAVIGATING TO DASHBOARD");
         navigation.replace('StudentStack');
       }
     } catch {
@@ -99,10 +138,8 @@ const LoginScreen = ({ navigation }: any) => {
           <GoogleButton
             title="Continue with Google"
             Icon={GoogleIcon}
-            onPress={() => {
-              console.log('Google login pressed');
-              // TODO: integrate Google Auth
-            }}
+            onPress={() => promptAsync()}
+            disabled={!request}
           />
         </View>
       </KeyboardAvoidingView>
