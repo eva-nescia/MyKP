@@ -22,9 +22,34 @@ class DatabaseSeeder extends Seeder
         User::query()->create([
             'Name' => 'KenStudent',
             'NIM' => '1234567890',
-            'Email' => 'ken@student.ac.id',
+            'Email' => 'faatihkeane@gmail.com',
             'Password' => 'password',
             'Role' => 'student',
         ]);
+
+        User::query()->create([
+            'Name' => 'ExselStudent',
+            'NIM' => '89012345678',
+            'Email' => 'eoctaviand@student.ciputra.ac.id',
+            'Password' => 'password',
+            'Role' => 'student',
+        ]);
+
+        User::query()->create([
+            'Name' => 'MichelleStudent',
+            'NIM' => '78901234567',
+            'Email' => 'mstevany@student.ciputra.ac.id',
+            'Password' => 'password',
+            'Role' => 'student',
+        ]);
+
+        // Add your friend's Google account email here so they can log in
+        // User::query()->create([
+        //     'Name' => 'FriendName',
+        //     'NIM' => '0000000000',
+        //     'Email' => 'friends.google.email@gmail.com',
+        //     'Password' => 'password',
+        //     'Role' => 'student',
+        // ]);
     }
 }
