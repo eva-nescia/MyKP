@@ -5,6 +5,10 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface GoogleLoginPayload {
+  id_token: string;
+}
+
 export interface AuthResponse {
   token: string;
   user: {
