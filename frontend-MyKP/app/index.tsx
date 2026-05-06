@@ -1,3 +1,3 @@
-import AppNavigator from "../src/core/navigation/AppNavigator";
+import SplashScreen from "../src/features/auth/view/SplashScreen";
 
-export default AppNavigator;
+export default SplashScreen;
