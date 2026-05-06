@@ -13,8 +13,8 @@
     },
     "android": {
       "adaptiveIcon": {
-      "backgroundColor": "#E6F4FE"
-    },
+        "backgroundColor": "#E6F4FE"
+      },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -40,6 +40,9 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "googleClientId": "193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com"
     }
   }
 }

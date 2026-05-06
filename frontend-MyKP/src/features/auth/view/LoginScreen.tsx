@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,12 +12,17 @@ import {
 import { useRouter } from "expo-router";
 
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 
 import { styles } from './styles/Login.styles';
 import InputField from '../components/InputField';
 import LoginButton from '../components/LoginBtn';
 import GoogleButton from '../components/GoogleBtn';
-import { login } from '../services/authService';
+import { login, googleLogin } from '../services/authService';
+
+// Must be called at module level so the auth redirect is handled on every render
+WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
   const router = useRouter();
