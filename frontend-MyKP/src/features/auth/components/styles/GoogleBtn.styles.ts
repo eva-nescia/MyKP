@@ -12,6 +12,9 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.text,
     alignItems: 'center',
   },
+  disabledButton: {
+    opacity: 0.6,
+  },
 
   content: {
     flexDirection: 'row',

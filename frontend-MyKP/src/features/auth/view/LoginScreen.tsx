@@ -9,7 +9,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { useRouter } from "expo-router";
+import { useRouter } from 'expo-router';
+import Constants from 'expo-constants';
 
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
 import * as WebBrowser from 'expo-web-browser';
@@ -21,28 +22,60 @@ import LoginButton from '../components/LoginBtn';
 import GoogleButton from '../components/GoogleBtn';
 import { login, googleLogin } from '../services/authService';
 
-// Must be called at module level so the auth redirect is handled on every render
 WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
   const router = useRouter();
 
-  // ✅ FIX HERE
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const googleClientId =
+    Constants.expoConfig?.extra?.googleClientId ??
+    '193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com';
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: googleClientId,
+    scopes: ['openid', 'profile', 'email'],
+  });
+
+  const routeForRole = (role: string) => {
+    if (role === 'admin') {
+      router.replace('/activities');
+    } else {
+      router.replace('/dashboard');
+    }
+  };
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const accessToken = response.authentication?.accessToken;
+      if (accessToken) {
+        handleGoogleAuth(accessToken);
+      } else {
+        Alert.alert('Google login failed', 'Could not retrieve token. Please try again.');
+      }
+    } else if (response?.type === 'error') {
+      console.error('Google OAuth error:', response.error);
+      Alert.alert('Google login failed', 'Authentication error. Please try again.');
+    }
+  }, [response]);
+
+  const handleGoogleAuth = async (accessToken: string) => {
+    try {
+      const res = await googleLogin(accessToken);
+      routeForRole(res.user.role);
+    } catch {
+      Alert.alert('Google login failed', 'Your Google account is not registered in the system.');
+    }
+  };
+
   const handleLogin = async () => {
     try {
-      const response = await login({ email, password });
-      const userRole = response.user.role;
-
-      if (userRole === "admin") {
-        router.replace("/activities");
-      } else {
-        router.replace("/dashboard");
-      }
+      const res = await login({ email, password });
+      routeForRole(res.user.role);
     } catch {
-      Alert.alert("Login failed", "Please check your email and password.");
+      Alert.alert('Login failed', 'Please check your email and password.');
     }
   };
 
@@ -105,9 +138,8 @@ const LoginScreen = () => {
           <GoogleButton
             title="Continue with Google"
             Icon={GoogleIcon}
-            onPress={() => {
-              console.log('Google login pressed');
-            }}
+            onPress={() => promptAsync()}
+            disabled={!request}
           />
         </View>
       </KeyboardAvoidingView>

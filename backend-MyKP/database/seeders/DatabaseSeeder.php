@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         User::query()->create([
             'Name' => 'KenStudent',
             'NIM' => '1234567890',
-            'Email' => 'faatihkeane@gmail.com',
+            'Email' => 'kokonatyeye@gmail.com',
             'Password' => 'password',
             'Role' => 'student',
         ]);
