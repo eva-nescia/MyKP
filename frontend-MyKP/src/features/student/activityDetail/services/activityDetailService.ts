@@ -30,7 +30,7 @@ export const fetchActivityById = async (id: string): Promise<Activity> => {
 
       contactPerson: [
         "Jose BMA - 08123456789", 
-        "Patrick BMA -08123456789"],
+        "Patrick BMA - 08123456789"],
 
       registrationLink: "https://example.com",
     },

@@ -4,112 +4,178 @@ import {
   Pressable,
   View,
   Image,
-  Animated,
 } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import * as Linking from "expo-linking";
-import { useRef, useState } from "react";
+
+import {
+  useRouter,
+  useLocalSearchParams,
+} from "expo-router";
+
 import { Ionicons, Feather } from "@expo/vector-icons";
 
-import { useActivityDetailViewModel } from "@/features/student/activityDetail/viewmodel/useActivityDetailViewModel";
 import Section from "@/features/student/activityDetail/components/Section";
+
+import FloatingActionBar from "@/features/student/activityDetail/components/FloatingActionBar";
+
+import SaveActivityModal from "@/features/student/activityDetail/components/SaveActivityModal";
+
+import RegistrationModal from "@/features/student/activityDetail/components/RegistrationModal";
+
+import { useActivityDetailViewModel } from "@/features/student/activityDetail/viewmodel/useActivityDetailViewModel";
+
 import styles from "@/features/student/activityDetail/view/styles/ActivityDetail.styles";
 
 export default function ActivityDetailScreen() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { activity } = useActivityDetailViewModel(id as string);
 
-  const [saved, setSaved] = useState(false);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const { id } = useLocalSearchParams<{
+    id: string;
+  }>();
+
+  const {
+    activity,
+    saved,
+
+    saveMessage,
+
+    showSaveModal,
+    setShowSaveModal,
+
+    showLinkModal,
+    setShowLinkModal,
+
+    handleSave,
+    handleRegister,
+    confirmRegister,
+  } = useActivityDetailViewModel(id as string);
 
   if (!activity) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
         <Text>Loading...</Text>
       </View>
     );
   }
 
-  const openLink = () => {
-    if (activity.registrationLink) {
-      Linking.openURL(activity.registrationLink);
-    }
-  };
-
-  const handleSave = () => {
-    setSaved(!saved);
-
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 1.15,
-        duration: 120,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 120,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.screen}>
       {/* HEADER */}
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-            <Text>←</Text>
+      <View style={styles.fixedHeader}>
+        <Pressable
+          onPress={() =>
+            router.replace(
+              "/(student)/activities"
+            )
+          }
+          style={styles.backButton}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+          />
         </Pressable>
-        <Text style={styles.headerTitle}>Activity Details</Text>
+
+        <Text style={styles.headerTitle}>
+          Activity Details
+        </Text>
       </View>
 
-      {/* TITLE */}
-      <Text style={styles.title}>{activity.title}</Text>
+      {/* CONTENT */}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={
+          styles.contentContainer
+        }
+        showsVerticalScrollIndicator={false}
+      >
+        {/* HERO */}
+        <View style={styles.heroSection}>
+          <Image
+            source={activity.image}
+            style={styles.imagePoster}
+          />
 
-      {/* ORGANIZER */}
-      <Text style={styles.organizer}>
-        ORGANIZED BY {activity.organizer}
-      </Text>
-
-      {/* IMAGE */}
-      <Image source={activity.image} style={styles.imageFull} />
-
-      {/* META CARD */}
-      <View style={styles.metaCard}>
-        {/* BADGES */}
-        <View style={styles.badges}>
-          <Text style={styles.badge}>{activity.type}</Text>
-          <Text style={styles.badge}>{activity.points} KP</Text>
-
-          {activity.eligibleStudyProgram && (
-            <Text style={styles.badge}>
-              {activity.eligibleStudyProgram}
+          <View style={styles.heroContent}>
+            <Text style={styles.title}>
+              {activity.title}
             </Text>
-          )}
 
-          {activity.eligibleCohort && (
-            <Text style={styles.badge}>
-              {activity.eligibleCohort}
+            <Text style={styles.organizer}>
+              ORGANIZED BY{" "}
+              {activity.organizer}
             </Text>
-          )}
+
+            {/* BADGES */}
+            <View style={styles.badges}>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {activity.type}
+                </Text>
+              </View>
+
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {activity.points} KP
+                </Text>
+              </View>
+
+              {activity.eligibleStudyProgram && (
+                <View style={styles.badge}>
+                  <Text
+                    style={styles.badgeText}
+                  >
+                    {
+                      activity.eligibleStudyProgram
+                    }
+                  </Text>
+                </View>
+              )}
+
+              {activity.eligibleCohort && (
+                <View style={styles.badge}>
+                  <Text
+                    style={styles.badgeText}
+                  >
+                    {activity.eligibleCohort}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
         </View>
 
         {/* INFO */}
         <View style={styles.infoRow}>
           <View style={styles.infoBox}>
             <View style={styles.infoHeader}>
-              <Feather name="calendar" size={14} />
-              <Text style={styles.infoLabel}>DATE & TIME</Text>
+              <Feather
+                name="calendar"
+                size={16}
+                color="#0F172A"
+              />
+
+              <Text style={styles.infoLabel}>
+                DATE & TIME
+              </Text>
             </View>
 
-            <Text style={styles.infoText}>{activity.date}</Text>
+            <Text style={styles.infoText}>
+              {activity.date}
+            </Text>
           </View>
 
           <View style={styles.infoBox}>
             <View style={styles.infoHeader}>
-              <Feather name="map-pin" size={14} />
-              <Text style={styles.infoLabel}>LOCATION</Text>
+              <Feather
+                name="map-pin"
+                size={16}
+                color="#0F172A"
+              />
+
+              <Text style={styles.infoLabel}>
+                LOCATION
+              </Text>
             </View>
 
             <Text style={styles.infoText}>
@@ -117,56 +183,81 @@ export default function ActivityDetailScreen() {
             </Text>
           </View>
         </View>
-      </View>
 
-      {/* SAVE BUTTON */}
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <Pressable
-          style={[
-            styles.saveButton,
-            saved && { backgroundColor: "#94A3B8" },
-          ]}
-          onPress={handleSave}
-        >
-          <Ionicons
-            name={saved ? "bookmark" : "bookmark-outline"}
-            size={18}
-            color="white"
-          />
-          <Text style={styles.saveText}>
-            {saved ? "Activity Saved" : "Save Activity"}
+        {/* DESCRIPTION */}
+        <Section title="Description">
+          <Text style={styles.sectionText}>
+            {activity.description}
           </Text>
-        </Pressable>
-      </Animated.View>
+        </Section>
 
-      {/* REGISTER BUTTON */}
-      <Pressable style={styles.registerButton} onPress={openLink}>
-        <Feather name="link" size={18} color="white" />
-        <Text style={styles.registerText}>Registration Link</Text>
-      </Pressable>
+        {/* REQUIREMENT */}
+        <Section title="Requirement">
+          {activity.requirement?.map(
+            (item, index) => (
+              <Text
+                key={index}
+                style={styles.sectionText}
+              >
+                • {item}
+              </Text>
+            )
+          )}
+        </Section>
 
-      {/* CONTENT */}
-      <Section title="Description">
-        <Text>{activity.description}</Text>
-      </Section>
+        {/* HOW TO CLAIM */}
+        <Section title="How to Claim KP">
+          {activity.howToClaim?.map(
+            (item, index) => (
+              <Text
+                key={index}
+                style={styles.sectionText}
+              >
+                • {item}
+              </Text>
+            )
+          )}
+        </Section>
 
-      <Section title="Requirement">
-        {activity.requirement?.map((item, index) => (
-          <Text key={index}>• {item}</Text>
-        ))}
-      </Section>
+        {/* CONTACT */}
+        <Section title="Contact Person">
+          {activity.contactPerson?.map(
+            (item, index) => (
+              <Text
+                key={index}
+                style={styles.sectionText}
+              >
+                • {item}
+              </Text>
+            )
+          )}
+        </Section>
+      </ScrollView>
 
-      <Section title="How to Claim KP">
-        {activity.howToClaim?.map((item, index) => (
-          <Text key={index}>• {item}</Text>
-        ))}
-      </Section>
+      {/* FLOATING BAR */}
+      <FloatingActionBar
+        saved={saved}
+        onSave={handleSave}
+        onRegister={handleRegister}
+      />
 
-      <Section title="Contact Person">
-        {activity.contactPerson?.map((item, index) => (
-          <Text key={index}>• {item}</Text>
-        ))}
-      </Section>
-    </ScrollView>
+      {/* SAVE MODAL */}
+      <SaveActivityModal
+        visible={showSaveModal}
+        message={saveMessage}
+        onClose={() =>
+          setShowSaveModal(false)
+        }
+      />
+
+      {/* REGISTER MODAL */}
+      <RegistrationModal
+        visible={showLinkModal}
+        onClose={() =>
+          setShowLinkModal(false)
+        }
+        onConfirm={confirmRegister}
+      />
+    </View>
   );
 }

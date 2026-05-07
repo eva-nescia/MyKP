@@ -1,137 +1,183 @@
-import { COLORS } from "@/constants/colors";
 import { StyleSheet } from "react-native";
 
+import { COLORS } from "@/constants/colors";
+
 export default StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    padding: 16,
     backgroundColor: COLORS.white,
   },
 
-  header: {
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+
+  contentContainer: {
+   paddingTop: 72,
+   paddingBottom: 130,
+  },
+
+  /* header */
+
+  fixedHeader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+
+    zIndex: 100,
+
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
-    marginBottom: 12,
+
+    // gap: 14,
+
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 14,
+
+    backgroundColor: COLORS.white,
+  },
+
+  backButton: {
+    width: 42,
+    height: 42,
+
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   headerTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "700",
+    color: COLORS.text,
+  },
+
+  /* hero */
+
+  heroSection: {
+    flexDirection: "row",
+    gap: 16,
+    marginBottom: 24,
+  },
+
+  imagePoster: {
+    width: 130,
+    height: 190,
+
+    borderRadius: 8,
+  },
+
+  heroContent: {
+    flex: 1,
   },
 
   title: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 10,
-  },
+    fontSize: 22,
+    fontWeight: "600",
 
-  imageFull: {
-    width: 155,
-    height: 220,
-    borderRadius: 8,
-    marginBottom: 10,
-    alignSelf: "center",
+    // lineHeight: 31,
+
+    color: COLORS.text,
+
+    marginBottom: 6,
   },
 
   organizer: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#64748B",
-    marginBottom: 10,
+
+    marginTop: 5,
+    marginBottom: 16,
   },
 
-  metaCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: 14,
-    padding: 3,
-    marginBottom: 16,
-    // shadowColor: "#000",
-    // shadowOpacity: 0.05,
-    // shadowRadius: 10, 
-    elevation: 2,
-  },
+  /* badges */
 
   badges: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 6,
-    marginBottom: 10,
+
+    gap: 10,
   },
 
   badge: {
-    borderWidth: 1,
-    borderColor: COLORS.text,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    color: COLORS.text,
-    fontSize: 14,
-    backgroundColor: COLORS.white,
+    height: 38,
+
+    // borderWidth: 1,
+    // borderColor: COLORS.text,
+
+    borderRadius: 8,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    paddingHorizontal: 14,
+
+    backgroundColor: COLORS.primary,
   },
+
+  badgeText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: COLORS.white,
+  },
+
+  /* info */
 
   infoRow: {
     flexDirection: "row",
-    gap: 8,
+    gap: 12,
+
+    marginBottom: 8,
   },
 
   infoBox: {
     flex: 1,
+
     borderWidth: 1,
-    borderColor: COLORS.text,
-    borderRadius: 10,
-    padding: 10,
+    borderColor: "#0F172A",
+
+    borderRadius: 12,
+
+    padding: 16,
   },
 
   infoHeader: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
-    marginBottom: 2,
-  },
 
-  infoLabel: {
-    fontWeight: "600",
-    fontSize: 14,
-    color: COLORS.text,
-  },
-
-  infoText: {
-    fontSize: 14,
-    color: COLORS.text,
-    lineHeight: 16,
-    marginTop: 4,
-  },
-
-  saveButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
     gap: 6,
-    backgroundColor: COLORS.primary,
-    padding: 14,
-    borderRadius: 30,
+
     marginBottom: 10,
   },
 
-  saveText: {
-    color: "white",
-    fontWeight: "600",
+  infoLabel: {
     fontSize: 16,
+    fontWeight: "600",
+
+    color: "#0F172A",
   },
 
-  registerButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: COLORS.secondary,
-    padding: 14,
-    borderRadius: 30,
+  infoText: {
+    fontSize: 16,
+    lineHeight: 24,
+
+    color: "#0F172A",
   },
 
-  registerText: {
-    color: "white",
-    fontWeight: "600",
+  /* text */
+
+  sectionText: {
     fontSize: 16,
+    lineHeight: 28,
+
+    color: COLORS.text,
   },
 });

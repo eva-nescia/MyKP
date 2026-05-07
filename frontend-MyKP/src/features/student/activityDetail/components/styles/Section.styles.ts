@@ -1,12 +1,17 @@
+import { COLORS } from "@/constants/colors";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginTop: 24,
   },
+
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "600",
-    marginBottom: 8,
+
+    color: COLORS.text,
+
+    marginBottom: 12,
   },
 });

@@ -38,13 +38,13 @@ export default function SplashScreen() {
           return;
         }
 
-        // if (role === "student") {
-        //   router.replace("/");
-        // } else if (role === "admin") {
-        //   router.replace("/activities");
-        // } else {
-        //   router.replace("/login");
-        // }
+        if (role === "student") {
+          router.replace("/");
+        } else if (role === "admin") {
+          router.replace("/activities");
+        } else {
+          router.replace("/login");
+        }
 
       } catch (error) {
         console.log("Splash error:", error);

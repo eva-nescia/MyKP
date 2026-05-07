@@ -17,10 +17,12 @@ export default function StudentLayout() {
       screenOptions={({ route }) => {
        const rawName = route.name;
 
-      // normalize route name properly
-      const routeName = rawName.startsWith("activities")
-        ? "activities"
-        : (rawName as StudentTabKey);
+     const isDetailsScreen =
+      rawName === "activities/details";
+
+    const routeName = rawName.startsWith("activities")
+      ? "activities"
+      : (rawName as StudentTabKey);
 
       const config = STUDENT_TAB_CONFIG[routeName];
 
@@ -30,13 +32,15 @@ export default function StudentLayout() {
           tabBarActiveTintColor: COLORS.primary,
           tabBarInactiveTintColor: "#D1D5DB",
 
-          tabBarStyle: {
-            backgroundColor: COLORS.secondary,
-            borderTopWidth: 0,
-            height: 60 + insets.bottom,
-            paddingBottom: insets.bottom,
-            paddingTop: 6,
-          },
+          tabBarStyle: isDetailsScreen
+            ? { display: "none" }
+            : {
+                backgroundColor: COLORS.secondary,
+                borderTopWidth: 0,
+                height: 60 + insets.bottom,
+                paddingBottom: insets.bottom,
+                paddingTop: 6,
+              },
 
           tabBarLabel: ({ focused, color }) =>
             config ? (
@@ -64,8 +68,6 @@ export default function StudentLayout() {
       <Tabs.Screen name="saved" options={{ href: "/(student)/saved" }} />
       <Tabs.Screen name="profile" options={{ href: "/(student)/profile" }} />
 
-      {/* hide details */}
-      <Tabs.Screen name="activities/details" options={{ href: null }} />
     </Tabs>
   );
 }
