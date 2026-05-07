@@ -41,7 +41,7 @@ export default function ActivityListScreen() {
             {...item}
             onPress={() =>
               router.push({
-                pathname: "/(student)/activities/details",
+                pathname: "/activity-details/details",
                 params: { id: item.id },
               })
             }

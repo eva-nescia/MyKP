@@ -14,7 +14,7 @@ export const fetchActivities = async (): Promise<Activity[]> => {
       id: "2",
       title: "Leadership Workshop",
       image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
-      type: "Workshop",
+      type: "Lain-lain",
       points: 4,
       date: "Mon, 12 October 2025",
     },

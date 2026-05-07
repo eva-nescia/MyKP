@@ -4,6 +4,7 @@ export default function AdminLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="activities" />
+      <Stack.Screen name="profile" />
     </Stack>
   );
 }
