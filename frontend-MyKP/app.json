@@ -41,7 +41,7 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.PLACEHOLDER_CREATE_IOS_CLIENT"
+          "iosUrlScheme": "com.googleusercontent.apps.193433707669-jm6q5stj4jjr940c46lkv8a4vefi1hgv"
         }
       ],
       [
@@ -56,7 +56,7 @@
     "extra": {
       "googleWebClientId": "193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com",
       "googleAndroidClientId": "193433707669-vk5lej74bdh0kjhfrifm7cjajch8is5l.apps.googleusercontent.com",
-      "googleIosClientId": "",
+      "googleIosClientId": "193433707669-jm6q5stj4jjr940c46lkv8a4vefi1hgv.apps.googleusercontent.com",
       "googleAuthProxyRedirectUri": "https://auth.expo.io/@KeaneKen/frontend-MyKP",
       "apiBaseUrl": "auto",
       "apiPort": "8000"
