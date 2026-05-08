@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.keaneken.frontendmykp"
     },
     "android": {
+      "package": "com.keaneken.frontendmykp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE"
       },
@@ -35,10 +37,26 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.193433707669-jm6q5stj4jjr940c46lkv8a4vefi1hgv"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
       ]
     ],
     "extra": {
       "googleWebClientId": "193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com",
+      "googleAndroidClientId": "193433707669-vk5lej74bdh0kjhfrifm7cjajch8is5l.apps.googleusercontent.com",
+      "googleIosClientId": "193433707669-jm6q5stj4jjr940c46lkv8a4vefi1hgv.apps.googleusercontent.com",
       "googleAuthProxyRedirectUri": "https://auth.expo.io/@KeaneKen/frontend-MyKP",
       "apiBaseUrl": "auto",
       "apiPort": "8000"
@@ -46,9 +64,6 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    },
-    "extra": {
-      "googleClientId": "193433707669-v82q01sn5t3fqtbec7qu08afi0dcrukj.apps.googleusercontent.com"
     }
   }
 }
