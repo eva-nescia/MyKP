@@ -1,3 +1,3 @@
-export default function Saved() {
-  return null; // placeholder
-}
+import SavedScreen from "../../src/features/student/bookmark/view/SavedScreen";
+
+export default SavedScreen;
