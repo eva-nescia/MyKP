@@ -1,6 +1,6 @@
 import { LoginPayload, AuthResponse } from '../model/auth.types';
 
-const API_URL = 'http://192.168.1.13:8000/api';
+const API_URL = 'http://192.168.1.8:8000/api';
 
 export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
   try {
@@ -23,23 +23,26 @@ export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
   }
 };
 
-export const googleLogin = async (accessToken: string): Promise<AuthResponse> => {
-  try {
-    const response = await fetch(`${API_URL}/login/google`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ accessToken }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Google login failed');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Google login error:', error);
-    throw error;
-  }
-};
+// ==========================================================
+// GOOGLE LOGIN — temporarily disabled. Re-enable later.
+// ==========================================================
+// export const googleLogin = async (accessToken: string): Promise<AuthResponse> => {
+//   try {
+//     const response = await fetch(`${API_URL}/login/google`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ accessToken }),
+//     });
+//
+//     if (!response.ok) {
+//       throw new Error('Google login failed');
+//     }
+//
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Google login error:', error);
+//     throw error;
+//   }
+// };
