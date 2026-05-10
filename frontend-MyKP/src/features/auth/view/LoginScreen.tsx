@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,21 +10,26 @@ import {
   Keyboard,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import Constants from 'expo-constants';
 
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
-import {
-  GoogleSignin,
-  isSuccessResponse,
-  isErrorWithCode,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+
+// ==========================================================
+// GOOGLE LOGIN — functionality temporarily disabled. Re-enable later.
+// ==========================================================
+// import Constants from 'expo-constants';
+// import {
+//   GoogleSignin,
+//   isSuccessResponse,
+//   isErrorWithCode,
+//   statusCodes,
+// } from '@react-native-google-signin/google-signin';
 
 import { styles } from './styles/Login.styles';
 import InputField from '../components/InputField';
 import LoginButton from '../components/LoginBtn';
 import GoogleButton from '../components/GoogleBtn';
-import { login, googleLogin } from '../services/authService';
+import { login } from '../services/authService';
+// import { googleLogin } from '../services/authService';
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -32,15 +37,15 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    const extra = Constants.expoConfig?.extra ?? {};
-    GoogleSignin.configure({
-      webClientId: extra.googleWebClientId,
-      iosClientId: extra.googleIosClientId || undefined,
-      scopes: ['openid', 'profile', 'email'],
-      offlineAccess: false,
-    });
-  }, []);
+  // useEffect(() => {
+  //   const extra = Constants.expoConfig?.extra ?? {};
+  //   GoogleSignin.configure({
+  //     webClientId: extra.googleWebClientId,
+  //     iosClientId: extra.googleIosClientId || undefined,
+  //     scopes: ['openid', 'profile', 'email'],
+  //     offlineAccess: false,
+  //   });
+  // }, []);
 
   const routeForRole = (role: string) => {
     if (role === 'admin') {
@@ -50,36 +55,42 @@ const LoginScreen = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      try {
-        await GoogleSignin.signOut();
-      } catch {}
-      const response = await GoogleSignin.signIn();
-      if (!isSuccessResponse(response)) {
-        return;
-      }
-      const { accessToken } = await GoogleSignin.getTokens();
-      if (!accessToken) {
-        Alert.alert('Google login failed', 'Could not retrieve token. Please try again.');
-        return;
-      }
-      const res = await googleLogin(accessToken);
-      routeForRole(res.user.role);
-    } catch (error: any) {
-      if (isErrorWithCode(error)) {
-        if (error.code === statusCodes.SIGN_IN_CANCELLED) return;
-        if (error.code === statusCodes.IN_PROGRESS) return;
-        if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-          Alert.alert('Google login failed', 'Google Play Services is not available on this device.');
-          return;
-        }
-      }
-      console.error('Google sign-in error:', error);
-      Alert.alert('Google login failed', 'Your Google account is not registered in the system.');
-    }
+  // Google sign-in functionality temporarily disabled. Button still renders but does nothing useful.
+  const handleGoogleSignIn = () => {
+    Alert.alert('Coming soon', 'Google login is temporarily disabled. Please use email and password.');
   };
+
+  // Original Google sign-in implementation — re-enable later.
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  //     try {
+  //       await GoogleSignin.signOut();
+  //     } catch {}
+  //     const response = await GoogleSignin.signIn();
+  //     if (!isSuccessResponse(response)) {
+  //       return;
+  //     }
+  //     const { accessToken } = await GoogleSignin.getTokens();
+  //     if (!accessToken) {
+  //       Alert.alert('Google login failed', 'Could not retrieve token. Please try again.');
+  //       return;
+  //     }
+  //     const res = await googleLogin(accessToken);
+  //     routeForRole(res.user.role);
+  //   } catch (error: any) {
+  //     if (isErrorWithCode(error)) {
+  //       if (error.code === statusCodes.SIGN_IN_CANCELLED) return;
+  //       if (error.code === statusCodes.IN_PROGRESS) return;
+  //       if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //         Alert.alert('Google login failed', 'Google Play Services is not available on this device.');
+  //         return;
+  //       }
+  //     }
+  //     console.error('Google sign-in error:', error);
+  //     Alert.alert('Google login failed', 'Your Google account is not registered in the system.');
+  //   }
+  // };
 
   const handleLogin = async () => {
     try {
@@ -146,6 +157,7 @@ const LoginScreen = () => {
             <View style={styles.line} />
           </View>
 
+          {/* Google login button — UI only; functionality temporarily disabled */}
           <GoogleButton
             title="Continue with Google"
             Icon={GoogleIcon}
