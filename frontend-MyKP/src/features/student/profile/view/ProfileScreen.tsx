@@ -49,6 +49,29 @@ export default function ProfileScreen() {
         KP Category Progress
       </Text>
 
+      <FlatList
+        data={vm.categories}
+        keyExtractor={(item) =>
+          item.id.toString()
+        }
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={
+          styles.listContent
+        }
+        renderItem={({ item }) => (
+          <KPProgressCard
+            item={item}
+            onPress={() =>
+              vm.openCategory(
+                item.id,
+                item.title,
+                item.current,
+                item.target
+              )
+            }
+          />
+        )}
+      />
       {vm.loading ? (
         <ActivityIndicator size="large" color={COLORS.secondary} />
       ) : vm.error ? (

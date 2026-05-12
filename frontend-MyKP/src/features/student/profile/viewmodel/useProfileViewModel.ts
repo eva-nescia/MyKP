@@ -42,12 +42,21 @@ export default function useProfileViewModel() {
     };
   }, []);
 
-  const openCategory = (id: number, title: string) => {
+  const openCategory = (
+    id: number,
+    title: string,
+    current: number,
+    target: number
+  ) => {
     router.push({
-      pathname: "/participation-history/history",
+      pathname:
+        "/participation-history/history",
+
       params: {
         id: String(id),
         title,
+        current: String(current),
+        target: String(target),
       },
     });
   };
