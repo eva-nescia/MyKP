@@ -109,65 +109,59 @@
                 }
             }
         },
-        "/api/login/google": {
-            "post": {
+        "/api/dashboard": {
+            "get": {
                 "tags": [
-                    "Authentication"
+                    "Dashboard"
                 ],
-                "summary": "Login with Google OAuth Access Token",
-                "operationId": "1da99ed35da5200d3fb60b8361f36ba6",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "accessToken"
-                                ],
-                                "properties": {
-                                    "accessToken": {
-                                        "description": "The access token provided by the Google prompt on the frontend",
-                                        "type": "string",
-                                        "example": "ya29.a0AfB_byCdefGHIJKlmnop..."
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+                "summary": "Get Student Dashboard Data",
+                "operationId": "b8d48729f409e730c12425753b6f4075",
                 "responses": {
                     "200": {
-                        "description": "Successful Google login (Same response as standard login)",
+                        "description": "Student dashboard data retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "token": {
+                                        "userName": {
                                             "type": "string",
-                                            "example": "1a2b3c4d5e6f7g8h9i0j..."
+                                            "example": "KenStudent"
                                         },
-                                        "user": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
+                                        "kpProgress": {
+                                            "type": "integer",
+                                            "example": 35
+                                        },
+                                        "totalKP": {
+                                            "type": "integer",
+                                            "example": 100
+                                        },
+                                        "activities": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Seminar Bela Negara & Anti Narkoba 2026"
+                                                    },
+                                                    "type": {
+                                                        "type": "string",
+                                                        "example": "Talkshow Wajib BMA"
+                                                    },
+                                                    "points": {
+                                                        "type": "integer",
+                                                        "example": 6
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "Thu, 29 May 2026"
+                                                    }
                                                 },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "KenStudent"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "format": "email",
-                                                    "example": "kokonatyeye@gmail.com"
-                                                },
-                                                "role": {
-                                                    "type": "string",
-                                                    "example": "student"
-                                                }
-                                            },
-                                            "type": "object"
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -175,35 +169,28 @@
                             }
                         }
                     },
-                    "422": {
-                        "description": "Validation error (e.g., token invalid or email not registered in system)",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "This Google account is not registered."
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "email": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "This Google account is not registered."
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "401": {
+                        "description": "Unauthorized - User not authenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid or expired token"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Laravel Sanctum API Token",
+                "bearerFormat": "string",
+                "scheme": "bearer"
             }
         }
     },
@@ -211,6 +198,10 @@
         {
             "name": "Authentication",
             "description": "Authentication"
+        },
+        {
+            "name": "Dashboard",
+            "description": "Dashboard"
         }
     ]
 }

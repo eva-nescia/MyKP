@@ -17,14 +17,16 @@ class DatabaseSeeder extends Seeder
             'Email' => 'exsel@admin.ac.id',
             'Password' => 'password',
             'Role' => 'admin',
+            'ProfilePicture' => 'https://i.pravatar.cc/300?u=exsel.admin',
         ]);
 
         User::query()->create([
             'Name' => 'KenStudent',
             'NIM' => '1234567890',
-            'Email' => 'kokonatyeye@gmail.com',
+            'Email' => 'atubagus@student.ciputra.ac.id',
             'Password' => 'password',
             'Role' => 'student',
+            'ProfilePicture' => 'https://i.pravatar.cc/300?u=ken.student',
         ]);
 
         User::query()->create([
@@ -33,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'Email' => 'eoctaviand@student.ciputra.ac.id',
             'Password' => 'password',
             'Role' => 'student',
+            'ProfilePicture' => 'https://i.pravatar.cc/300?u=exsel.student',
         ]);
 
         User::query()->create([
@@ -41,6 +44,7 @@ class DatabaseSeeder extends Seeder
             'Email' => 'mstevany@student.ciputra.ac.id',
             'Password' => 'password',
             'Role' => 'student',
+            'ProfilePicture' => 'https://i.pravatar.cc/300?u=michelle.student',
         ]);
 
         // Add your friend's Google account email here so they can log in
