@@ -86,7 +86,7 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::query()->where('Email', $credentials['email'])->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->Password)) {
             throw ValidationException::withMessages([
@@ -97,8 +97,13 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
-            'token' => $token, // This gets passed back to React Native
+            'token' => $token,
+            'user' => [
+                'id' => $user->UserID,
+                'name' => $user->Name,
+                'email' => $user->Email,
+                'role' => $user->Role,
+            ],
         ]);
     }
 
