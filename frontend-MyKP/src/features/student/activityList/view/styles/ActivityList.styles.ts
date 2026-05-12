@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "700",
     color: COLORS.text,
+    paddingTop: 45
   },
 
   subtitle: {

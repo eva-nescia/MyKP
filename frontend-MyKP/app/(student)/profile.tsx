@@ -1,3 +1,3 @@
-export default function Profile() {
-  return null;
-}
+import ProfileScreen from "@/features/student/profile/view/ProfileScreen";
+
+export default ProfileScreen;

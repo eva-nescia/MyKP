@@ -1,4 +1,5 @@
 import { COLORS } from "@/constants/colors";
+import { FONT_WEIGHT } from "@/constants/typography";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
@@ -18,7 +19,7 @@ export default StyleSheet.create({
   image: {
     width: 74,
     height: 110,
-    borderRadius: 8,
+    borderRadius: 4,
   },
 
   content: {
@@ -42,18 +43,20 @@ export default StyleSheet.create({
 
   organizerText: {
     fontSize: 12,
-    color: "#64748B",
+    fontWeight: FONT_WEIGHT.regular,
+    color: COLORS.text,
   },
 
   title: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
     marginBottom: 4,
   },
 
   date: {
     fontSize: 14,
+    fontWeight: FONT_WEIGHT.regular,
     color: COLORS.text,
     marginBottom: 8,
   },
@@ -66,7 +69,7 @@ export default StyleSheet.create({
   badge: {
     borderWidth: 1,
     borderColor: "#CBD5E1",
-    borderRadius: 8,
+    borderRadius: 6,
 
     paddingHorizontal: 10,
     paddingVertical: 4,

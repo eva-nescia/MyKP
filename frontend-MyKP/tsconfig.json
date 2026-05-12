@@ -16,5 +16,5 @@
     "expo-env.d.ts",
     "App.tsx",
     ".expo/types/**/*.ts"
-, "src/components/kpProgressCard"  ]
+  ]
 }
