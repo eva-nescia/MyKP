@@ -1,6 +1,6 @@
 import { LoginPayload, AuthResponse } from '../model/auth.types';
 
-const API_URL = 'http://172.20.10.2:8000/api';
+const API_URL = 'http://192.168.1.13:8000/api';
 
 export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
   try {

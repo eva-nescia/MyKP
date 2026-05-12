@@ -1,24 +1,42 @@
 import { DashboardData } from "../model/types";
 
-//  replace with axios later
-export const fetchDashboard = async (): Promise<DashboardData> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        userName: "Ye Shunguang",
-        kpProgress: 35,
-        totalKP: 100,
-        activities: [
-          {
-            id: "1",
-            title: "Seminar Bela Negara & Anti Narkoba",
-            image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"), 
-            type: "Talkshow Wajib",
-            points: 6,
-            date: "Sat, 29 November 2025",
-          },
-        ],
-      });
-    }, 500);
-  });
+// Check this URL carefully! If you are testing on an Android Emulator
+// use 'http://10.0.2.2:8000/api' instead of localhost!
+// If on physical device on same wifi, use 'http://192.168.1.X:8000/api'
+const API_URL = 'http://192.168.1.13:8000/api'; 
+
+export const fetchDashboard = async (token: string): Promise<DashboardData> => {
+  console.log(`[DEBUG] fetchDashboard initiated to URL: ${API_URL}/dashboard`);
+  console.log(`[DEBUG] Using token length: ${token ? token.length : 'NULL'}`);
+  
+  try {
+    const response = await fetch(`${API_URL}/dashboard`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    console.log(`[DEBUG] fetchDashboard response status:`, response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log(`[DEBUG] Response Error Text:`, errorText);
+      throw new Error(`Error ${response.status}: Failed to fetch dashboard data`);
+    }
+
+    const data = await response.json();
+    console.log(`[DEBUG] fetchDashboard successful data payload:`, JSON.stringify(data).substring(0, 100) + '...');
+
+    data.activities = data.activities.map((act: any) => ({
+      ...act,
+      image: act.image ? { uri: act.image } : require('../../../../../assets/images/activity-placeholder/seminarAntiNarkoba.jpeg')
+    }));
+
+    return data;
+  } catch (error) {
+    console.error(`[DEBUG] fetchDashboard fatal error:`, error);
+    throw error;
+  }
 };

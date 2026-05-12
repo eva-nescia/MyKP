@@ -10,7 +10,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-
+import { useAuth } from '../../../core/contexts/AuthContext';
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
 
 // ==========================================================
@@ -32,6 +32,7 @@ import { login } from '../services/authService';
 // import { googleLogin } from '../services/authService';
 
 const LoginScreen = () => {
+  const { signIn } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -95,6 +96,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       const res = await login({ email, password });
+      signIn(res.token, res.user); 
       routeForRole(res.user.role);
     } catch {
       Alert.alert('Login failed', 'Please check your email and password.');

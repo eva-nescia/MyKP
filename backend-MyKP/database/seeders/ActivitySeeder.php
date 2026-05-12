@@ -18,12 +18,10 @@ class ActivitySeeder extends Seeder
             'kp_amount' => 6,
             'eligible_generation' => 'All Gen',
             'eligible_study_program' => 'All Study Program',
-            // Converted 29/11/2025 to standard DB date format
-            'date' => '2025-11-29', 
-            'time' => '07:30 - FINISHED',
+            'date' => '2026-05-29', 
+            'time' => '07:30 - 09:30',
             'location' => 'Auditorium, 7th Floor',
             'registration_link' => 'https://forms.google.com/seminarbma2026',
-            // Converted 28/11/2025 to standard DB date format
             'registration_deadline_date' => '2025-11-28',
             'registration_deadline_time' => '23:59:00',
             'description' => <<<'EOT'
