@@ -29,6 +29,7 @@ class User extends Authenticatable
         'Email',
         'Password',
         'Role',
+        'ProfilePicture',
     ];
 
     /**
@@ -50,5 +51,10 @@ class User extends Authenticatable
         return [
             'Password' => 'hashed',
         ];
+    }
+
+    public function kpProgress()
+    {
+        return $this->hasMany(KP_Progress::class, 'user_id', 'UserID');
     }
 }

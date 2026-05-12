@@ -10,38 +10,42 @@ class KPProgressSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * Per-student template — each student gets one row per category.
+     * kp_status is derived from amounts so seeded data is always self-consistent.
      */
     public function run(): void
     {
-        // Get the first student to assign this progress to
-        $student = User::where('Role', 'student')->first();
-        
-        if (!$student) {
-            return; // Don't run if no student exists
-        }
-
-        $progressData = [
-            ['kp_category' => 'O-Week', 'kp_current_amount' => 9, 'kp_amount_requirement' => 6, 'kp_status' => 'Completed'],
-            ['kp_category' => 'Upacara', 'kp_current_amount' => 0, 'kp_amount_requirement' => 4, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Camp Mahasiswa (CampJur)', 'kp_current_amount' => 4, 'kp_amount_requirement' => 4, 'kp_status' => 'Completed'],
-            ['kp_category' => 'Pra Latihan Dasar Kepemimpinan', 'kp_current_amount' => 0, 'kp_amount_requirement' => 4, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Organisasi Kemahasiswaan', 'kp_current_amount' => 10, 'kp_amount_requirement' => 20, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Mentoring', 'kp_current_amount' => 0, 'kp_amount_requirement' => 15, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Talkshow (Wajib BMA)', 'kp_current_amount' => 6, 'kp_amount_requirement' => 6, 'kp_status' => 'Completed'],
-            ['kp_category' => 'Kompetisi', 'kp_current_amount' => 0, 'kp_amount_requirement' => 2, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Pengabdian Masyarakat', 'kp_current_amount' => 0, 'kp_amount_requirement' => 8, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Penelitian', 'kp_current_amount' => 0, 'kp_amount_requirement' => 6, 'kp_status' => 'On Progress'],
-            ['kp_category' => 'Lain-lain', 'kp_current_amount' => 6, 'kp_amount_requirement' => 15, 'kp_status' => 'On Progress'],
+        $template = [
+            ['kp_category' => 'O-Week',                         'kp_current_amount' => 9,  'kp_amount_requirement' => 6],
+            ['kp_category' => 'Upacara',                        'kp_current_amount' => 4,  'kp_amount_requirement' => 4],
+            ['kp_category' => 'Camp Mahasiswa (CampJur)',       'kp_current_amount' => 4,  'kp_amount_requirement' => 4],
+            ['kp_category' => 'Pra Latihan Dasar Kepemimpinan', 'kp_current_amount' => 0,  'kp_amount_requirement' => 4],
+            ['kp_category' => 'Organisasi Kemahasiswaan',       'kp_current_amount' => 10, 'kp_amount_requirement' => 20],
+            ['kp_category' => 'Mentoring',                      'kp_current_amount' => 0,  'kp_amount_requirement' => 15],
+            ['kp_category' => 'Talkshow (Wajib BMA)',           'kp_current_amount' => 6,  'kp_amount_requirement' => 6],
+            ['kp_category' => 'Kompetisi',                      'kp_current_amount' => 0,  'kp_amount_requirement' => 2],
+            ['kp_category' => 'Pengabdian Masyarakat',          'kp_current_amount' => 0,  'kp_amount_requirement' => 8],
+            ['kp_category' => 'Penelitian',                     'kp_current_amount' => 0,  'kp_amount_requirement' => 6],
+            ['kp_category' => 'Lain-lain',                      'kp_current_amount' => 6,  'kp_amount_requirement' => 15],
         ];
 
-        foreach ($progressData as $data) {
-            KP_Progress::create([
-                'user_id' => $student->UserID,
-                'kp_category' => $data['kp_category'],
-                'kp_current_amount' => $data['kp_current_amount'],
-                'kp_amount_requirement' => $data['kp_amount_requirement'],
-                'kp_status' => $data['kp_status'],
-            ]);
+        $students = User::query()->where('Role', 'student')->get();
+
+        foreach ($students as $student) {
+            foreach ($template as $row) {
+                $status = $row['kp_current_amount'] >= $row['kp_amount_requirement']
+                    ? 'Completed'
+                    : 'On Progress';
+
+                KP_Progress::create([
+                    'user_id'               => $student->UserID,
+                    'kp_category'           => $row['kp_category'],
+                    'kp_current_amount'     => $row['kp_current_amount'],
+                    'kp_amount_requirement' => $row['kp_amount_requirement'],
+                    'kp_status'             => $status,
+                ]);
+            }
         }
 
         // Calculate the total earned amount for the student

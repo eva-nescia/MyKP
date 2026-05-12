@@ -2,7 +2,33 @@ export interface KPCategory {
   id: number;
   title: string;
   current: number;
-  total: number;
+  target: number;
+  status: "Completed" | "On Progress";
+  percentage: number;
+}
+
+export interface KPSummary {
+  total_categories: number;
+  completed: number;
+  in_progress: number;
+  total_current: number;
+  total_target: number;
+  overall_percentage: number;
+}
+
+export interface ProfileUser {
+  id: number;
+  name: string;
+  nim: string;
+  email: string;
+  role: string;
+  profile_picture: string | null;
+}
+
+export interface ProfileResponse {
+  user: ProfileUser;
+  kp_categories: KPCategory[];
+  kp_summary: KPSummary;
 }
 
 export interface ParticipationHistory {
@@ -12,12 +38,4 @@ export interface ParticipationHistory {
   kp: string;
   status: "Completed" | "On Progress";
   image: any;
-}
-
-export interface ProfileData {
-  name: string;
-  studentId: string;
-  studyProgram: string;
-  cohort: string;
-  profilePicture: any;
 }
