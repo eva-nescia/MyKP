@@ -16,6 +16,13 @@ use OpenApi\Attributes as OA; // <-- Must add this import!
     title: "MyKP API Documentation",
     description: "API documentation for the MyKP backend"
 )]
+#[OA\SecurityScheme(
+    securityScheme: "sanctum",
+    type: "http",
+    scheme: "bearer",
+    bearerFormat: "string",
+    description: "Laravel Sanctum API Token"
+)]
 class AuthController extends Controller
 {
     #[OA\Post(
@@ -79,7 +86,7 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::query()->where('Email', $credentials['email'])->first();
+        $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->Password)) {
             throw ValidationException::withMessages([
@@ -87,16 +94,11 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = Str::random(60);
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'token' => $token,
-            'user' => [
-                'id' => $user->UserID,
-                'name' => $user->Name,
-                'email' => $user->Email,
-                'role' => $user->Role,
-            ],
+            'user' => $user,
+            'token' => $token, // This gets passed back to React Native
         ]);
     }
 

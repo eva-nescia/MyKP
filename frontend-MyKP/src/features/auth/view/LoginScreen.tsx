@@ -10,7 +10,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-
+import { useAuth } from '../../../core/contexts/AuthContext';
 import GoogleIcon from '../../../../assets/images/icon/google_icon.svg';
 
 // ==========================================================
@@ -33,6 +33,7 @@ import { setSession } from '../services/session';
 // import { googleLogin } from '../services/authService';
 
 const LoginScreen = () => {
+  const { signIn } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState('');

@@ -47,5 +47,8 @@ class KPProgressSeeder extends Seeder
                 ]);
             }
         }
+
+        // Calculate the total earned amount for the student
+        $totalEarned = KP_Progress::where('user_id', $student->UserID)->sum('kp_current_amount');
     }
 }
