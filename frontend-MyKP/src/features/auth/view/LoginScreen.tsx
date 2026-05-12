@@ -98,6 +98,7 @@ const LoginScreen = () => {
     try {
       const res = await login({ email, password });
       setSession(res);
+      signIn(res.token, res.user);
       routeForRole(res.user.role);
     } catch {
       Alert.alert('Login failed', 'Please check your email and password.');

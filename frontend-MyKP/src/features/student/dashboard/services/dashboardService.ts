@@ -3,7 +3,7 @@ import { DashboardData } from "../model/types";
 // Check this URL carefully! If you are testing on an Android Emulator
 // use 'http://10.0.2.2:8000/api' instead of localhost!
 // If on physical device on same wifi, use 'http://192.168.1.X:8000/api'
-const API_URL = 'http://192.168.1.13:8000/api'; 
+const API_URL = 'http://192.168.1.15:8000/api';
 
 export const fetchDashboard = async (token: string): Promise<DashboardData> => {
   console.log(`[DEBUG] fetchDashboard initiated to URL: ${API_URL}/dashboard`);
