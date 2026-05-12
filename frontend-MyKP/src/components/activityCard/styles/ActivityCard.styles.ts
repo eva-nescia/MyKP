@@ -1,6 +1,7 @@
-// src/components/activityCard/styles.ts
-
+import { FONT_WEIGHT } from "@/constants/typography";
 import { StyleSheet } from "react-native";
+
+import { COLORS } from "@/constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ export const styles = StyleSheet.create({
 
   title: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: FONT_WEIGHT.semiBold,
     marginBottom: 6,
   },
 
@@ -34,6 +35,6 @@ export const styles = StyleSheet.create({
 
   date: {
     fontSize: 12,
-    color: "COLORS.text",
+    color: COLORS.text,
   },
 });

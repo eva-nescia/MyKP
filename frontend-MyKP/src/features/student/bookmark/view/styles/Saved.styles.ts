@@ -5,20 +5,20 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 16,
-    paddingTop: 18,
+    paddingHorizontal: 25,
+    paddingTop: 70,
   },
 
   header: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "700",
     color: COLORS.text,
     marginBottom: 6,
   },
 
   subheader: {
-    fontSize: 15,
-    color: "#64748B",
+    fontSize: 16,
+    color: COLORS.text,
     marginBottom: 16,
   },
 

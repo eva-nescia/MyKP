@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
 
   container: {
     padding: 24,
+    paddingTop: 70,
     paddingBottom: 24,
   },
 

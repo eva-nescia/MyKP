@@ -1,5 +1,6 @@
 import { View, Text, Image, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import Badge from "@/components/badge/Badge";
 
 import styles from "./styles/SavedActivityCard.styles";
 
@@ -54,13 +55,15 @@ export default function SavedActivityCard({
         </Text>
 
         <View style={styles.badges}>
-          <Text style={styles.badge}>
-            {type}
-          </Text>
+          <Badge
+            label={type}
+            variant="outline"
+          />
 
-          <Text style={styles.badge}>
-            {points}
-          </Text>
+          <Badge
+            label={`${points} KP`}
+            variant="primary"
+          />
         </View>
       </View>
     </Pressable>

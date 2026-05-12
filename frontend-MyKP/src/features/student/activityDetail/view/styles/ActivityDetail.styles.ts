@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { COLORS } from "@/constants/colors";
+import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
   screen: {
@@ -20,8 +21,9 @@ export default StyleSheet.create({
   },
 
   contentContainer: {
-   paddingTop: 72,
-   paddingBottom: 130,
+   paddingTop: 120,
+   paddingBottom: 120,
+   padding: 14
   },
 
   /* header */
@@ -40,7 +42,7 @@ export default StyleSheet.create({
     // gap: 14,
 
     paddingHorizontal: 16,
-    paddingTop: 14,
+    paddingTop: 60,
     paddingBottom: 14,
 
     backgroundColor: COLORS.white,
@@ -80,8 +82,8 @@ export default StyleSheet.create({
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: FONT_WEIGHT.semiBold,
 
     // lineHeight: 31,
 
@@ -92,7 +94,7 @@ export default StyleSheet.create({
 
   organizer: {
     fontSize: 12,
-    color: "#64748B",
+    color: COLORS.text,
 
     marginTop: 5,
     marginBottom: 16,
@@ -124,8 +126,8 @@ export default StyleSheet.create({
   },
 
   badgeText: {
-    fontSize: 14,
-    fontWeight: "500",
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.medium,
     color: COLORS.white,
   },
 
