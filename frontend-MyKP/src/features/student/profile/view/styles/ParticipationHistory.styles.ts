@@ -1,125 +1,123 @@
 import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
-    paddingHorizontal: 20,
-    paddingTop: 12,
+    backgroundColor: COLORS.white,
+
+    paddingHorizontal: 22,
+    paddingTop: 56,
   },
+
+  /* header */
 
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    marginTop: 8,
-    marginBottom: 28,
+    marginBottom: 20,
+    paddingTop: 20,
+    gap: 14,
+  },
+
+  backButton: {
+    width: 42,
+    height: 42,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginRight: 14,
   },
 
   header: {
     fontSize: 26,
-    fontWeight: "700",
+    fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
   },
 
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: COLORS.text,
-    marginBottom: 18,
-  },
+  /* progress */
 
-  card: {
-    flexDirection: "row",
+  progressCard: {
     backgroundColor: COLORS.white,
 
-    borderRadius: 18,
+    borderRadius: 20,
 
-    padding: 12,
-    marginBottom: 16,
+    padding: 20,
+
+    marginBottom: 32,
+    
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
 
     shadowColor: "#000",
     shadowOpacity: 0.06,
-    shadowRadius: 10,
+    shadowRadius: 12,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 4,
     },
 
     elevation: 4,
   },
 
-  image: {
-    width: 78,
-    height: 118,
-    borderRadius: 10,
-    marginRight: 14,
+  progressHeader: {
+    marginBottom: 14,
   },
 
-  content: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
-
-  title: {
-    fontSize: 16,
-    fontWeight: "700",
+  progressTitle: {
+    fontSize: 34,
+    fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
-    lineHeight: 22,
   },
 
-  date: {
-    fontSize: 14,
-    color: "#64748B",
-    marginTop: 6,
-  },
+  progressBarBackground: {
+    height: 16,
 
-  badgeRow: {
-    flexDirection: "row",
-    gap: 8,
-    marginTop: 14,
-  },
-
-  kpBadge: {
-    backgroundColor: "#FEF3C7",
+    backgroundColor: COLORS.secondary + "25",
 
     borderRadius: 999,
 
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    overflow: "hidden",
 
-    justifyContent: "center",
-    alignItems: "center",
+    marginBottom: 12,
   },
 
-  kpText: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: COLORS.text,
-  },
+  progressBarFill: {
+    height: "100%",
+    backgroundColor: COLORS.primary,
 
-  statusBadge: {
     borderRadius: 999,
-
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-
-    justifyContent: "center",
-    alignItems: "center",
   },
 
-  completed: {
-    backgroundColor: "#BBF7D0",
-  },
+  progressFooter: {
+    textAlign: "right",
 
-  progress: {
-    backgroundColor: "#FDE68A",
-  },
+    fontSize: 15,
+    fontWeight: FONT_WEIGHT.regular,
 
-  statusText: {
-    fontSize: 13,
-    fontWeight: "700",
     color: COLORS.text,
   },
+
+  /* section */
+
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.text,
+    marginBottom: 18,
+  },
+
+  listContent: {
+    paddingBottom: 30,
+  },
+
+  emptyText: {
+    textAlign: "center",
+
+    marginTop: 20,
+
+    color: COLORS.text
+  }
 });

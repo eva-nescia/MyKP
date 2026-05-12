@@ -63,7 +63,9 @@ export default function ProfileScreen() {
             onPress={() =>
               vm.openCategory(
                 item.id,
-                item.title
+                item.title,
+                item.current,
+                item.target
               )
             }
           />

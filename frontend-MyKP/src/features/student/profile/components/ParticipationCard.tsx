@@ -1,5 +1,7 @@
 import { View, Text, Image } from "react-native";
 
+import Badge from "src/features/student/profile/components/Badge";
+
 import styles from "./styles/ParticipationCard.styles";
 
 type Props = {
@@ -28,9 +30,13 @@ export default function ParticipationCard({
       />
 
       <View style={styles.content}>
-        <Text style={styles.organizer}>
-          Posted by {organizer}
-        </Text>
+        <View style={styles.organizerRow}>
+          <View style={styles.orangeDot} />
+
+          <Text style={styles.organizerText}>
+            Posted by {organizer}
+          </Text>
+        </View>
 
         <Text style={styles.title}>
           {title}
@@ -40,26 +46,20 @@ export default function ParticipationCard({
           {date}
         </Text>
 
-        <View style={styles.badges}>
-          <View style={styles.kpBadge}>
-            <Text style={styles.kpText}>
-              {kp}
-            </Text>
-          </View>
+      <View style={styles.badges}>
+          <Badge
+            label={kp}
+            variant="outline"
+          />
 
-          <View
-            style={[
-              styles.statusBadge,
-
+          <Badge
+            label={status}
+            variant={
               status === "Completed"
-                ? styles.completed
-                : styles.progress,
-            ]}
-          >
-            <Text style={styles.statusText}>
-              {status}
-            </Text>
-          </View>
+                ? "success"
+                : "warning"
+            }
+          />
         </View>
       </View>
     </View>

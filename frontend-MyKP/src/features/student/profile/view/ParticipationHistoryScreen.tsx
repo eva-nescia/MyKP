@@ -1,64 +1,93 @@
 import {
   View,
   Text,
-  Image,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
+
+import { router } from "expo-router";
+
+import { ArrowLeft } from "lucide-react-native";
+
+import ParticipationCard from "@/features/student/profile/components/ParticipationCard";
+
+import useParticipationHistoryViewModel from "../viewmodel/useParticipationHistoryViewModel";
 
 import styles from "../view/styles/ParticipationHistory.styles";
 
-type Props = {
-  item: {
-    id: number;
-    title: string;
-    date: string;
-    kp: string;
-    status: "Completed" | "On Progress";
-    image: any;
-  };
-};
+export default function ParticipationHistoryScreen() {
+  const vm = useParticipationHistoryViewModel();
 
-export default function ParticipationCard({
-  item,
-}: Props) {
   return (
-    <View style={styles.card}>
-      <Image
-        source={item.image}
-        style={styles.image}
-      />
+    <View style={styles.container}>
+      <View style={styles.headerRow}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+        >
+          <ArrowLeft
+            size={26}
+            color="#0F172A"
+          />
+        </TouchableOpacity>
 
-      <View style={styles.content}>
-        <View>
-          <Text style={styles.title}>
-            {item.title}
-          </Text>
-
-          <Text style={styles.date}>
-            {item.date}
-          </Text>
-        </View>
-
-        <View style={styles.badgeRow}>
-          <View style={styles.kpBadge}>
-            <Text style={styles.kpText}>
-              {item.kp}
-            </Text>
-          </View>
-
-          <View
-            style={[
-              styles.statusBadge,
-              item.status === "Completed"
-                ? styles.completed
-                : styles.progress,
-            ]}
-          >
-            <Text style={styles.statusText}>
-              {item.status}
-            </Text>
-          </View>
-        </View>
+        <Text style={styles.header}>
+          {vm.title}
+        </Text>
       </View>
+
+     <View style={styles.progressCard}>
+      
+    <View style={styles.progressHeader}>
+      <Text style={styles.progressTitle}>
+        {vm.current} / {vm.target}
+      </Text>
+    </View>
+
+    <View style={styles.progressBarBackground}>
+      <View
+        style={[
+          styles.progressBarFill,
+          {
+            width: `${vm.percentage}%`,
+          },
+        ]}
+      />
+    </View>
+
+   <Text style={styles.progressFooter}>
+    {Math.max(vm.target - vm.current, 0)} points remaining
+  </Text>
+  </View>
+
+      <Text style={styles.sectionTitle}>
+        Participation History
+      </Text>
+
+      <FlatList
+        data={vm.history}
+        keyExtractor={(item) =>
+          item.id.toString()
+        }
+        renderItem={({ item }) => (
+          <ParticipationCard
+            title={item.title}
+            date={item.date}
+            kp={item.kp}
+            status={item.status as "On Progress" | "Completed"}
+            organizer={item.organizer}
+            image={item.image}
+          />
+        )}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>
+            No participation history found.
+          </Text>
+        }
+        contentContainerStyle={
+          styles.listContent
+        }
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
