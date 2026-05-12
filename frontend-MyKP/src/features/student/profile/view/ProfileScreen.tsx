@@ -3,6 +3,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -38,37 +39,43 @@ export default function ProfileScreen() {
             size={40}
             color={COLORS.secondary}
             paddingBottom={26}
-        />
+          />
         </TouchableOpacity>
       </View>
 
-      <ProfileHeader onLogout={() => vm.setLogoutVisible(true)} />
+      <ProfileHeader user={vm.user} onLogout={() => vm.setLogoutVisible(true)} />
 
       <Text style={styles.sectionTitle}>
         KP Category Progress
       </Text>
 
-      <FlatList
-        data={vm.categories}
-        keyExtractor={(item) =>
-          item.id.toString()
-        }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={
-          styles.listContent
-        }
-        renderItem={({ item }) => (
-          <KPProgressCard
-            item={item}
-            onPress={() =>
-              vm.openCategory(
-                item.id,
-                item.title
-              )
-            }
-          />
-        )}
-      />
+      {vm.loading ? (
+        <ActivityIndicator size="large" color={COLORS.secondary} />
+      ) : vm.error ? (
+        <Text style={{ color: COLORS.secondary, padding: 16 }}>{vm.error}</Text>
+      ) : (
+        <FlatList
+          data={vm.categories}
+          keyExtractor={(item) =>
+            item.id.toString()
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={
+            styles.listContent
+          }
+          renderItem={({ item }) => (
+            <KPProgressCard
+              item={item}
+              onPress={() =>
+                vm.openCategory(
+                  item.id,
+                  item.title
+                )
+              }
+            />
+          )}
+        />
+      )}
 
       <LogoutModal
         visible={vm.logoutVisible}
