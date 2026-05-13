@@ -49,11 +49,17 @@ const LoginScreen = () => {
   //   });
   // }, []);
 
-  const routeForRole = (role: string) => {
-    if (role === 'admin') {
-      router.replace('/activities');
+  const routeForRole = (
+    role: string
+  ) => {
+    if (role === "admin") {
+      router.replace(
+        "/(admin)/activities"
+      );
     } else {
-      router.replace('/dashboard');
+      router.replace(
+        "/(student)/dashboard"
+      );
     }
   };
 

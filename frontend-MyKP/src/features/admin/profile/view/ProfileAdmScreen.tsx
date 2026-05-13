@@ -3,7 +3,7 @@ import {
   Text,
 } from "react-native";
 
-export default function ActivityListAdminScreen() {
+export default function ProfileAdminScreen() {
   return (
     <View
       style={{
@@ -22,7 +22,7 @@ export default function ActivityListAdminScreen() {
           color: "#0F172A",
         }}
       >
-        Admin Activity List
+        Admin Profile
       </Text>
 
       <Text
