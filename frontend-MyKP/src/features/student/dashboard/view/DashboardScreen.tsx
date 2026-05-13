@@ -6,6 +6,8 @@ import ActivityCard from "../../../../components/activityCard/ActivityCard";
 import DashboardHeader from "../components/DashboardHeader";
 import { styles } from "./styles/Dashboard.styles";
 
+import { router } from "expo-router";
+
 export default function DashboardScreen() {
   const { data, loading, error } = useDashboardViewModel();
 
@@ -24,7 +26,9 @@ export default function DashboardScreen() {
           userName={data.userName}
           onPressNotification={() => {
             console.log("Go to notifications");
-            // TODO: navigation.navigate("Notifications")
+            router.push(
+              "/notification/notification"
+            )
           }}
         />
 

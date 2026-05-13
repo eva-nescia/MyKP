@@ -1,3 +1,3 @@
-import NotificationlScreen from "@/features/student/notification//view/NotificationScreen";
+import NotificationScreen from "@/features/student/notification//view/NotificationScreen";
 
-export default NotificationlScreen;
+export default NotificationScreen;

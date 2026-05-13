@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { COLORS } from "@/constants/colors";
+import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
   card: {
@@ -56,14 +57,14 @@ export default StyleSheet.create({
 
   title: {
     fontSize: 20,
-    fontWeight: "500",
+    fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
 
     marginBottom: 2,
   },
 
   description: {
-    fontSize: 18,
+    fontSize: 16,
     color: COLORS.text,
 
     marginBottom: 6,
