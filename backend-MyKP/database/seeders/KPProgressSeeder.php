@@ -24,6 +24,7 @@ class KPProgressSeeder extends Seeder
             ['kp_category' => 'Organisasi Kemahasiswaan',       'kp_current_amount' => 10, 'kp_amount_requirement' => 20],
             ['kp_category' => 'Mentoring',                      'kp_current_amount' => 0,  'kp_amount_requirement' => 15],
             ['kp_category' => 'Talkshow (Wajib BMA)',           'kp_current_amount' => 6,  'kp_amount_requirement' => 6],
+            ['kp_category' => 'Kepanitiaan',                    'kp_current_amount' => 0,  'kp_amount_requirement' => 10],
             ['kp_category' => 'Kompetisi',                      'kp_current_amount' => 0,  'kp_amount_requirement' => 2],
             ['kp_category' => 'Pengabdian Masyarakat',          'kp_current_amount' => 0,  'kp_amount_requirement' => 8],
             ['kp_category' => 'Penelitian',                     'kp_current_amount' => 0,  'kp_amount_requirement' => 6],
