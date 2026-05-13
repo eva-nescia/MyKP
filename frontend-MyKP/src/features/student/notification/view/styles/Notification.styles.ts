@@ -7,12 +7,12 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-
     paddingHorizontal: 20,
     paddingTop: 56,
   },
 
   headerRow: {
+    paddingTop: 20,
     flexDirection: "row",
     alignItems: "center",
 
@@ -22,20 +22,20 @@ export default StyleSheet.create({
   },
 
   header: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
   },
 
   count: {
     fontSize: 16,
-    color: "#64748B",
+    color: COLORS.text,
 
     marginBottom: 26,
   },
 
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: FONT_WEIGHT.semiBold,
 
     color: COLORS.text,
