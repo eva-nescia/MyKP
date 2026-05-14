@@ -7,8 +7,8 @@ import { useState } from "react";
 import { useRouter } from "expo-router";
 
 import ActivityCard from "@/components/activityCard/ActivityCard";
-import SearchBar from "../components/SearchBar";
-import FilterDropdown from "../components/FilterDropdown";
+import SearchBar from "@/components/search-filter/SearchBar";
+import FilterDropdown from "@/components/search-filter/FilterDropdown";
 import { useActivityListViewModel } from "../viewmodel/useActivityListViewModel";
 import { styles } from "./styles/ActivityList.styles";
 
