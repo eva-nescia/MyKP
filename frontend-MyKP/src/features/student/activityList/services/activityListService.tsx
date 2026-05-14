@@ -1,22 +1,28 @@
 import { Activity } from "../model/types";
+import { API_URL } from '../../../../constants/apiConfig';
 
 export const fetchActivities = async (): Promise<Activity[]> => {
-  return [
-    {
-      id: "1",
-      title: "Seminar Bela Negara & Anti Narkoba",
-      image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
-      type: "Talkshow Wajib",
-      points: 6,
-      date: "Sat, 29 November 2025",
-    },
-    {
-      id: "2",
-      title: "Leadership Workshop",
-      image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
-      type: "Lain-lain",
-      points: 4,
-      date: "Mon, 12 October 2025",
-    },
-  ];
+  try {
+    const response = await fetch(`${API_URL}/activities`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch activities (HTTP ${response.status})`);
+    }
+
+    const data = await response.json();
+
+    // Map backend response to frontend Activity interface
+    // Handle image as URI if available, otherwise use placeholder
+    return data.map((act: any) => ({
+      id: act.id,
+      title: act.title,
+      image: act.image ? { uri: act.image } : require('../../../../../assets/images/activity-placeholder/seminarAntiNarkoba.jpeg'),
+      type: act.type,
+      points: act.points,
+      date: act.date,
+    }));
+  } catch (error) {
+    console.error('Error fetching activities:', error);
+    throw error;
+  }
 };
