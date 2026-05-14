@@ -4,14 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
 class ActivityController extends Controller
 {
     #[OA\Get(
         path: "/api/activities",
-        summary: "Get all activities",
-        tags: ["Activities"]
+        summary: "Search activities by title or type",
+        tags: ["Activities"],
+        parameters: [
+            new OA\Parameter(
+                name: "search",
+                in: "query",
+                description: "Search by activity title or type",
+                required: false,
+                schema: new OA\Schema(type: "string", example: "seminar")
+            ),
+        ]
     )]
     #[OA\Response(
         response: 200,
@@ -31,11 +41,20 @@ class ActivityController extends Controller
             )
         )
     )]
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
-        $activities = Activity::query()
-            ->orderBy('date', 'desc')
-            ->get();
+        $query = Activity::query();
+
+        // Search filter — by title or type
+        if ($request->has('search') && $request->input('search') !== '') {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('kp_category', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $activities = $query->orderBy('date', 'desc')->get();
 
         $formatted = $activities->map(function ($act) {
             return [
