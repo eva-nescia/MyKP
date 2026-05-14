@@ -62,9 +62,7 @@ class ActivityController extends Controller
         }
 
         // Category filter
-        if ($request->has('category') && $request->input('category') !== '' && $request->input('category') !== 'All') {
-            $query->where('kp_category', $request->input('category'));
-        }
+        $query = $this->filterByCategory($query, $request);
 
         $activities = $query->orderBy('date', 'desc')->get();
 
@@ -80,5 +78,13 @@ class ActivityController extends Controller
         });
 
         return response()->json($formatted);
+    }
+
+    private function filterByCategory(Query $query, Request $request): Query
+    {
+        if ($request->has('category') && $request->input('category') !== '' && $request->input('category') !== 'All') {
+            return $query->where('kp_category', $request->input('category'));
+        }
+        return $query;
     }
 }
