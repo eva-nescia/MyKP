@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import ProfileHeader from "../components/ProfileHeader";
 import KPProgressCard from "../components/KPProgressCard";
-import LogoutModal from "../components/LogoutModal";
+import LogoutModal from "../../../../components/modal/logout/LogoutModal";
 
 import useProfileViewModel from "../viewmodel/useProfileViewModel";
 
