@@ -1,9 +1,21 @@
 import { Activity } from "../model/types";
 import { API_URL } from '../../../../constants/apiConfig';
 
-export const fetchActivities = async (): Promise<Activity[]> => {
+export const fetchActivities = async (search?: string, category?: string): Promise<Activity[]> => {
   try {
-    const response = await fetch(`${API_URL}/activities`);
+    // Build query string
+    const params = new URLSearchParams();
+    if (search && search.trim()) {
+      params.append('search', search.trim());
+    }
+    if (category && category !== 'All' && category.trim()) {
+      params.append('category', category.trim());
+    }
+
+    const queryString = params.toString();
+    const url = queryString ? `${API_URL}/activities?${queryString}` : `${API_URL}/activities`;
+
+    const response = await fetch(url);
     
     if (!response.ok) {
       throw new Error(`Failed to fetch activities (HTTP ${response.status})`);

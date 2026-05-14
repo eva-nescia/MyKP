@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use OpenApi\Attributes as OA;
 
 class ActivityController extends Controller
@@ -80,7 +81,7 @@ class ActivityController extends Controller
         return response()->json($formatted);
     }
 
-    private function filterByCategory(Query $query, Request $request): Query
+    private function filterByCategory(Builder $query, Request $request): Builder
     {
         if ($request->has('category') && $request->input('category') !== '' && $request->input('category') !== 'All') {
             return $query->where('kp_category', $request->input('category'));
