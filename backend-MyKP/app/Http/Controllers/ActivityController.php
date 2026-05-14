@@ -21,6 +21,13 @@ class ActivityController extends Controller
                 required: false,
                 schema: new OA\Schema(type: "string", example: "seminar")
             ),
+            new OA\Parameter(
+                name: "category",
+                in: "query",
+                description: "Filter by activity category",
+                required: false,
+                schema: new OA\Schema(type: "string", example: "Talkshow Wajib BMA")
+            ),
         ]
     )]
     #[OA\Response(
@@ -52,6 +59,11 @@ class ActivityController extends Controller
                 $q->where('name', 'LIKE', "%{$search}%")
                   ->orWhere('kp_category', 'LIKE', "%{$search}%");
             });
+        }
+
+        // Category filter
+        if ($request->has('category') && $request->input('category') !== '' && $request->input('category') !== 'All') {
+            $query->where('kp_category', $request->input('category'));
         }
 
         $activities = $query->orderBy('date', 'desc')->get();
