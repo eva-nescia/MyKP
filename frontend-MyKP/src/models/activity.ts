@@ -4,7 +4,9 @@ export interface Activity {
   image: any;
   type: string;
   points: number;
+  
   date: string;
+  year: string;
 
   organizer?: string;
   location?: string;

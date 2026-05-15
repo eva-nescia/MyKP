@@ -5,9 +5,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { BlurView } from "expo-blur";
+
 import { LogOut } from "lucide-react-native";
 
-import styles from "src/features/student/profile/components/styles/LogoutModal.styles";
+import styles from "@/components/modal/logout/LogoutModal.styles";
+import { COLORS } from "@/constants/colors";
 
 type Props = {
   visible: boolean;
@@ -27,28 +30,39 @@ export default function LogoutModal({
       animationType="fade"
     >
       <View style={styles.overlay}>
+        <BlurView
+          intensity={30}
+          tint="light"
+          style={styles.blur}
+        />
+
         <View style={styles.container}>
           <View
             style={styles.iconContainer}
           >
             <LogOut
-              size={42}
-              color="white"
+              size={28}
+              color={COLORS.primary}
             />
           </View>
 
           <Text style={styles.title}>
-            Are you sure you want to
-            logout?
+            Logout?
+          </Text>
+
+          <Text style={styles.description}>
+            You will need to log in again
+            to access your account.
           </Text>
 
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={onClose}
+              activeOpacity={0.9}
             >
               <Text
-                style={styles.buttonText}
+                style={styles.cancelText}
               >
                 Cancel
               </Text>
@@ -57,9 +71,10 @@ export default function LogoutModal({
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={onConfirm}
+              activeOpacity={0.9}
             >
               <Text
-                style={styles.buttonText}
+                style={styles.confirmText}
               >
                 Logout
               </Text>

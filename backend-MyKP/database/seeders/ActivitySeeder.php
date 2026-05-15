@@ -50,7 +50,7 @@ EOT,
 • 081234567890 - Gladys
 • 081234567890 - Vivi
 EOT,
-            'event_poster' => 'poster_seminar_bela_negara.jpg', // Placeholder for the actual image path
+            'event_poster' => 'images/seminarAntiNarkoba.jpeg',
         ]);
     }
 }

@@ -15,7 +15,7 @@ const CATEGORIES = [
   "All",
   "Organisasi",
   "Kepanitiaan",
-  "Talkshow Wajib",
+  "Talkshow Wajib BMA",
   "Kompetisi",
   "Pengabdian Masyarakat (Abdimas)",
   "Penelitian",
