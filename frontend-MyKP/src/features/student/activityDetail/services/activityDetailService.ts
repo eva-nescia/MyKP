@@ -1,40 +1,38 @@
 import { Activity } from "@/models/activity";
+import { API_URL } from '../../../../constants/apiConfig';
 
 export const fetchActivityById = async (id: string): Promise<Activity> => {
-  const data: Activity[] = [
-    {
-      id: "1",
-      title: "Seminar Bela Negara & Anti Narkoba",
-      image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
-      organizer: "BMA",
-      location: "Auditorium\n7th floor",
-      type: "Talkshow Wajib",
-      points: 6,
-      eligibleStudyProgram: "All Prodi",
-      eligibleCohort: "All Gen",
-      date: "Fri, 26 Feb 2026\n23:59",
+try {
+    const url = `${API_URL}/activities/${id}`;
 
-      description:
-        "Seminar ini bertujuan untuk meningkatkan kesadaran mahasiswa terhadap pentingnya bela negara dan bahaya narkoba.",
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch activity (HTTP ${response.status})`);
+    }
 
-      requirement: [
-        "Mahasiswa aktif UC Makassar",
-        "Mengisi form pendaftaran",
-      ],
+    const act = await response.json();
 
-      howToClaim: [
-        "Hadiri seminar",
-        "Isi absensi",
-        "KP akan diberikan setelah verifikasi",
-      ],
-
-      contactPerson: [
-        "Jose BMA - 08123456789", 
-        "Patrick BMA - 08123456789"],
-
-      registrationLink: "https://example.com",
-    },
-  ];
-
-  return data.find((item) => item.id === id)!;
+    return {
+      id: act.id,
+      title: act.title,
+      image: act.image ? { uri: act.image } : require('../../../../../assets/images/activity-placeholder/seminarAntiNarkoba.jpeg'),
+      organizer: act.organizer,
+      location: act.location,
+      type: act.type,
+      points: act.points,
+      year: new Date(act.date).getFullYear().toString(),
+      eligibleStudyProgram: act.eligibleStudyProgram,
+      eligibleCohort: act.eligibleCohort,
+      date: act.date,
+      description: act.description,
+      requirement: act.requirement,
+      howToClaim: act.howToClaim,
+      contactPerson: act.contactPerson,
+      registrationLink: act.registrationLink,
+    };
+  } catch (error) {
+    console.error('Error fetching activity:', error);
+    throw error;
+  }
 };

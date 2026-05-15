@@ -17,7 +17,7 @@ class ActivitySeeder extends Seeder
             'kp_category' => 'Talkshow Wajib BMA',
             'kp_amount' => 6,
             'eligible_generation' => 'All Gen',
-            'eligible_study_program' => 'All Study Program',
+            'eligible_study_program' => 'All Prodi',
             'date' => '2026-05-29', 
             'time' => '07:30 - 09:30',
             'location' => 'Auditorium, 7th Floor',
@@ -50,7 +50,7 @@ EOT,
 • 081234567890 - Gladys
 • 081234567890 - Vivi
 EOT,
-            'event_poster' => 'poster_seminar_bela_negara.jpg', // Placeholder for the actual image path
+            'event_poster' => 'images/seminarAntiNarkoba.jpeg',
         ]);
     }
 }

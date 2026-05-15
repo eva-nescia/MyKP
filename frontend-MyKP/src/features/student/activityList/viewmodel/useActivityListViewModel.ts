@@ -26,25 +26,11 @@ export const useActivityListViewModel = () => {
     setLoading(false);
   };
 
-  const applyFilter = () => {
-    let result = data;
-
-    // search
-    if (search) {
-      result = result.filter((item) =>
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.type.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    // category filter
-    if (selectedCategory && selectedCategory !== "All") {
-      result = result.filter(
-        (item) => item.type === selectedCategory
-      );
-    }
-
+  const applyFilter = async () => {
+    setLoading(true);
+    const result = await fetchActivities(search, selectedCategory ?? undefined);
     setFiltered(result);
+    setLoading(false);
   };
 
   return {
