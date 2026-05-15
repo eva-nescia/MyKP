@@ -4,6 +4,7 @@ import {
   FlatList,
 } from "react-native";
 import { useState } from "react";
+import { router } from "expo-router";
 
 import SearchBar from "@/components/search-filter/SearchBar";
 import AdminActivityCard from "../components/ActivityCardAdm";
@@ -18,7 +19,7 @@ export default function ActivityListAdminScreen() {
 
   const [showFilter, setShowFilter] =
     useState(false);
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -78,11 +79,9 @@ export default function ActivityListAdminScreen() {
         showsVerticalScrollIndicator={false}
       />
 
-      <AddActivityButton
-        onPress={() => {
-          console.log("Add activity");
-        }}
-      />
+    <AddActivityButton
+      onPress={() => router.push("/new-activity/new-activity")}
+    />
 
       <YearFilter
         visible={showFilter}
