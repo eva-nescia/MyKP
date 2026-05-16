@@ -56,23 +56,19 @@ export default function ActivityListAdminScreen() {
             type={item.type}
             points={item.points}
             date={item.date}
-
             onPress={() => {
-              console.log(
-                "Open activity details"
-              );
+              console.log("Open activity details");
             }}
-
             onEdit={() => {
-              console.log(
-                "Edit activity"
-              );
+              router.push({
+                pathname: "/new-activity/edit/[id]",
+                params: {
+                  id: item.id,
+                },
+              });
             }}
-
             onDelete={() => {
-              console.log(
-                "Delete activity"
-              );
+              console.log("Delete activity");
             }}
           />
         )}

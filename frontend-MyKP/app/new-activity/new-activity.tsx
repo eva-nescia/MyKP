@@ -1,3 +1,3 @@
-import AddActivityScreen from "@/features/admin/add-new-activity/view/AddActivityScreen";
+import AddActivityScreen from "@/features/admin/form-activity/view/AddActivityScreen";
 
 export default AddActivityScreen;
