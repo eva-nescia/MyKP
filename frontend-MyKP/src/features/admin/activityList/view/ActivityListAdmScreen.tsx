@@ -3,10 +3,12 @@ import {
   Text,
   FlatList,
 } from "react-native";
-import { useState } from "react";
-import { router } from "expo-router";
+import { useState, useEffect } from "react";
+import { router, useLocalSearchParams } from "expo-router";
 
 import SearchBar from "@/components/search-filter/SearchBar";
+import AppSnackbar from "@/components/snackbar/AppSnackbar";
+
 import AdminActivityCard from "../components/ActivityCardAdm";
 import AddActivityButton from "../components/AddActivityBtn";
 import YearFilter from "../components/YearFilter";
@@ -14,12 +16,20 @@ import { useActivityListAdminViewModel } from "../viewmodel/useActivityListAdmVi
 import styles from "./styles/ActivityListAdm.styles";
 
 export default function ActivityListAdminScreen() {
-  const vm =
-    useActivityListAdminViewModel();
+  const vm = useActivityListAdminViewModel();
 
-  const [showFilter, setShowFilter] =
-    useState(false);
-  
+  const { loginSuccess } = useLocalSearchParams();
+
+  const [showFilter, setShowFilter] = useState(false);
+  const [showLoginSuccess, setShowLoginSuccess] = useState(false);
+
+  useEffect(() => {
+    if (loginSuccess === "true") {
+      setShowLoginSuccess(true);
+    }
+    console.log("loginSuccess:", loginSuccess);
+  }, [loginSuccess]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -46,9 +56,7 @@ export default function ActivityListAdminScreen() {
       <FlatList
         data={vm.data}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={
-          styles.list
-        }
+        contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <AdminActivityCard
             title={item.title}
@@ -75,9 +83,11 @@ export default function ActivityListAdminScreen() {
         showsVerticalScrollIndicator={false}
       />
 
-    <AddActivityButton
-      onPress={() => router.push("/new-activity/new-activity")}
-    />
+      <AddActivityButton
+        onPress={() =>
+          router.push("/new-activity/new-activity")
+        }
+      />
 
       <YearFilter
         visible={showFilter}
@@ -87,6 +97,15 @@ export default function ActivityListAdminScreen() {
         }
         onClose={() =>
           setShowFilter(false)
+        }
+      />
+
+      <AppSnackbar
+        visible={showLoginSuccess}
+        message="Login successful"
+        type="success"
+        onHide={() =>
+          setShowLoginSuccess(false)
         }
       />
     </View>
