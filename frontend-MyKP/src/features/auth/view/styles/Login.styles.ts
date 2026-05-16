@@ -1,7 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from "react-native";
 
-import { COLORS } from '../../../../constants/colors';
-import { FONT_WEIGHT } from '../../../../constants/typography';
+import { COLORS } from "../../../../constants/colors";
+import { FONT_WEIGHT } from "../../../../constants/typography";
+
+const { height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,62 +11,86 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
 
+  scrollContent: {
+    flexGrow: 1,
+    backgroundColor: COLORS.white,
+  },
+
   header: {
-    height: '32%',
-    position: 'relative',
+    height: height * 0.36,
+    minHeight: 260,
+    maxHeight: 360,
+
+    position: "relative",
+    overflow: "hidden",
   },
 
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
 
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: COLORS.primary,
-    opacity: 0.85,
+    opacity: 0.86,
   },
 
   logoContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+
+    paddingTop: 24,
   },
 
   logo: {
-    width: 150,
-    height: 150,
-    resizeMode: 'contain',
+    width: 160,
+    height: 160,
+    resizeMode: "contain",
   },
 
   formContainer: {
     flex: 1,
+
     backgroundColor: COLORS.white,
-    padding: 24,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+
+    marginTop: -34,
+
+    // borderTopLeftRadius: 30,
+    // borderTopRightRadius: 30,
+
+    paddingHorizontal: 28,
+    paddingTop: 38,
+    paddingBottom: 44,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+
+    elevation: 12,
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 34,
     fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
-    marginBottom: 6,
+
+    marginBottom: 8,
   },
 
   subtitle: {
-    fontSize: 14,
-    fontWeight: FONT_WEIGHT.regular,
-    color: COLORS.text,
-    marginBottom: 24,
-  },
+    fontSize: 15,
+    lineHeight: 22,
+    color: "#64748B",
 
-  formTitle: {
-    fontSize: 18,
-    fontWeight: FONT_WEIGHT.semiBold,
-    color: COLORS.text,
-    marginBottom: 16,
+    marginBottom: 34,
   },
 
   inputLabel: {
@@ -73,20 +99,23 @@ export const styles = StyleSheet.create({
   },
 
   dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
+    flexDirection: "row",
+    alignItems: "center",
+
+    marginVertical: 28,
   },
 
   line: {
     flex: 1,
     height: 1,
-    backgroundColor: COLORS.gray,
+    backgroundColor: "#D1D5DB",
   },
 
   dividerText: {
-    marginHorizontal: 10,
-    color: COLORS.text,
-  },
+    marginHorizontal: 14,
 
+    color: "#6B7280",
+    fontSize: 14,
+    fontWeight: FONT_WEIGHT.medium,
+  },
 });
