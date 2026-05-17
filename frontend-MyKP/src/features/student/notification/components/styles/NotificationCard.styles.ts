@@ -4,74 +4,94 @@ import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
+
   card: {
     flexDirection: "row",
+    alignItems: "flex-start",
 
     backgroundColor: COLORS.white,
 
-    borderRadius: 14,
-
-    padding: 16,
-
+    borderRadius: 24,
+    padding: 18,
     marginBottom: 14,
 
+    borderWidth: 1,
+    borderColor: "rgba(148,163,184,0.08)",
+
     shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 4,
     },
 
-    elevation: 4,
+    elevation: 2,
   },
 
   iconContainer: {
-    width: 54,
+    width: 46,
+    height: 46,
+
+    borderRadius: 16,
+
+    backgroundColor: "#FFF7ED",
+
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 4,
+
+    marginRight: 14,
   },
 
   content: {
     flex: 1,
   },
 
-  badge: {
-    alignSelf: "flex-start",
-
-    backgroundColor: "#0F3D63",
-
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-
-    borderRadius: 6,
-
-    marginBottom: 6,
+  topRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 10,
   },
 
-  badgeText: {
-    color: "white",
-    fontSize: 10,
-    fontWeight: "600",
-  },
 
   title: {
-    fontSize: 20,
-    fontWeight: FONT_WEIGHT.semiBold,
+    flex: 1,
+
+    fontSize: 18,
+    fontWeight: FONT_WEIGHT.medium,
+
     color: COLORS.text,
 
-    marginBottom: 2,
+    lineHeight: 24,
+  },
+
+  time: {
+    fontSize: 13,
+    fontWeight: FONT_WEIGHT.medium,
+    color: "#94A3B8",
   },
 
   description: {
     fontSize: 16,
     color: COLORS.text,
 
-    marginBottom: 6,
+    marginTop: 4,
+    marginBottom: 8,
+
+    lineHeight: 22,
   },
 
-  time: {
-    fontSize: 13,
-    color: "#475569",
+ badge: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 999,
+  },
+
+  badgeText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.semiBold,
+
+    color: "#C97A04",
   },
 });
