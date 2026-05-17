@@ -67,11 +67,11 @@ class ActivityController extends Controller
 
         $activities = $query->orderBy('date', 'desc')->get();
 
-        $formatted = $activities->map(function ($act) {
+        $formatted = $activities->map(function ($act) use ($request) {
             return [
                 'id'     => (string) $act->ActivityID,
                 'title'  => $act->name,
-                'image'  => $act->event_poster ? asset($act->event_poster) : null,
+                'image'  => $this->buildImageUrl($request, $act->event_poster),
                 'type'   => $act->kp_category,
                 'points' => (int) $act->kp_amount,
                 'date'   => \Carbon\Carbon::parse($act->date)->format('l, d F Y'),
@@ -119,7 +119,7 @@ class ActivityController extends Controller
             ]
         )
     )]
-    public function getById(string $id): JsonResponse
+    public function getById(Request $request, string $id): JsonResponse
     {
         $activity = Activity::where('ActivityID', $id)->first();
 
@@ -132,7 +132,7 @@ class ActivityController extends Controller
         return response()->json([
             'id'                    => (string) $activity->ActivityID,
             'title'                 => $activity->name,
-            'image'                 => $activity->event_poster ? asset($activity->event_poster) : null,
+            'image'                 => $this->buildImageUrl($request, $activity->event_poster),
             'organizer'             => $organizer,
             'type'                  => $activity->kp_category,
             'points'                => (int) $activity->kp_amount,
@@ -146,6 +146,21 @@ class ActivityController extends Controller
             'contactPerson'         => $this->parseListField($activity->contact_person),
             'registrationLink'      => $activity->registration_link,
         ]);
+    }
+
+    /**
+     * Build an absolute image URL based on the current request host.
+     * Passes through if already an absolute URL (e.g. factory-generated fake URLs).
+     */
+    public static function buildImageUrl(Request $request, ?string $poster): ?string
+    {
+        if (!$poster) {
+            return null;
+        }
+        if (preg_match('/^https?:\/\//i', $poster)) {
+            return $poster;
+        }
+        return $request->getSchemeAndHttpHost() . '/' . ltrim($poster, '/');
     }
 
     private function parseListField(?string $field): array
