@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../../../../constants/colors";
+import { FONT_WEIGHT } from "@/constants/typography";
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -57,10 +58,10 @@ export const styles = StyleSheet.create({
   },
 
   section: {
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 24,
+    fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
-    marginVertical: 12,
+    marginBottom: 8,
   },
 
   horizontalList: {

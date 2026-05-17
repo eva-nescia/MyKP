@@ -4,7 +4,7 @@ export const COLORS = {
   text: '#000000',      // brown
   white: '#FFFFFF',
   lightGray: '#F5F5F5',
-  gray: '#999999',
+  gray: '64748B9',
   background: '#F8FAFC',
   success: '#16A34A',
   error: '#DC2626'
