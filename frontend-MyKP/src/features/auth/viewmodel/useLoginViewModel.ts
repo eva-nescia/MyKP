@@ -154,7 +154,7 @@ export default function useLoginViewModel() {
         password,
       });
 
-      setSession(res);
+      await setSession(res);
 
       signIn(res.token, res.user);
 

@@ -1,40 +1,61 @@
-import { useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import {
-  getParticipationHistory,
-} from "@/features/student/profile/services/historyService";
+  ParticipationHistoryItem,
+  fetchParticipationHistory,
+} from "@/features/student/profile/services/participationService";
 
 export default function useParticipationHistoryViewModel() {
-  const {
-    id,
-    title,
-    current,
-    target,
-  } = useLocalSearchParams();
+  const { title, current, target } = useLocalSearchParams();
 
-  const categoryId = Number(id);
+  const categoryTitle = title?.toString() ?? "";
+  const currentValue = Number(current) || 0;
+  const targetValue = Number(target) || 0;
+  const percentage = targetValue > 0
+    ? Math.min((currentValue / targetValue) * 100, 100)
+    : 0;
 
-  const history =
-    getParticipationHistory().filter(
-      (item) =>
-        item.categoryId === categoryId
-    );
+  const [history, setHistory] = useState<ParticipationHistoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const currentValue = Number(current);
-  const targetValue = Number(target);
+  const load = useCallback(async () => {
+    if (!categoryTitle) {
+      setHistory([]);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const rows = await fetchParticipationHistory(categoryTitle);
+      setHistory(rows);
+    } catch (e: any) {
+      setError(e?.message ?? "Failed to load participation history.");
+      setHistory([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [categoryTitle]);
 
-  const percentage = Math.min(
-    (currentValue / targetValue) * 100,
-    100
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  // Refresh whenever the user comes back to this screen — e.g. after
+  // registering for a new event somewhere else in the app.
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load]),
   );
 
   return {
-    title:
-      title?.toString() ??
-      "Selected Category",
-
+    title: categoryTitle || "Selected Category",
     history,
-
+    loading,
+    error,
     current: currentValue,
     target: targetValue,
     percentage,

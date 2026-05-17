@@ -10,6 +10,7 @@ import {
   getBookmarkStatus,
   removeBookmark,
 } from "@/features/student/bookmark/services/bookmarkService";
+import { registerForActivity } from "@/features/student/profile/services/participationService";
 
 export const useActivityDetailViewModel = (
   id: string
@@ -88,6 +89,25 @@ export const useActivityDetailViewModel = (
 
   const confirmRegister = async () => {
     setShowLinkModal(false);
+
+    // Record the participation + bump KP before opening the external form.
+    // We deliberately don't block the link open on a failed register — if the
+    // user is already registered (409) or the network burps, they should still
+    // be able to fill the form. We surface a toast via the save modal instead.
+    try {
+      const result = await registerForActivity(id);
+      if (!result.alreadyRegistered) {
+        setSaveMessage(
+          result.kpProgressUpdated
+            ? "Registered. KP added to your progress."
+            : "Registered. (No matching KP category to update.)"
+        );
+        setShowSaveModal(true);
+        setTimeout(() => setShowSaveModal(false), 1600);
+      }
+    } catch {
+      // Silent — the link will still open below.
+    }
 
     setTimeout(async () => {
       if (activity?.registrationLink) {
