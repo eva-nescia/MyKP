@@ -1,15 +1,10 @@
-export interface Activity {
-  id: string;
-  title: string;
-  image: any;
-  type: string;
-  points: number;
-  date: string;
-}
+import { Activity } from "@/models/activity";
+
 
 export interface DashboardData {
   userName: string;
   kpProgress: number;
   totalKP: number;
+  date: string;
   activities: Activity[];
 }

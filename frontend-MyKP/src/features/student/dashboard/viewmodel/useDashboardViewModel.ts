@@ -4,49 +4,40 @@ import { useLocalSearchParams } from "expo-router";
 import { fetchDashboard } from "../services/dashboardService";
 import { DashboardData } from "../model/types";
 import { useAuth } from "../../../../core/contexts/AuthContext";
+import { useLoadingStore } from "@/store/useLoadingStore";
 
 export const useDashboardViewModel = () => {
   const { token } = useAuth();
 
-  const { loginSuccess } =
-    useLocalSearchParams();
+  const { loginSuccess } = useLocalSearchParams();
 
-  const [data, setData] =
-    useState<DashboardData | null>(null);
+  const showLoading = useLoadingStore((state) => state.showLoading);
+  const hideLoading = useLoadingStore((state) => state.hideLoading);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState<string | null>(null);
-
-  const [showLoginSuccess, setShowLoginSuccess] =
-    useState(false);
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showLoginSuccess, setShowLoginSuccess] = useState(false);
 
   const loadDashboard = async () => {
     if (!token) {
       setError("User is not authenticated");
-      setLoading(false);
       return;
     }
 
     try {
-      setLoading(true);
+      showLoading();
       setError(null);
 
-      const result =
-        await fetchDashboard(token);
+      const result = await fetchDashboard(token);
 
       setData(result);
-
     } catch (err: any) {
       setError(
         err.message ||
-        "Failed to load dashboard. Check backend connection."
+          "Failed to load dashboard. Check backend connection."
       );
-
     } finally {
-      setLoading(false);
+      hideLoading();
     }
   };
 
@@ -54,7 +45,6 @@ export const useDashboardViewModel = () => {
     loadDashboard();
   }, [token]);
 
-  // LOGIN SUCCESS
   useEffect(() => {
     if (loginSuccess === "true") {
       setShowLoginSuccess(true);
@@ -63,7 +53,6 @@ export const useDashboardViewModel = () => {
 
   return {
     data,
-    loading,
     error,
 
     showLoginSuccess,
