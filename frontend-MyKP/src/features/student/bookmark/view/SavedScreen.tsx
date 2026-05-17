@@ -1,24 +1,20 @@
-import { View, Text, FlatList } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  View,
+} from "react-native";
 
 import EmptySavedState from "../components/EmptySavedState";
 import SavedActivityCard from "../components/SavedActivityCard";
+import { useSavedActivitiesViewModel } from "../viewmodel/useSavedActivitiesViewModel";
 
 import styles from "src/features/student/bookmark/view/styles/Saved.styles";
 
-const MOCK_DATA = [
-  {
-      id: "1",
-      title: "Seminar Bela Negara & Anti Narkoba",
-      organizer: "BMA",
-      image: require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
-      type: "Talkshow Wajib",
-      points: "6",
-      date: "Sat, 29 November 2025",
-    },
-];
-
 export default function SavedScreen() {
-  const hasSaved = MOCK_DATA.length > 0;
+  const { data, loading, error } = useSavedActivitiesViewModel();
+
+  const hasSaved = data.length > 0;
 
   return (
     <View style={styles.container}>
@@ -28,18 +24,34 @@ export default function SavedScreen() {
 
       {hasSaved && (
         <Text style={styles.subheader}>
-          {MOCK_DATA.length} saved activity
+          {data.length} saved {data.length === 1 ? "activity" : "activities"}
         </Text>
       )}
 
-      {!hasSaved ? (
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : error ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text style={{ textAlign: "center" }}>{error}</Text>
+        </View>
+      ) : !hasSaved ? (
         <EmptySavedState />
       ) : (
         <FlatList
-          data={MOCK_DATA}
+          data={data}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <SavedActivityCard {...item} />
+            <SavedActivityCard
+              id={item.id}
+              title={item.title}
+              organizer={item.organizer}
+              date={item.date}
+              points={String(item.points)}
+              type={item.type}
+              image={item.image}
+            />
           )}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
