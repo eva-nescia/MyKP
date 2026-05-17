@@ -3,10 +3,10 @@ import { View, Text } from "react-native";
 import {
   Bell,
   Clock3,
-  Check,
+  CheckCheck,
 } from "lucide-react-native";
 
-import styles from "src/features/student/notification/components/styles/NotificationCard.styles";
+import styles from "./styles/NotificationCard.styles";
 
 type Props = {
   item: {
@@ -21,12 +21,41 @@ type Props = {
 export default function NotificationCard({
   item,
 }: Props) {
+  const getTypeStyle = () => {
+    if (item.type === "success") {
+      return {
+        iconBg: "#ECFDF5",
+        iconColor: "#16A34A",
+        badgeBg: "#DCFCE7",
+        badgeText: "#15803D",
+      };
+    }
+
+    if (item.type === "notification") {
+      return {
+        iconBg: "#EFF6FF",
+        iconColor: "#2563EB",
+        badgeBg: "#DBEAFE",
+        badgeText: "#1D4ED8",
+      };
+    }
+
+    return {
+      iconBg: "#FFF7ED",
+      iconColor: "#F28C28",
+      badgeBg: "#FEF3C7",
+      badgeText: "#C97A04",
+    };
+  };
+
+  const typeStyle = getTypeStyle();
+
   const renderIcon = () => {
     if (item.type === "success") {
       return (
-        <Check
-          size={34}
-          color="#F28C28"
+        <CheckCheck
+          size={20}
+          color={typeStyle.iconColor}
         />
       );
     }
@@ -34,47 +63,84 @@ export default function NotificationCard({
     if (item.type === "notification") {
       return (
         <Bell
-          size={34}
-          color="#F28C28"
+          size={20}
+          color={typeStyle.iconColor}
         />
       );
     }
 
     return (
       <Clock3
-        size={34}
-        color="#F28C28"
+        size={20}
+        color={typeStyle.iconColor}
       />
     );
   };
 
+  const badgeLabel =
+    item.type === "notification"
+      ? "Notification"
+      : item.type === "success"
+      ? "Success"
+      : "Reminder";
+
   return (
     <View style={styles.card}>
-      <View style={styles.iconContainer}>
+      <View
+        style={[
+          styles.iconContainer,
+          {
+            backgroundColor:
+              typeStyle.iconBg,
+          },
+        ]}
+      >
         {renderIcon()}
       </View>
 
-      <View style={styles.content}>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>
-            {item.type === "notification"
-              ? "Notification"
-              : "Reminder"}
-          </Text>
-        </View>
-
-        <Text style={styles.title}>
+     <View style={styles.content}>
+      <View style={styles.topRow}>
+        <Text
+          style={styles.title}
+          numberOfLines={2}
+        >
           {item.title}
         </Text>
 
-        <Text style={styles.description}>
-          {item.description}
-        </Text>
-
-        <Text style={styles.time}>
-          ◷ {item.time}
-        </Text>
+        <View
+          style={[
+            styles.badge,
+            {
+              backgroundColor:
+                typeStyle.badgeBg,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.badgeText,
+              {
+                color:
+                  typeStyle.badgeText,
+              },
+            ]}
+          >
+            {badgeLabel}
+          </Text>
+        </View>
       </View>
+
+      <Text
+        style={styles.description}
+        numberOfLines={2}
+      >
+        {item.description}
+      </Text>
+
+      <Text style={styles.time}>
+        {item.time}
+      </Text>
+    </View>
     </View>
   );
 }

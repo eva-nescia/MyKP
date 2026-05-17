@@ -7,31 +7,8 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 20,
-    paddingTop: 56,
-  },
-
-  headerRow: {
-    paddingTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-
-    gap: 12,
-
-    marginBottom: 10,
-  },
-
-  header: {
-    fontSize: 26,
-    fontWeight: FONT_WEIGHT.bold,
-    color: COLORS.text,
-  },
-
-  count: {
-    fontSize: 16,
-    color: COLORS.text,
-
-    marginBottom: 26,
+    paddingHorizontal: 24,
+    paddingTop: 70,
   },
 
   sectionTitle: {
