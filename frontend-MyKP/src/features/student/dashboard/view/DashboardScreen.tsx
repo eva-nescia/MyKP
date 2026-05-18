@@ -40,7 +40,7 @@ export default function DashboardScreen() {
       >
         <DashboardHeader
           userName={data.userName}
-          hasUnreadNotifications={true}
+          hasUnreadNotifications={vm.unreadCount > 0}
           onPressNotification={() => {
             router.push(
               "/notification/notification"

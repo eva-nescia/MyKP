@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   View,
   Text,
   FlatList,
@@ -36,7 +37,13 @@ export default function NotificationScreen() {
         onBack={() => router.back()}
       />
 
-      {totalNotifications === 0 ? (
+      {vm.loading ? (
+        <View style={{ paddingTop: 60 }}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : vm.error ? (
+        <Text style={{ textAlign: "center", paddingTop: 60 }}>{vm.error}</Text>
+      ) : totalNotifications === 0 ? (
         <EmptyNotification />
       ) : (
         <>
