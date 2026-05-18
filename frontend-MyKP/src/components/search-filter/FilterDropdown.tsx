@@ -1,15 +1,13 @@
-import { View, Text, Pressable, Dimensions } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-import { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  Modal,
+} from "react-native";
 
-import FilterItem from "./FilterItem";
+import { BlurView } from "expo-blur";
+
 import { styles } from "./styles/FilterDropdown.styles";
-
-const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const CATEGORIES = [
   "All",
@@ -35,49 +33,82 @@ export default function FilterDropdown({
   onApply,
   onClose,
 }: Props) {
-  const [localSelected, setLocalSelected] = useState<string | null>(selected);
-  const translateY = useSharedValue(SCREEN_HEIGHT);
-
-  useEffect(() => {
-    if (visible) {
-      setLocalSelected(selected);
-    }
-    translateY.value = withTiming(
-      visible ? 0 : SCREEN_HEIGHT,
-      { duration: 300 }
+  const handleSelect = (
+    category: string
+  ) => {
+    onApply(
+      category === "All"
+        ? null
+        : category
     );
-  }, [visible, selected]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
-
-  if (!visible) return null;
+    onClose();
+  };
 
   return (
-    <View style={styles.overlay}>
-      {/* dim background */}
-      <Pressable style={styles.backdrop} onPress={onClose} />
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+      statusBarTranslucent
+    >
+      <View style={styles.overlay}>
+        {/* blur backdrop */}
+        <BlurView
+          intensity={18}
+          tint="light"
+          style={styles.backdrop}
+        />
 
-      {/* dropdown panel */}
-      <Animated.View style={[styles.panel, animatedStyle]}>
-        <Text style={styles.title}>Filter Category</Text>
+        {/* press outside to close */}
+        <Pressable
+          style={styles.backdrop}
+          onPress={onClose}
+        />
 
-        <View style={styles.list}>
-          {CATEGORIES.map((cat) => (
-            <FilterItem
-              key={cat}
-              label={cat}
-              selected={localSelected === cat}
-              onPress={() => setLocalSelected(localSelected === cat ? null : cat)}
-            />
-          ))}
+        {/* bottom sheet */}
+        <View style={styles.container}>
+          <View
+            style={styles.dragIndicator}
+          />
+
+          <Text style={styles.title}>
+            Filter KP Category
+          </Text>
+
+          {CATEGORIES.map((category) => {
+            const isSelected =
+              selected === category ||
+              (!selected &&
+                category === "All");
+
+            return (
+              <Pressable
+                key={category}
+                style={[
+                  styles.option,
+                  isSelected &&
+                    styles.selectedOption,
+                ]}
+                onPress={() =>
+                  handleSelect(category)
+                }
+              >
+                <Text
+                  style={[
+                    styles.optionText,
+                    isSelected &&
+                      styles.selectedText,
+                  ]}
+                >
+                  {category}
+                </Text>
+              </Pressable>
+            );
+          })}
         </View>
-
-        <Pressable style={styles.applyBtn} onPress={() => { onApply(localSelected); onClose(); }}>
-          <Text style={styles.applyText}>Apply</Text>
-        </Pressable>
-      </Animated.View>
-    </View>
+      </View>
+    </Modal>
   );
 }

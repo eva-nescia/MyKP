@@ -6,8 +6,8 @@ import MandatoryActivityCarousel from "../MandatoryActivityCarousel";
 export const styles = StyleSheet.create({
   section: {
     marginHorizontal: -24,
-    paddingTop: 8,
-    paddingBottom: 32,
+    paddingTop: 15,
+    paddingBottom: 45,
     marginBottom: 24,
   },
 
@@ -28,8 +28,8 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 22,
-    lineHeight: 29,
+    fontSize: 20,
+    // lineHeight: 29,
     fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
     textAlign: "center",
@@ -52,34 +52,32 @@ export const styles = StyleSheet.create({
   },
 
   typeBadge: {
-    maxWidth: 180,
     paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingVertical: 6,
     borderRadius: 999,
-    backgroundColor: COLORS.white,
+    backgroundColor: "#F8FAFC",
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#E2E8F0",
   },
 
   typeText: {
-    fontSize: 14,
-    fontWeight: FONT_WEIGHT.medium,
-    color: COLORS.text,
+    fontSize: 13,
+    fontWeight: FONT_WEIGHT.regular,
+    color: "#475569",
   },
 
   pointBadge: {
     paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingVertical: 6,
     borderRadius: 999,
     backgroundColor: COLORS.primary,
   },
 
   pointText: {
-    fontSize: 14,
-    fontWeight: FONT_WEIGHT.semiBold,
+    fontSize: 13,
+    fontWeight: FONT_WEIGHT.regular,
     color: COLORS.white,
   },
-
   emptyCard: {
     backgroundColor: "#F8FAFC",
     borderRadius: 20,

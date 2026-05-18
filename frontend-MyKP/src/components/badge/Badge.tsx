@@ -12,7 +12,14 @@ export default function Badge({
 }: Props) {
   return (
     <View style={[styles.badge, styles[variant]]}>
-      <Text style={[styles.text, styles[`${variant}Text`]]}>
+     <Text
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={[
+          styles.text,
+          styles[`${variant}Text`],
+        ]}
+      >
         {label}
       </Text>
     </View>

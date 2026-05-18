@@ -1,40 +1,57 @@
 import { FONT_WEIGHT } from "@/constants/typography";
 import { StyleSheet } from "react-native";
-
 import { COLORS } from "@/constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
     width: 165,
     marginRight: 12,
+    marginBottom: 20,
   },
 
   image: {
     width: "100%",
-    height: 250,
-    borderRadius: 8,
-    marginBottom: 8,
+    height: 245,
+
+    borderRadius: 14,
+
+    marginBottom: 10,
+
+    backgroundColor: "#E5E7EB",
+    resizeMode: "cover",
   },
 
   action: {
     position: "absolute",
-    top: 8,
-    right: 8,
+    top: 10,
+    right: 10,
+    zIndex: 2,
   },
 
   title: {
     fontSize: 14,
+    lineHeight: 19,
     fontWeight: FONT_WEIGHT.semiBold,
-    marginBottom: 6,
+    color: COLORS.text,
+    marginBottom: 4,
   },
+
 
   badges: {
     flexDirection: "row",
-    marginBottom: 4,
+    alignItems: "center",
   },
 
   date: {
     fontSize: 12,
-    color: COLORS.text,
+    fontWeight: FONT_WEIGHT.medium,
+    marginLeft: 4,
+    color: "#64748B",
+  },
+
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
   },
 });
