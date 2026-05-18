@@ -5,6 +5,11 @@ import * as Linking from "expo-linking";
 import { Activity } from "@/models/activity";
 
 import { fetchActivityById } from "../services/activityDetailService";
+import {
+  addBookmark,
+  getBookmarkStatus,
+  removeBookmark,
+} from "@/features/student/bookmark/services/bookmarkService";
 
 export const useActivityDetailViewModel = (
   id: string
@@ -30,6 +35,13 @@ export const useActivityDetailViewModel = (
         await fetchActivityById(id);
 
       setActivity(data);
+
+      try {
+        const status = await getBookmarkStatus(id);
+        setSaved(status);
+      } catch {
+        // ignore — unauthenticated viewers default to unsaved
+      }
     };
 
     load();
@@ -37,16 +49,29 @@ export const useActivityDetailViewModel = (
 
   /* SAVE */
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const nextSaved = !saved;
 
     setSaved(nextSaved);
 
-    setSaveMessage(
-      nextSaved
-        ? "Activity saved successfully."
-        : "Activity removed from saved."
-    );
+    try {
+      if (nextSaved) {
+        await addBookmark(id);
+      } else {
+        await removeBookmark(id);
+      }
+
+      setSaveMessage(
+        nextSaved
+          ? "Activity saved successfully."
+          : "Activity removed from saved."
+      );
+    } catch {
+      setSaved(!nextSaved);
+      setSaveMessage(
+        "Couldn't update saved status. Please try again."
+      );
+    }
 
     setShowSaveModal(true);
 

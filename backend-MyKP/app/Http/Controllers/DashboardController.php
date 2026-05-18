@@ -60,10 +60,11 @@ class DashboardController extends Controller
                                         ->orderBy('date', 'asc')
                                         ->get();
 
-        $formattedActivities = $mandatoryActivities->map(function ($act) {
+        $formattedActivities = $mandatoryActivities->map(function ($act) use ($request) {
             return [
                 'id' => (string) $act->ActivityID,
                 'title' => $act->name,
+                'image' => ActivityController::buildImageUrl($request, $act->event_poster),
                 'type' => $act->kp_category,
                 'points' => (int) $act->kp_amount,
                 'date' => \Carbon\Carbon::parse($act->date)->format('l, d F Y'),

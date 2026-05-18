@@ -1,11 +1,19 @@
 /**
  * Centralized API Configuration
- * Change the API_URL here and it will update across all services
+ *
+ * Auto-detects the host machine running `npm start` via Expo's dev-server
+ * host URI, so teammates don't have to edit an IP. Falls back to localhost
+ * for web / iOS simulator when no dev host is available.
  */
+import Constants from 'expo-constants';
 
-// Update this URL to match your backend server
-// Examples:
-// - Android Emulator: 'http://10.0.2.2:8000/api'
-// - Physical device on same WiFi: 'http://192.168.1.X:8000/api'
-// - Localhost: 'http://localhost:8000/api'
-export const API_URL = 'http://10.1.76.99:8000/api';
+const BACKEND_PORT = 8000;
+
+const devHost =
+  Constants.expoConfig?.hostUri?.split(':')[0] ??
+  (Constants as any).expoGoConfig?.debuggerHost?.split(':')[0] ??
+  (Constants.manifest2 as any)?.extra?.expoClient?.hostUri?.split(':')[0];
+
+const host = devHost ?? 'localhost';
+
+export const API_URL = `http://${host}:${BACKEND_PORT}/api`;
