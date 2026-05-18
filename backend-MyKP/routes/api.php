@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityController;
@@ -22,6 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/activities/{activity_id}/register', [ParticipationController::class, 'register'])->whereNumber('activity_id');
     Route::get('/participations', [ParticipationController::class, 'history']);
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
 });
 
 Route::get('/profile/{user}', [ProfileController::class, 'show'])

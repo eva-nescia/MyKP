@@ -52,5 +52,35 @@ EOT,
 EOT,
             'event_poster' => 'images/seminarAntiNarkoba.jpeg',
         ]);
+
+        // Demo activity with a near deadline so the bookmark-reminder flow
+        // (3 / 2 / 1 days before registration_deadline_date) is visible the
+        // moment a student bookmarks it. Deadline is computed as "tomorrow"
+        // at seed time so the demo stays relevant on re-seeds.
+        Activity::factory()->create([
+            'name' => 'Panitia Campus Expo EII 2026',
+            'kp_category' => 'Kepanitiaan',
+            'kp_amount' => 5,
+            'eligible_generation' => 'All Gen',
+            'eligible_study_program' => 'All Prodi',
+            'date' => now()->addDays(14)->toDateString(),
+            'time' => '09:00 - 17:00',
+            'location' => 'Main Hall, 1st Floor',
+            'registration_link' => 'https://forms.google.com/panitia-expo-eii',
+            'registration_deadline_date' => now()->addDays(3)->toDateString(),
+            'registration_deadline_time' => '23:59:00',
+            'description' => 'Become part of the organising committee for Campus Expo EII 2026. Help plan, run, and coordinate booth sessions across the day.',
+            'requirements' => <<<'EOT'
+• Active UCM Student
+• Available on event day (full day)
+EOT,
+            'claiming_procedure' => <<<'EOT'
+• KP awarded after the event by the organising team
+EOT,
+            'contact_person' => <<<'EOT'
+• 081234567891 - Andre
+EOT,
+            'event_poster' => 'images/panitia_expo_eii.jpeg',
+        ]);
     }
 }
