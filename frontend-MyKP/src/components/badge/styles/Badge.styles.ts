@@ -5,10 +5,15 @@ import { FONT_WEIGHT } from "@/constants/typography";
 
 export const styles = StyleSheet.create({
   badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+
+    borderRadius: 999,
+
     marginRight: 6,
+    marginBottom: 6,
+
+    maxWidth: 114,
   },
 
   text: {
@@ -20,6 +25,7 @@ export const styles = StyleSheet.create({
   default: {
     backgroundColor: COLORS.white,
   },
+
   defaultText: {
     color: "#374151",
   },
@@ -27,6 +33,7 @@ export const styles = StyleSheet.create({
   primary: {
     backgroundColor: COLORS.primary,
   },
+
   primaryText: {
     color: COLORS.white,
   },
@@ -34,8 +41,10 @@ export const styles = StyleSheet.create({
   outline: {
     borderWidth: 1,
     borderColor: "#D1D5DB",
+    backgroundColor: "#F8FAFC",
   },
+
   outlineText: {
-    color: "#374151",
+    color: "#475569",
   },
 });

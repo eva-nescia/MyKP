@@ -1,46 +1,74 @@
 import { StyleSheet } from "react-native";
+
 import { COLORS } from "@/constants/colors";
 
 export const styles = StyleSheet.create({
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
     justifyContent: "flex-end",
   },
 
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.4)", // dim
   },
 
-  panel: {
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    maxHeight: "70%",
+  container: {
+    backgroundColor: COLORS.white,
+
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 40,
+
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+
+    elevation: 10,
+  },
+
+  dragIndicator: {
+    width: 48,
+    height: 5,
+    borderRadius: 999,
+    backgroundColor: "#CBD5E1",
+
+    alignSelf: "center",
+    marginBottom: 22,
   },
 
   title: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 12,
+    fontSize: 20,
+    fontWeight: "700",
     color: COLORS.text,
+
+    marginBottom: 18,
   },
 
-  list: {
-    marginBottom: 16,
+  option: {
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+
+    borderRadius: 12,
   },
 
-  applyBtn: {
-    backgroundColor: COLORS.primary,
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
+  selectedOption: {
+    backgroundColor: "#FFF7ED",
   },
 
-  applyText: {
-    color: "#fff",
-    fontWeight: "600",
+  optionText: {
     fontSize: 16,
+    color: "#334155",
+  },
+
+  selectedText: {
+    color: COLORS.primary,
+    fontWeight: "700",
   },
 });

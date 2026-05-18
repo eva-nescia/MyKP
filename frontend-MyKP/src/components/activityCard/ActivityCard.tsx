@@ -3,6 +3,7 @@
 import { View, Text, Image, Pressable } from "react-native";
 import Badge from "../badge/Badge";
 import { styles } from "../activityCard/styles/ActivityCard.styles";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   title: string;
@@ -33,12 +34,23 @@ export default function ActivityCard({
         {title}
       </Text>
 
+      <View style={styles.dateRow}>
+        <Ionicons
+          name="calendar-outline"
+          size={13}
+          color="#94A3B8"
+        />
+
+        <Text style={styles.date}>
+          {date}
+        </Text>
+      </View>
+
       <View style={styles.badges}>
         <Badge label={type} variant="outline" />
         <Badge label={`${points} KP`} variant="primary" />
       </View>
 
-      <Text style={styles.date}>{date}</Text>
     </Pressable>
   );
 }

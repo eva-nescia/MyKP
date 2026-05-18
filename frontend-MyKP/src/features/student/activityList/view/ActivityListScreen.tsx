@@ -11,19 +11,24 @@ import SearchBar from "@/components/search-filter/SearchBar";
 import FilterDropdown from "@/components/search-filter/FilterDropdown";
 import { useActivityListViewModel } from "../viewmodel/useActivityListViewModel";
 import { styles } from "./styles/ActivityList.styles";
+import ActivityListHeader from "../components/ActivityListHeader";
+import Loading from "src/components/loading/GlobalLoading";
 
 export default function ActivityListScreen() {
   const vm = useActivityListViewModel();
-  const [showFilter, setShowFilter] = useState(false);
+
+  const [showFilter, setShowFilter] =
+    useState(false);
+
   const router = useRouter();
+
+  if (vm.loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Activity List</Text>
-      <Text style={styles.subtitle}>
-        Official announcements• {vm.data.length} {vm.data.length === 1 ? 'activity' : 'activities'} found
-      </Text>
-
+     <ActivityListHeader count={vm.data.length} />
       <SearchBar
         value={vm.search}
         onChange={vm.setSearch}
@@ -32,6 +37,7 @@ export default function ActivityListScreen() {
 
       <FlatList
         data={vm.data}
+        scrollEnabled={vm.data.length > 2}
         numColumns={2}
         keyExtractor={(item) => item.id}
         columnWrapperStyle={styles.row}
@@ -48,7 +54,6 @@ export default function ActivityListScreen() {
           />
         )}
       />
-
       {/* overlay dropdown */}
       <FilterDropdown
         visible={showFilter}
