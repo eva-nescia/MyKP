@@ -15,7 +15,7 @@ export const fetchActivities = async (search?: string, category?: string): Promi
     const queryString = params.toString();
     const url = queryString ? `${API_URL}/activities?${queryString}` : `${API_URL}/activities`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: { Accept: 'application/json' } });
     
     if (!response.ok) {
       throw new Error(`Failed to fetch activities (HTTP ${response.status})`);

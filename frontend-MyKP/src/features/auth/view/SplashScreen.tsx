@@ -2,6 +2,8 @@ import { View, Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
 
+import { restoreSession } from "../services/session";
+
 import styles from "./styles/Splash.styles";
 
 export default function SplashScreen() {
@@ -29,26 +31,23 @@ export default function SplashScreen() {
   useEffect(() => {
     const initApp = async () => {
       try {
-        // temporary placeholder for token and role retrieval logic
-        const token = null;
-        const role = null; // "student" | "admin"
+        const user = await restoreSession();
 
-        if (!token) {
+        if (!user) {
           router.replace("/login");
           return;
         }
 
-        if (role === "student") {
-          router.replace("/");
-        } else if (role === "admin") {
-          router.replace("/activities");
+        if (user.role === "student") {
+          router.replace("/(student)/dashboard");
+        } else if (user.role === "admin") {
+          router.replace("/(admin)/activities");
         } else {
           router.replace("/login");
         }
-
       } catch (error) {
         console.log("Splash error:", error);
-        router.replace("/login"); 
+        router.replace("/login");
       }
     };
 

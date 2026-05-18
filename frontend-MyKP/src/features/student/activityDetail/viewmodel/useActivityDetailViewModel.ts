@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-import * as Linking from "expo-linking";
-
 import { Activity } from "@/models/activity";
 
 import { fetchActivityById } from "../services/activityDetailService";
@@ -10,6 +8,7 @@ import {
   getBookmarkStatus,
   removeBookmark,
 } from "@/features/student/bookmark/services/bookmarkService";
+import { registerForActivity } from "@/features/student/profile/services/participationService";
 
 export const useActivityDetailViewModel = (
   id: string
@@ -89,13 +88,23 @@ export const useActivityDetailViewModel = (
   const confirmRegister = async () => {
     setShowLinkModal(false);
 
-    setTimeout(async () => {
-      if (activity?.registrationLink) {
-        await Linking.openURL(
-          activity.registrationLink
-        );
-      }
-    }, 250);
+    // Prototype behaviour: record the participation + bump KP and just toast
+    // success. We don't open the external registration link any more because
+    // leaving the app drops the session on return (would need a custom dev
+    // build to round-trip cleanly).
+    try {
+      const result = await registerForActivity(id);
+      setSaveMessage(
+        result.alreadyRegistered
+          ? "You're already registered for this activity."
+          : "Successfully registered!"
+      );
+    } catch {
+      setSaveMessage("Couldn't register right now. Please try again.");
+    }
+
+    setShowSaveModal(true);
+    setTimeout(() => setShowSaveModal(false), 1600);
   };
 
   return {

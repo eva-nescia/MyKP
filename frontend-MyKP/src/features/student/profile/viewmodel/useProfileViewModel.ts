@@ -61,9 +61,9 @@ export default function useProfileViewModel() {
     });
   };
 
-  const logout = () => {
+  const logout = async () => {
     setLogoutVisible(false);
-    clearSession();
+    await clearSession();
     router.replace("/login");
   };
 

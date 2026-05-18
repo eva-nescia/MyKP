@@ -14,7 +14,7 @@ class ActivitySeeder extends Seeder
     {
         Activity::factory()->create([
             'name' => 'Seminar Bela Negara & Anti Narkoba 2026',
-            'kp_category' => 'Talkshow Wajib BMA',
+            'kp_category' => 'Talkshow (Wajib BMA)',
             'kp_amount' => 6,
             'eligible_generation' => 'All Gen',
             'eligible_study_program' => 'All Prodi',

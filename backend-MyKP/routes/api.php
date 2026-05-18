@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bookmarks', [BookmarkController::class, 'store']);
     Route::get('/bookmarks/{activity_id}', [BookmarkController::class, 'show'])->whereNumber('activity_id');
     Route::delete('/bookmarks/{activity_id}', [BookmarkController::class, 'destroy'])->whereNumber('activity_id');
+
+    Route::post('/activities/{activity_id}/register', [ParticipationController::class, 'register'])->whereNumber('activity_id');
+    Route::get('/participations', [ParticipationController::class, 'history']);
 });
 
 Route::get('/profile/{user}', [ProfileController::class, 'show'])
