@@ -7,12 +7,15 @@ export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        // Required so Laravel returns JSON 422 on validation failures instead
+        // of redirecting to the Referer (which breaks the CORS chain on web).
+        Accept: 'application/json',
       },
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
-      throw new Error('Invalid credentials');
+      throw new Error(`Invalid credentials (HTTP ${response.status})`);
     }
 
     return await response.json();

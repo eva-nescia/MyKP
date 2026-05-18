@@ -7,13 +7,4 @@
  */
 import Constants from 'expo-constants';
 
-const BACKEND_PORT = 8000;
-
-const devHost =
-  Constants.expoConfig?.hostUri?.split(':')[0] ??
-  (Constants as any).expoGoConfig?.debuggerHost?.split(':')[0] ??
-  (Constants.manifest2 as any)?.extra?.expoClient?.hostUri?.split(':')[0];
-
-const host = devHost ?? 'localhost';
-
-export const API_URL = `http://${host}:${BACKEND_PORT}/api`;
+export const API_URL = `http://localhost:8000/api`;

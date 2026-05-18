@@ -5,7 +5,7 @@ export const fetchActivityById = async (id: string): Promise<Activity> => {
 try {
     const url = `${API_URL}/activities/${id}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: { Accept: 'application/json' } });
     
     if (!response.ok) {
       throw new Error(`Failed to fetch activity (HTTP ${response.status})`);
