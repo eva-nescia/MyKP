@@ -14,16 +14,15 @@ import {
 import { Ionicons, Feather } from "@expo/vector-icons";
 
 import Section from "@/features/student/activityDetail/components/Section";
-
 import FloatingActionBar from "@/features/student/activityDetail/components/FloatingActionBar";
-
 import SaveActivityModal from "@/features/student/activityDetail/components/SaveActivityModal";
-
 import RegistrationModal from "@/features/student/activityDetail/components/RegistrationModal";
+import ActivityDetailHeader from "@/features/student/activityDetail/components/ActivityDetailHeader";
+import styles from "@/features/student/activityDetail/view/styles/ActivityDetail.styles";
+import SectionBullet from "../components/SectionBullet";
+import ContactItem from "../components/ContactItem";
 
 import { useActivityDetailViewModel } from "@/features/student/activityDetail/viewmodel/useActivityDetailViewModel";
-
-import styles from "@/features/student/activityDetail/view/styles/ActivityDetail.styles";
 
 export default function ActivityDetailScreen() {
   const router = useRouter();
@@ -60,26 +59,7 @@ export default function ActivityDetailScreen() {
   return (
     <View style={styles.screen}>
       {/* HEADER */}
-      <View style={styles.fixedHeader}>
-        <Pressable
-          onPress={() =>
-            router.replace(
-              "/(student)/activities"
-            )
-          }
-          style={styles.backButton}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-          />
-        </Pressable>
-
-        <Text style={styles.headerTitle}>
-          Activity Details
-        </Text>
-      </View>
+      <ActivityDetailHeader />
 
       {/* CONTENT */}
       <ScrollView
@@ -102,40 +82,43 @@ export default function ActivityDetailScreen() {
             </Text>
 
             <Text style={styles.organizer}>
-              ORGANIZED BY{" "}
-              {activity.organizer}
+              Organized by {activity.organizer || "TBA"}
             </Text>
 
-            {/* BADGES */}
-            <View style={styles.badges}>
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>
+            <View style={styles.primaryBadgeRow}>
+              <View style={styles.categoryBadge}>
+                <Text
+                  style={styles.categoryBadgeText}
+                  numberOfLines={1}
+                >
                   {activity.type}
                 </Text>
               </View>
 
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>
+              <View style={styles.kpBadge}>
+                <Text style={styles.kpBadgeText}>
                   {activity.points} KP
                 </Text>
               </View>
+            </View>
 
+            <View style={styles.metaTagRow}>
               {activity.eligibleStudyProgram && (
-                <View style={styles.badge}>
+                <View style={styles.metaTag}>
                   <Text
-                    style={styles.badgeText}
+                    style={styles.metaTagText}
+                    numberOfLines={1}
                   >
-                    {
-                      activity.eligibleStudyProgram
-                    }
+                    {activity.eligibleStudyProgram}
                   </Text>
                 </View>
               )}
 
               {activity.eligibleCohort && (
-                <View style={styles.badge}>
+                <View style={styles.metaTag}>
                   <Text
-                    style={styles.badgeText}
+                    style={styles.metaTagText}
+                    numberOfLines={1}
                   >
                     {activity.eligibleCohort}
                   </Text>
@@ -145,42 +128,48 @@ export default function ActivityDetailScreen() {
           </View>
         </View>
 
-        {/* INFO */}
-        <View style={styles.infoRow}>
-          <View style={styles.infoBox}>
-            <View style={styles.infoHeader}>
-              <Feather
+         {/* INFO */}
+        <View style={styles.infoCard}>
+          <View style={styles.infoItem}>
+            <View style={styles.infoIconBox}>
+             <Feather
                 name="calendar"
-                size={16}
-                color="#0F172A"
+                size={20}
+                color="#FB923C"
               />
-
-              <Text style={styles.infoLabel}>
-                DATE & TIME
-              </Text>
             </View>
 
-            <Text style={styles.infoText}>
-              {activity.date}
-            </Text>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoLabel}>
+                Date & Time
+              </Text>
+
+              <Text style={styles.infoText}>
+                {activity.date}
+              </Text>
+            </View>
           </View>
 
-          <View style={styles.infoBox}>
-            <View style={styles.infoHeader}>
+          <View style={styles.infoDivider} />
+
+          <View style={styles.infoItem}>
+            <View style={styles.infoIconBox}>
               <Feather
                 name="map-pin"
-                size={16}
-                color="#0F172A"
+                size={20}
+                color="#FB923C"
               />
-
-              <Text style={styles.infoLabel}>
-                LOCATION
-              </Text>
             </View>
 
-            <Text style={styles.infoText}>
-              {activity.location ?? "TBA"}
-            </Text>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoLabel}>
+                Location
+              </Text>
+
+              <Text style={styles.infoText}>
+                {activity.location ?? "TBA"}
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -195,12 +184,9 @@ export default function ActivityDetailScreen() {
         <Section title="Requirement">
           {activity.requirement?.map(
             (item, index) => (
-              <Text
-                key={index}
-                style={styles.sectionText}
-              >
-                • {item}
-              </Text>
+              <SectionBullet key={index}>
+                {item}
+              </SectionBullet>
             )
           )}
         </Section>
@@ -209,12 +195,9 @@ export default function ActivityDetailScreen() {
         <Section title="How to Claim KP">
           {activity.howToClaim?.map(
             (item, index) => (
-              <Text
-                key={index}
-                style={styles.sectionText}
-              >
-                • {item}
-              </Text>
+         <SectionBullet key={index}>
+            {item}
+          </SectionBullet>
             )
           )}
         </Section>
@@ -223,12 +206,9 @@ export default function ActivityDetailScreen() {
         <Section title="Contact Person">
           {activity.contactPerson?.map(
             (item, index) => (
-              <Text
-                key={index}
-                style={styles.sectionText}
-              >
-                • {item}
-              </Text>
+            <ContactItem key={index}>
+              {item}
+            </ContactItem>
             )
           )}
         </Section>
