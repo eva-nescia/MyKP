@@ -10,6 +10,7 @@ export const fetchDashboard = async (token: string): Promise<DashboardData> => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
         'Authorization': `Bearer ${token}`
       }
     });
