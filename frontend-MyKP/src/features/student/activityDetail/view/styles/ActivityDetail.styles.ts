@@ -21,9 +21,9 @@ export default StyleSheet.create({
   },
 
   contentContainer: {
-   paddingTop: 120,
+   paddingTop: 125,
    paddingBottom: 120,
-   padding: 14
+   paddingHorizontal: 14,
   },
 
   /* header */
@@ -62,19 +62,18 @@ export default StyleSheet.create({
     color: COLORS.text,
   },
 
-  /* hero */
-
   heroSection: {
     flexDirection: "row",
     gap: 16,
-    marginBottom: 24,
+    marginBottom: 26,
   },
 
   imagePoster: {
-    width: 130,
-    height: 190,
-
+    width: 108,
+    height: 160,
     borderRadius: 8,
+    backgroundColor: "#E5E7EB",
+    resizeMode: "cover",
   },
 
   heroContent: {
@@ -83,103 +82,160 @@ export default StyleSheet.create({
 
   title: {
     fontSize: 20,
+    lineHeight: 25,
     fontWeight: FONT_WEIGHT.semiBold,
-
-    // lineHeight: 31,
-
     color: COLORS.text,
-
-    marginBottom: 6,
-  },
-
-  organizer: {
-    fontSize: 12,
-    color: COLORS.text,
-
-    marginTop: 5,
-    marginBottom: 16,
-  },
-
-  /* badges */
-
-  badges: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-
-    gap: 10,
-  },
-
-  badge: {
-    height: 38,
-
-    // borderWidth: 1,
-    // borderColor: COLORS.text,
-
-    borderRadius: 8,
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    paddingHorizontal: 14,
-
-    backgroundColor: COLORS.primary,
-  },
-
-  badgeText: {
-    fontSize: 12,
-    fontWeight: FONT_WEIGHT.medium,
-    color: COLORS.white,
-  },
-
-  /* info */
-
-  infoRow: {
-    flexDirection: "row",
-    gap: 12,
-
     marginBottom: 8,
   },
 
-  infoBox: {
-    flex: 1,
+  organizer: {
+    fontSize: 13,
+    fontWeight: FONT_WEIGHT.medium,
 
-    borderWidth: 1,
-    borderColor: "#0F172A",
+    color: "#64748B",
 
-    borderRadius: 12,
-
-    padding: 16,
+    marginBottom: 14,
   },
 
-  infoHeader: {
+  primaryBadgeRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
 
-    gap: 6,
+    gap: 8,
 
     marginBottom: 10,
   },
 
-  infoLabel: {
-    fontSize: 16,
-    fontWeight: "600",
+  categoryBadge: {
+    maxWidth: 140,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: "#F8FAFC",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
 
-    color: "#0F172A",
+  categoryBadgeText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.medium,
+
+    color: "#475569",
+  },
+
+  kpBadge: {
+    paddingHorizontal: 11,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: COLORS.primary,
+  },
+
+  kpBadgeText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.white,
+  },
+
+  metaTagRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+
+  metaTag: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 999,
+    backgroundColor: "#FFF7ED",
+  },
+
+  metaTagText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.medium,
+
+    color: COLORS.primary,
+  },
+
+  /* info */
+
+  infoCard: {
+  backgroundColor: "#FFFFFF",
+
+  borderRadius: 22,
+
+  padding: 16,
+
+  borderWidth: 1,
+  borderColor: "#E2E8F0",
+  marginTop: 6,
+  marginBottom: 2,
+
+  shadowColor: "#000",
+  shadowOpacity: 0.04,
+  shadowRadius: 10,
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+
+  elevation: 2,
+},
+
+  infoItem: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+
+    gap: 12,
+  },
+
+  infoIconBox: {
+    width: 42,
+    height: 42,
+
+    borderRadius: 14,
+
+    backgroundColor: "#FFF7ED",
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  infoContent: {
+    flex: 1,
+  },
+
+  infoLabel: {
+    fontSize: 13,
+    fontWeight: FONT_WEIGHT.semiBold,
+
+    color: "#64748B",
+
+    marginBottom: 4,
   },
 
   infoText: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 20,
 
-    color: "#0F172A",
+    fontWeight: FONT_WEIGHT.regular,
+
+    color: COLORS.text,
+  },
+
+  infoDivider: {
+    height: 1,
+
+    backgroundColor: "#E2E8F0",
+
+    marginVertical: 14,
   },
 
   /* text */
 
   sectionText: {
     fontSize: 16,
-    lineHeight: 28,
-
+    lineHeight: 25,
     color: COLORS.text,
   },
 });

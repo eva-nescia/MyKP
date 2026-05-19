@@ -55,7 +55,11 @@
       "googleIosClientId": "193433707669-jm6q5stj4jjr940c46lkv8a4vefi1hgv.apps.googleusercontent.com",
       "googleAuthProxyRedirectUri": "https://auth.expo.io/@KeaneKen/frontend-MyKP",
       "apiBaseUrl": "auto",
-      "apiPort": "8000"
+      "apiPort": "8000",
+      "router": {},
+      "eas": {
+        "projectId": "95df7b98-695d-46db-ad4f-2d2274d7c2e0"
+      }
     },
     "experiments": {
       "typedRoutes": true,

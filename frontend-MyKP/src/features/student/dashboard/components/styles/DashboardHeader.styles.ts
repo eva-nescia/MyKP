@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   subtitle: {
     fontSize: 18,
     fontWeight: FONT_WEIGHT.medium,
-    color: COLORS.gray,
+    color: "#64748B",
 
     marginTop: 4,
   },

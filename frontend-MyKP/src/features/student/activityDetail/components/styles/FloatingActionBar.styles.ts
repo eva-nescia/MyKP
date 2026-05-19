@@ -9,22 +9,22 @@ export default StyleSheet.create({
     right: 0,
 
     flexDirection: "row",
+    gap: 12,
+
+    padding: 20,
+    paddingBottom: 28,
 
     backgroundColor: COLORS.white,
 
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingHorizontal: 0,
-
-    elevation: 20,
+    borderTopColor: "#F3F4F6",
   },
 
   registerButton: {
     flex: 1,
-    height: 70,
+    height: 54,
+
+    borderRadius: 12,
 
     backgroundColor: COLORS.secondary,
 
@@ -37,7 +37,9 @@ export default StyleSheet.create({
 
   saveButton: {
     flex: 1,
-    height: 70,
+    height: 54,
+
+    borderRadius: 12,
 
     backgroundColor: COLORS.primary,
 
@@ -54,7 +56,7 @@ export default StyleSheet.create({
 
   buttonText: {
     color: COLORS.white,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
   },
 });
