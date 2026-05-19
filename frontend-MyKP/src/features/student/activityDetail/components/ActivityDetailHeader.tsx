@@ -16,7 +16,8 @@ export default function ActivityDetailHeader() {
     <View style={styles.container}>
       <Pressable
         onPress={() =>
-          router.replace("/(student)/activities")
+          // router.replace("/(student)/activities")
+          router.back()
         }
         style={styles.backButton}
       >

@@ -97,4 +97,10 @@ export const styles = StyleSheet.create({
     color: "#64748B",
     lineHeight: 20,
   },
+
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5
+  },
 });

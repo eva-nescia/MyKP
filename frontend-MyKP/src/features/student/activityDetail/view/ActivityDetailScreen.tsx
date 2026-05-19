@@ -128,11 +128,11 @@ export default function ActivityDetailScreen() {
           </View>
         </View>
 
-         {/* INFO */}
+        {/* INFO */}
         <View style={styles.infoCard}>
           <View style={styles.infoItem}>
             <View style={styles.infoIconBox}>
-             <Feather
+              <Feather
                 name="calendar"
                 size={20}
                 color="#FB923C"
@@ -144,15 +144,15 @@ export default function ActivityDetailScreen() {
                 Date & Time
               </Text>
 
-            <Text style={styles.infoText}>
-              {activity.date}
-            </Text>
-
-            {activity.startTime && activity.endTime && (
               <Text style={styles.infoText}>
-                {activity.startTime} - {activity.endTime}
+                {activity.date}
               </Text>
-            )}
+
+              {activity.startTime && activity.endTime && (
+                <Text style={styles.infoText}>
+                  {activity.startTime} - {activity.endTime}
+                </Text>
+              )}
             </View>
           </View>
 
@@ -245,5 +245,6 @@ export default function ActivityDetailScreen() {
         onConfirm={confirmRegister}
       />
     </View>
+    
   );
 }

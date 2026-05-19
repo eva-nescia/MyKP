@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     width: 46,
     height: 46,
 
-    borderRadius: 16,
+    borderRadius: 999,
 
     backgroundColor: "#FFF7ED",
 
@@ -44,15 +44,15 @@ export const styles = StyleSheet.create({
 
     position: "relative",
 
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    // shadowColor: "#000",
+    // shadowOpacity: 0.06,
+    // shadowRadius: 2,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 4,
+    // },
 
-    elevation: 3,
+    elevation: 1,
   },
 
   badge: {

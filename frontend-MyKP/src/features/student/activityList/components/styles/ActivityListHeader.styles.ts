@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
   },
 
     subtitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FONT_WEIGHT.medium,
     color: "#64748B",
     marginTop: 4,
