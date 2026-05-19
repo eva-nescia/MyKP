@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { router } from "expo-router";
 
 import { getProfile } from "../services/profileService";
+import { logout as revokeServerToken } from "@/features/auth/services/authService";
 import { clearSession, getCurrentUser } from "@/features/auth/services/session";
 import { KPCategory, KPSummary, ProfileUser } from "../model/types";
 
@@ -63,6 +64,8 @@ export default function useProfileViewModel() {
 
   const logout = async () => {
     setLogoutVisible(false);
+    // Revoke server-side token first (best-effort), then wipe local session.
+    await revokeServerToken();
     await clearSession();
     router.replace("/login");
   };

@@ -107,6 +107,22 @@ class AuthController extends Controller
         ]);
     }
 
+    #[OA\Post(
+        path: "/api/logout",
+        summary: "Revoke the current Sanctum access token",
+        tags: ["Authentication"],
+        security: [["sanctum" => []]]
+    )]
+    #[OA\Response(response: 200, description: "Logged out")]
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'logged_out' => true,
+        ]);
+    }
+
     // ==========================================================
     // GOOGLE LOGIN — temporarily disabled. Re-enable later.
     // ==========================================================

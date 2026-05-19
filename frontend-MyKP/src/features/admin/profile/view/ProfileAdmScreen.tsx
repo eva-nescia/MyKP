@@ -22,6 +22,7 @@ import { COLORS } from "@/constants/colors";
 import { useAuth } from "src/core/contexts/AuthContext";
 
 import { clearSession } from "src/features/auth/services/session";
+import { logout as revokeServerToken } from "src/features/auth/services/authService";
 
 import { getAdminProfile } from "src/features/admin/profile/services/profileAdmService";
 
@@ -44,6 +45,7 @@ export default function ProfileAdminScreen() {
     try {
       setShowLogout(false);
 
+      await revokeServerToken();
       await clearSession();
 
       signOut();
