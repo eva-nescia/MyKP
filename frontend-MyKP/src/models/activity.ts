@@ -6,6 +6,8 @@ export interface Activity {
   points: number;
   
   date: string;
+  startTime?: string;
+  endTime?: string;
   year: string;
 
   organizer?: string;

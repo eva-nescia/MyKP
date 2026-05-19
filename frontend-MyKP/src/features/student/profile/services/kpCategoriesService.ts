@@ -38,7 +38,7 @@ export function getKPCategories() {
     },
     {
       id: 7,
-      title: "Talkshow Wajib (BMA)",
+      title: "Talkshow Wajib BMA",
       current: 0,
       target: 6,
     },

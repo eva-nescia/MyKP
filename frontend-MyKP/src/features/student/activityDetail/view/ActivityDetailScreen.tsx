@@ -144,10 +144,15 @@ export default function ActivityDetailScreen() {
                 Date & Time
               </Text>
 
+            <Text style={styles.infoText}>
+              {activity.date}
+            </Text>
+
+            {activity.startTime && activity.endTime && (
               <Text style={styles.infoText}>
-                {activity.date}
+                {activity.startTime} - {activity.endTime}
               </Text>
-            </View>
+            )}
           </View>
 
           <View style={styles.infoDivider} />

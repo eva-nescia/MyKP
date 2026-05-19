@@ -2,6 +2,8 @@ import { View, Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
 
+import { clearSession } from "../services/session";
+
 import styles from "./styles/Splash.styles";
 
 export default function SplashScreen() {
@@ -28,28 +30,15 @@ export default function SplashScreen() {
 
   useEffect(() => {
     const initApp = async () => {
+      // Always land on /login at app launch. Any persisted token from a
+      // previous run is cleared so leftover localStorage / SecureStore
+      // entries can't auto-redirect into the dashboard.
       try {
-        // temporary placeholder for token and role retrieval logic
-        const token = null;
-        const role = null; // "student" | "admin"
-
-        if (!token) {
-          router.replace("/login");
-          return;
-        }
-
-        if (role === "student") {
-          router.replace("/");
-        } else if (role === "admin") {
-          router.replace("/activities");
-        } else {
-          router.replace("/login");
-        }
-
-      } catch (error) {
-        console.log("Splash error:", error);
-        router.replace("/login"); 
+        await clearSession();
+      } catch {
+        // Best-effort; never block the navigation.
       }
+      router.replace("/login");
     };
 
     setTimeout(initApp, 1200);

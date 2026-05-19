@@ -1,47 +1,39 @@
 import { Activity } from "@/models/activity";
+import { API_URL } from "@/constants/apiConfig";
+import { getToken } from "@/features/auth/services/session";
 
-export function getAdminActivities(): Activity[] {
-  return [
-    {
-      id: "1",
+export async function getAdminActivities(): Promise<Activity[]> {
+  try {
+    const token = getToken();
+    
+    const response = await fetch(`${API_URL}/admin/activities`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
 
-      title:
-        "Oprec President & Vice Student Council 26/27",
+    if (!response.ok) {
+      console.error('Failed to fetch admin activities:', response.status);
+      return [];
+    }
 
-      image: require(
-        "assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"
-      ),
-
-      type: "Organisasi",
-
-      points: 25,
-
-      date: "Sat, 29 November 2025",
-
-      year: "2025",
-
-      organizer: "Student Council",
-    },
-
-    {
-      id: "2",
-
-      title:
-        "Seminar Bela Negara & Anti Narkoba",
-
-      image: require(
-        "assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"
-      ),
-
-      type: "Talkshow Wajib BMA",
-
-      points: 6,
-
-      date: "Sat, 29 November 2025",
-
-      year: "2025",
-
-      organizer: "BMA",
-    },
-  ];
+    const activities = await response.json();
+    
+    // Transform API response to Activity model
+    return activities.map((activity: any) => ({
+      id: activity.id,
+      title: activity.name,
+      image: activity.event_poster ? { uri: `${API_URL.replace('/api', '')}/${activity.event_poster}` } : require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
+      type: activity.kp_category,
+      points: activity.kp_amount,
+      date: new Date(activity.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }),
+      year: new Date(activity.date).getFullYear().toString(),
+      organizer: "Admin",
+    }));
+  } catch (error) {
+    console.error('Error fetching admin activities:', error);
+    return [];
+  }
 }

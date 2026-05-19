@@ -30,7 +30,8 @@ export default function EditActivityScreen() {
         "Open recruitment for O-Week committee members.",
 
       eventDate: new Date(),
-      eventTime: new Date(),
+      startTime: new Date(),
+      endTime: new Date(),
 
       registrationDeadlineDate: new Date(),
       registrationDeadlineTime: new Date(),

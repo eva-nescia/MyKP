@@ -10,7 +10,7 @@ import styles from "./styles/NotificationCard.styles";
 
 type Props = {
   item: {
-    id: number;
+    id: string | number;
     type: string;
     title: string;
     description: string;

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   View,
   Text,
   FlatList,
@@ -63,31 +64,39 @@ export default function ParticipationHistoryScreen() {
         Participation History
       </Text>
 
-      <FlatList
-        data={vm.history}
-        keyExtractor={(item) =>
-          item.id.toString()
-        }
-        renderItem={({ item }) => (
-          <ParticipationCard
-            title={item.title}
-            date={item.date}
-            kp={item.kp}
-            status={item.status as "On Progress" | "Completed"}
-            organizer={item.organizer}
-            image={item.image}
-          />
-        )}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>
-            No participation history found.
+      {vm.loading ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : vm.error ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text style={[styles.emptyText, { textAlign: "center" }]}>
+            {vm.error}
           </Text>
-        }
-        contentContainerStyle={
-          styles.listContent
-        }
-        showsVerticalScrollIndicator={false}
-      />
+        </View>
+      ) : (
+        <FlatList
+          data={vm.history}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <ParticipationCard
+              title={item.title}
+              date={item.date}
+              kp={item.kp}
+              status={item.status}
+              organizer={item.organizer}
+              image={item.image}
+            />
+          )}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>
+              No participation history found.
+            </Text>
+          }
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 }

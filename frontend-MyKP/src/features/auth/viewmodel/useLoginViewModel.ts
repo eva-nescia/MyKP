@@ -126,40 +126,29 @@ export default function useLoginViewModel() {
   // };
 
   const handleLogin = async () => {
-    // EMPTY EMAIL
     if (!email.trim()) {
       showFeedback(
         "Email Required",
         "Please enter your email before continuing.",
         "error"
       );
-
       return;
     }
 
-    // EMPTY PASSWORD
     if (!password.trim()) {
       showFeedback(
         "Password Required",
         "Please enter your password before continuing.",
         "error"
       );
-
       return;
     }
 
     try {
-      const res = await login({
-        email,
-        password,
-      });
-
-      setSession(res);
-
+      const res = await login({ email, password });
+      await setSession(res);
       signIn(res.token, res.user);
-
       routeForRole(res.user.role);
-
     } catch {
       showFeedback(
         "Login Failed",

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import { fetchDashboard } from "../services/dashboardService";
 import { DashboardData } from "../model/types";
 import { useAuth } from "../../../../core/contexts/AuthContext";
 import { useLoadingStore } from "@/store/useLoadingStore";
+import { fetchUnreadCount } from "@/features/student/notification/services/notificationService";
 
 export const useDashboardViewModel = () => {
   const { token } = useAuth();
@@ -17,6 +18,7 @@ export const useDashboardViewModel = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const loadDashboard = async () => {
     if (!token) {
@@ -41,9 +43,24 @@ export const useDashboardViewModel = () => {
     }
   };
 
+  const refreshUnreadCount = useCallback(async () => {
+    if (!token) return;
+    const count = await fetchUnreadCount();
+    setUnreadCount(count);
+  }, [token]);
+
   useEffect(() => {
     loadDashboard();
   }, [token]);
+
+  // Refresh badge each time the dashboard comes back into focus — e.g.
+  // after returning from the notification screen, the unread count should
+  // drop to 0 because index() auto-marks everything as read.
+  useFocusEffect(
+    useCallback(() => {
+      refreshUnreadCount();
+    }, [refreshUnreadCount]),
+  );
 
   useEffect(() => {
     if (loginSuccess === "true") {
@@ -54,6 +71,7 @@ export const useDashboardViewModel = () => {
   return {
     data,
     error,
+    unreadCount,
 
     showLoginSuccess,
     setShowLoginSuccess,

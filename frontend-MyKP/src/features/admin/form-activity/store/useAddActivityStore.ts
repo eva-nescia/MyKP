@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import { getToken } from '../../../auth/services/session';
+import { API_URL } from '../../../../constants/apiConfig';
+import * as FileSystem from 'expo-file-system';
 
 export type ActivityFormMode = "create" | "edit";
 
@@ -23,7 +26,8 @@ export interface AddActivityState {
 
   // schedule
   eventDate: Date | null;
-  eventTime: Date | null;
+  startTime: Date | null;
+  endTime: Date | null;
 
   registrationDeadlineDate: Date | null;
   registrationDeadlineTime: Date | null;
@@ -99,7 +103,8 @@ const initialState: AddActivityFields = {
   description: "",
 
   eventDate: null,
-  eventTime: null,
+  startTime: null,
+  endTime: null,
 
   registrationDeadlineDate: null,
   registrationDeadlineTime: null,
@@ -238,7 +243,8 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
       description: activity.description ?? "",
 
       eventDate: activity.eventDate ?? null,
-      eventTime: activity.eventTime ?? null,
+      startTime: activity.startTime ?? null,
+      endTime: activity.endTime ?? null,
 
       registrationDeadlineDate:
         activity.registrationDeadlineDate ?? null,
@@ -257,17 +263,110 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
   submit: async () => {
     const state = get();
 
+    // Format times to HH:mm:ss
+    const formatTimeToString = (date: Date | null): string | null => {
+      if (!date) return null;
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}:00`;
+    };
+
+    // Format dates to YYYY-MM-DD
+    const formatDateToString = (date: Date | null): string | null => {
+      if (!date) return null;
+      return date.toISOString().split('T')[0];
+    };
+
+    // First: Create activity WITHOUT image
+    const activityData = {
+      name: state.name,
+      kp_category: state.category,
+      kp_amount: parseInt(state.kp, 10),
+      eligible_generation: state.generations.join(', '),
+      eligible_study_program: state.studyPrograms.join(', '),
+      date: formatDateToString(state.eventDate) || '',
+      start_time: formatTimeToString(state.startTime) || '',
+      end_time: formatTimeToString(state.endTime) || '',
+      location: state.location,
+      description: state.description || '',
+      requirements: state.requirements.length > 0 ? state.requirements.join('\n') : '',
+      claiming_procedure: state.claimRequirements || '',
+      contact_person: state.contacts.length > 0 ? state.contacts.join('\n') : '',
+      registration_link: state.registrationLink || '',
+      registration_deadline_date: formatDateToString(state.registrationDeadlineDate) || '',
+      registration_deadline_time: formatTimeToString(state.registrationDeadlineTime) || '',
+    };
+
     if (state.mode === "edit") {
-      console.log("UPDATE ACTIVITY:", state.editingId, state);
-
+      console.log("UPDATE ACTIVITY:", state.editingId);
       await new Promise((resolve) => setTimeout(resolve, 1200));
-
       return;
     }
 
-    console.log("CREATE ACTIVITY:", state);
+    const token = getToken();
+    console.log('Creating activity...');
 
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    try {
+      // Create activity first
+      const response = await fetch(`${API_URL}/activities`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(activityData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create activity: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const activityId = result.id;
+      console.log("Activity created:", activityId);
+
+      // Second: Upload image if provided
+      if (state.image?.uri) {
+        try {
+          console.log('Uploading image for activity:', activityId);
+          
+          // Read image as base64
+          const base64Data = await FileSystem.readAsStringAsync(state.image.uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          
+          const fileName = state.image.fileName || state.image.uri.split('/').pop() || `activity_${Date.now()}.jpg`;
+          const mimeType = state.image.type || 'image/jpeg';
+          
+          // Send as base64 in JSON
+          const imageResponse = await fetch(`${API_URL}/activities/${activityId}/upload-image`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({
+              image_data: base64Data,
+              mime_type: mimeType,
+              file_name: fileName,
+            }),
+          });
+
+          if (imageResponse.ok) {
+            console.log('Image uploaded successfully');
+          } else {
+            console.warn('Image upload failed, but activity was created');
+          }
+        } catch (imageError) {
+          console.warn('Image upload error (activity still created):', imageError);
+        }
+      }
+
+      return result;
+    } catch (error) {
+      console.error("ERROR CREATING ACTIVITY:", error);
+      throw error;
+    }
   },
 
   reset: () => {

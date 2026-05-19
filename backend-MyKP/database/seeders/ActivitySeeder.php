@@ -12,14 +12,18 @@ class ActivitySeeder extends Seeder
      */
     public function run(): void
     {
+        $adminUserId = 1;
+
         Activity::factory()->create([
+            'user_id' => $adminUserId,
             'name' => 'Seminar Bela Negara & Anti Narkoba 2026',
             'kp_category' => 'Talkshow Wajib BMA',
             'kp_amount' => 6,
             'eligible_generation' => 'All Gen',
             'eligible_study_program' => 'All Prodi',
             'date' => '2026-05-29', 
-            'time' => '07:30 - 09:30',
+            'start_time' => '07:30:00',
+            'end_time' => '09:30:00',
             'location' => 'Auditorium, 7th Floor',
             'registration_link' => 'https://forms.google.com/seminarbma2026',
             'registration_deadline_date' => '2025-11-28',
@@ -51,6 +55,38 @@ EOT,
 • 081234567890 - Vivi
 EOT,
             'event_poster' => 'images/seminarAntiNarkoba.jpeg',
+        ]);
+
+        // Demo activity with a near deadline so the bookmark-reminder flow
+        // (3 / 2 / 1 days before registration_deadline_date) is visible the
+        // moment a student bookmarks it. Deadline is computed as "tomorrow"
+        // at seed time so the demo stays relevant on re-seeds.
+        Activity::factory()->create([
+            'user_id' => $adminUserId,
+            'name' => 'Panitia Campus Expo EII 2026',
+            'kp_category' => 'Kepanitiaan',
+            'kp_amount' => 5,
+            'eligible_generation' => 'All Gen',
+            'eligible_study_program' => 'All Prodi',
+            'date' => now()->addDays(14)->toDateString(),
+            'start_time' => '09:00:00',
+            'end_time' => '17:00:00',
+            'location' => 'Main Hall, 1st Floor',
+            'registration_link' => 'https://forms.google.com/panitia-expo-eii',
+            'registration_deadline_date' => now()->addDays(3)->toDateString(),
+            'registration_deadline_time' => '23:59:00',
+            'description' => 'Become part of the organising committee for Campus Expo EII 2026. Help plan, run, and coordinate booth sessions across the day.',
+            'requirements' => <<<'EOT'
+• Active UCM Student
+• Available on event day (full day)
+EOT,
+            'claiming_procedure' => <<<'EOT'
+• KP awarded after the event by the organising team
+EOT,
+            'contact_person' => <<<'EOT'
+• 081234567891 - Andre
+EOT,
+            'event_poster' => 'images/panitia_expo_eii.jpeg',
         ]);
     }
 }
