@@ -312,6 +312,7 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(activityData),

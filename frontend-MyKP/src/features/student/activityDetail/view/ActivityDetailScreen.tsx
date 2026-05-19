@@ -153,6 +153,7 @@ export default function ActivityDetailScreen() {
                 {activity.startTime} - {activity.endTime}
               </Text>
             )}
+            </View>
           </View>
 
           <View style={styles.infoDivider} />

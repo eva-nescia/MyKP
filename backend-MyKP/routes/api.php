@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 Route::get('/profile/{user}', [ProfileController::class, 'show'])
