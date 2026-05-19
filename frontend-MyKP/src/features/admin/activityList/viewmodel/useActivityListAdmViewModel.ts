@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { getAdminActivities } from "src/features/admin/activityList/services/activityListAdmService";
 
@@ -9,8 +9,25 @@ export function useActivityListAdminViewModel() {
   const [selectedYear, setSelectedYear] =
     useState("All");
 
-  const activities =
-    getAdminActivities();
+  const [activities, setActivities] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadActivities = async () => {
+      setLoading(true);
+      try {
+        const result = await getAdminActivities();
+        setActivities(result);
+      } catch (error) {
+        console.error("Error loading activities:", error);
+        setActivities([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadActivities();
+  }, []);
 
   const data = useMemo(() => {
     return activities.filter((item) => {
@@ -35,10 +52,11 @@ export function useActivityListAdminViewModel() {
         matchesYear
         );
     });
-    }, [search, selectedYear]);
+    }, [search, selectedYear, activities]);
 
   return {
     data,
+    loading,
 
     search,
     setSearch,

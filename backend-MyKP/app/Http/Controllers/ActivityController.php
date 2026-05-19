@@ -123,13 +123,13 @@ class ActivityController extends Controller
     )]
     public function getById(Request $request, string $id): JsonResponse
     {
-        $activity = Activity::where('ActivityID', $id)->first();
+        $activity = Activity::where('ActivityID', $id)->with('user')->first();
 
         if (!$activity) {
             return response()->json(['error' => 'Activity not found'], 404);
         }
 
-        $organizer = $activity->user ? $activity->user->name : 'Unknown';
+        $organizer = $activity->user ? $activity->user->Name : 'Unknown';
 
         return response()->json([
             'id'                    => (string) $activity->ActivityID,
@@ -386,4 +386,59 @@ class ActivityController extends Controller
             return response()->json(['error' => 'Failed to upload image: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Get all activities created by the authenticated admin
+     */
+    #[OA\Get(
+        path: "/api/admin/activities",
+        summary: "Get activities created by authenticated admin",
+        tags: ["Activities"],
+        security: [["sanctum" => []]]
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Admin activities retrieved successfully",
+        content: new OA\JsonContent(
+            type: "array",
+            items: new OA\Items(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "id", type: "string"),
+                    new OA\Property(property: "name", type: "string"),
+                    new OA\Property(property: "kp_category", type: "string"),
+                    new OA\Property(property: "date", type: "string"),
+                    new OA\Property(property: "event_poster", type: "string"),
+                ]
+            )
+        )
+    )]
+    public function getAdminActivities(): JsonResponse
+    {
+        $userId = auth()->id();
+
+        if (!$userId) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $activities = Activity::where('user_id', $userId)
+            ->orderBy('date', 'desc')
+            ->get()
+            ->map(function ($activity) {
+                return [
+                    'id' => (string) $activity->ActivityID,
+                    'name' => $activity->name,
+                    'kp_category' => $activity->kp_category,
+                    'kp_amount' => (int) $activity->kp_amount,
+                    'date' => $activity->date,
+                    'location' => $activity->location,
+                    'eligible_generation' => $activity->eligible_generation,
+                    'eligible_study_program' => $activity->eligible_study_program,
+                    'event_poster' => $activity->event_poster,
+                ];
+            });
+
+        return response()->json($activities);
+    }
 }
+

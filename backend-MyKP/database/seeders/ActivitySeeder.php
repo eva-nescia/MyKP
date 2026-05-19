@@ -12,7 +12,10 @@ class ActivitySeeder extends Seeder
      */
     public function run(): void
     {
+        $adminUserId = 1;
+
         Activity::factory()->create([
+            'user_id' => $adminUserId,
             'name' => 'Seminar Bela Negara & Anti Narkoba 2026',
             'kp_category' => 'Talkshow Wajib BMA',
             'kp_amount' => 6,
@@ -59,6 +62,7 @@ EOT,
         // moment a student bookmarks it. Deadline is computed as "tomorrow"
         // at seed time so the demo stays relevant on re-seeds.
         Activity::factory()->create([
+            'user_id' => $adminUserId,
             'name' => 'Panitia Campus Expo EII 2026',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 5,

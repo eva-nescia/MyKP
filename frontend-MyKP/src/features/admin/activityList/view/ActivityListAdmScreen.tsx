@@ -2,6 +2,7 @@ import {
   View,
   Text,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
@@ -53,7 +54,10 @@ export default function ActivityListAdminScreen() {
         }
       />
 
-      <FlatList
+      {vm.loading ? (
+        <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 20 }} />
+      ) : (
+        <FlatList
         data={vm.data}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
@@ -82,6 +86,7 @@ export default function ActivityListAdminScreen() {
         )}
         showsVerticalScrollIndicator={false}
       />
+      )}
 
       <AddActivityButton
         onPress={() =>
