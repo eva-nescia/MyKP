@@ -9,13 +9,14 @@ export interface AddActivityForm {
   description: string;
 
   eventDate: Date | null;
-  eventTime: Date | null;
+  startTime: Date | null;
+  endTime: Date | null;
 
   registrationDeadlineDate: Date | null;
   registrationDeadlineTime: Date | null;
 
   location: string;
-  meetingLink: string;
+  registrationLink: string;
 
   requirements: string;
   contacts: string;

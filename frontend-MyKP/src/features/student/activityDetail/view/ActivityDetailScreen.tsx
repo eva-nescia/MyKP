@@ -163,6 +163,12 @@ export default function ActivityDetailScreen() {
             <Text style={styles.infoText}>
               {activity.date}
             </Text>
+
+            {activity.startTime && activity.endTime && (
+              <Text style={styles.infoText}>
+                {activity.startTime} - {activity.endTime}
+              </Text>
+            )}
           </View>
 
           <View style={styles.infoBox}>

@@ -11,7 +11,8 @@ import { useState } from "react";
 export default function StepSchedule() {
   const {
     eventDate,
-    eventTime,
+    startTime,
+    endTime,
 
     registrationDeadlineDate,
     registrationDeadlineTime,
@@ -37,14 +38,25 @@ export default function StepSchedule() {
         }
       />
 
-      {/* EVENT TIME */}
+      {/* EVENT TIME - START */}
       <DateTimeField
-        label="Activity Time"
-        value={eventTime}
+        label="Activity Start Time"
+        value={startTime}
         mode="time"
-        placeholder="Select activity time"
+        placeholder="Select start time"
         onChange={(value: Date) =>
-          setField("eventTime", value)
+          setField("startTime", value)
+        }
+      />
+
+      {/* EVENT TIME - END */}
+      <DateTimeField
+        label="Activity End Time"
+        value={endTime}
+        mode="time"
+        placeholder="Select end time"
+        onChange={(value: Date) =>
+          setField("endTime", value)
         }
       />
 

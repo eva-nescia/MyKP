@@ -1,6 +1,17 @@
 import { Activity } from "@/models/activity";
 import { API_URL } from '../../../../constants/apiConfig';
 
+const formatTime = (time: string | undefined): string => {
+  if (!time) return 'TBA';
+  try {
+    // time format is HH:mm:ss
+    const [hours, minutes] = time.split(':');
+    return `${hours}:${minutes}`;
+  } catch {
+    return time;
+  }
+};
+
 export const fetchActivityById = async (id: string): Promise<Activity> => {
 try {
     const url = `${API_URL}/activities/${id}`;
@@ -25,6 +36,8 @@ try {
       eligibleStudyProgram: act.eligibleStudyProgram,
       eligibleCohort: act.eligibleCohort,
       date: act.date,
+      startTime: act.startTime,
+      endTime: act.endTime,
       description: act.description,
       requirement: act.requirement,
       howToClaim: act.howToClaim,

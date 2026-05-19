@@ -9,6 +9,7 @@ export const useActivityListViewModel = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
+  const [isFiltering, setIsFiltering] = useState(false);
 
   useEffect(() => {
     load();
@@ -16,7 +17,7 @@ export const useActivityListViewModel = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [search, selectedCategory, data]);
+  }, [search, selectedCategory]);
 
   const load = async () => {
     setLoading(true);
@@ -27,15 +28,16 @@ export const useActivityListViewModel = () => {
   };
 
   const applyFilter = async () => {
-    setLoading(true);
+    setIsFiltering(true);
     const result = await fetchActivities(search, selectedCategory ?? undefined);
     setFiltered(result);
-    setLoading(false);
+    setIsFiltering(false);
   };
 
   return {
     data: filtered,
     loading,
+    isFiltering,
     search,
     setSearch,
     selectedCategory,
