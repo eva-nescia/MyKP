@@ -12,7 +12,7 @@ export default StyleSheet.create({
     gap: 12,
 
     padding: 20,
-    paddingBottom: 28,
+    paddingBottom: 60,
 
     backgroundColor: COLORS.white,
 

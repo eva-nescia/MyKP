@@ -22,7 +22,7 @@ export default StyleSheet.create({
 
   contentContainer: {
    paddingTop: 125,
-   paddingBottom: 120,
+   paddingBottom: 150,
    paddingHorizontal: 14,
   },
 
@@ -69,8 +69,8 @@ export default StyleSheet.create({
   },
 
   imagePoster: {
-    width: 108,
-    height: 160,
+    width: 120,
+    height: 180,
     borderRadius: 8,
     backgroundColor: "#E5E7EB",
     resizeMode: "cover",
@@ -171,15 +171,15 @@ export default StyleSheet.create({
   marginTop: 6,
   marginBottom: 2,
 
-  shadowColor: "#000",
-  shadowOpacity: 0.04,
-  shadowRadius: 10,
-  shadowOffset: {
-    width: 0,
-    height: 4,
-  },
+  // shadowColor: "#000",
+  // shadowOpacity: 0.04,
+  // shadowRadius: 10,
+  // shadowOffset: {
+  //   width: 0,
+  //   height: 4,
+  // },
 
-  elevation: 2,
+  elevation: 1,
 },
 
   infoItem: {
@@ -206,7 +206,7 @@ export default StyleSheet.create({
   },
 
   infoLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: FONT_WEIGHT.semiBold,
 
     color: "#64748B",
@@ -216,7 +216,8 @@ export default StyleSheet.create({
 
   infoText: {
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 25,
+
 
     fontWeight: FONT_WEIGHT.regular,
 
