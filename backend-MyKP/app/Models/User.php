@@ -27,6 +27,7 @@ class User extends Authenticatable
         'Name',
         'NIM',
         'Email',
+        'Jurusan',
         'Password',
         'Role',
         'ProfilePicture',

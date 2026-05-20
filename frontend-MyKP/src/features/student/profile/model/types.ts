@@ -21,6 +21,7 @@ export interface ProfileUser {
   name: string;
   nim: string;
   email: string;
+  jurusan: string | null;
   role: string;
   profile_picture: string | null;
 }
