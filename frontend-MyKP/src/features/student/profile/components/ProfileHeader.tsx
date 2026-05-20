@@ -31,30 +31,32 @@ export default function ProfileHeader({
         </Text>
 
         <View style={styles.badgeContainer}>
-          {user?.jurusan ? (
+          <View style={styles.badgeRow}>
             <View style={styles.badge}>
               <Ionicons
-                name="school-outline"
+                name="card-outline"
                 size={13}
                 color="#64748B"
               />
 
               <Text style={styles.badgeText}>
-                {user.jurusan}
+                {user?.nim ?? "—"}
               </Text>
             </View>
-          ) : null}
 
-          <View style={styles.badge}>
-            <Ionicons
-              name="card-outline"
-              size={13}
-              color="#64748B"
-            />
+            {user?.jurusan ? (
+              <View style={styles.badge}>
+                <Ionicons
+                  name="school-outline"
+                  size={13}
+                  color="#64748B"
+                />
 
-            <Text style={styles.badgeText}>
-              {user?.nim ?? "—"}
-            </Text>
+                <Text style={styles.badgeText}>
+                  {user.jurusan}
+                </Text>
+              </View>
+            ) : null}
           </View>
 
           <View style={styles.badge}>
