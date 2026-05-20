@@ -5,76 +5,57 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   card: {
     flexDirection: "row",
-    padding: 10,
-
+    alignItems: "center",
+    padding: 12,
     borderWidth: 1,
     borderColor: "#E2E8F0",
-    borderRadius: 14,
-
+    borderRadius: 18,
     backgroundColor: COLORS.white,
-
     marginBottom: 14,
+    elevation: 1,
   },
 
   image: {
-    width: 74,
-    height: 110,
-    borderRadius: 4,
+    width: 82,
+    height: 118,
+    borderRadius: 6,
+    backgroundColor: "#E5E7EB",
   },
 
   content: {
     flex: 1,
-    marginLeft: 12,
-  },
-
-  organizerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 6,
-  },
-
-  orangeDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 999,
-    backgroundColor: COLORS.primary,
-    marginRight: 6,
-  },
-
-  organizerText: {
-    fontSize: 12,
-    fontWeight: FONT_WEIGHT.regular,
-    color: COLORS.text,
+    marginLeft: 14,
   },
 
   title: {
-    fontSize: 16,
+    fontSize: 18,
+    lineHeight: 22,
     fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
     marginBottom: 4,
   },
 
-  date: {
-    fontSize: 14,
-    fontWeight: FONT_WEIGHT.regular,
-    color: COLORS.text,
+  organizerText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.medium,
+    color: "#64748B",
     marginBottom: 8,
+  },
+
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginBottom: 8,
+  },
+
+  date: {
+    fontSize: 12,
+    color: "#94A3B8",
   },
 
   badges: {
     flexDirection: "row",
-    gap: 8,
-  },
-
-  badge: {
-    borderWidth: 1,
-    borderColor: "#CBD5E1",
-    borderRadius: 6,
-
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-
-    fontSize: 12,
-    color: COLORS.text,
+    alignItems: "center",
   },
 });

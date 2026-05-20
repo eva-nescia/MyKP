@@ -1,11 +1,19 @@
 /**
- * Centralized API Configuration.
+ * Centralized API Configuration
  *
- * Hardcoded to localhost:8000. Change here if you need to point at a
- * different backend.
- *
- * Note: "localhost" works for Expo Web and iOS simulator. On a physical
- * phone running Expo Go, you'd need your laptop's LAN IP here (and Laravel
- * must be started with `--host=0.0.0.0`).
+ * Auto-detects the host machine running `npm start` via Expo's dev-server
+ * host URI, so teammates don't have to edit an IP. Falls back to localhost
+ * for web / iOS simulator when no dev host is available.
  */
-export const API_URL = 'http://localhost:8000/api';
+import Constants from 'expo-constants';
+
+const BACKEND_PORT = 8000;
+
+const devHost =
+  Constants.expoConfig?.hostUri?.split(':')[0] ??
+  (Constants as any).expoGoConfig?.debuggerHost?.split(':')[0] ??
+  (Constants.manifest2 as any)?.extra?.expoClient?.hostUri?.split(':')[0];
+
+const host = devHost ?? 'localhost';
+
+export const API_URL = `http://${host}:${BACKEND_PORT}/api`;
