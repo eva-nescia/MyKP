@@ -9,9 +9,10 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
 
-    marginTop: 12,
+    paddingHorizontal: 25,
+    marginTop: 24,
     marginBottom: 22,
-  },
+    },
 
   textContainer: {
     flex: 1,

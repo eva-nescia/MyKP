@@ -1,4 +1,10 @@
-import { View, Text, Image } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+} from "react-native";
+
+import { Ionicons } from "@expo/vector-icons";
 
 import Badge from "src/features/student/profile/components/Badge";
 
@@ -22,6 +28,17 @@ export default function ParticipationCard({
   image,
   status,
 }: Props) {
+
+  const formattedDate = new Date(date).toLocaleDateString(
+    "en-GB",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }
+  );
+
   return (
     <View style={styles.card}>
       <Image
@@ -30,25 +47,35 @@ export default function ParticipationCard({
       />
 
       <View style={styles.content}>
-        <View style={styles.organizerRow}>
-          <View style={styles.orangeDot} />
-
-          <Text style={styles.organizerText}>
-            Posted by {organizer}
-          </Text>
-        </View>
-
-        <Text style={styles.title}>
+        <Text
+          style={styles.title}
+          numberOfLines={2}
+        >
           {title}
         </Text>
 
-        <Text style={styles.date}>
-          {date}
+        <Text
+          style={styles.organizerText}
+          numberOfLines={1}
+        >
+          Organized by {organizer}
         </Text>
 
-      <View style={styles.badges}>
+        <View style={styles.dateRow}>
+          <Ionicons
+            name="calendar-outline"
+            size={13}
+            color="#94A3B8"
+          />
+
+          <Text style={styles.date}>
+            {formattedDate}
+          </Text>
+        </View>
+
+        <View style={styles.badges}>
           <Badge
-            label={kp}
+            label={`${kp} KP`}
             variant="outline"
           />
 

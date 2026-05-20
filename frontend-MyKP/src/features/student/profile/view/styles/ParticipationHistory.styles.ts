@@ -103,8 +103,8 @@ export default StyleSheet.create({
   /* section */
 
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: FONT_WEIGHT.semiBold,
+    fontSize: 24,
+    fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
     marginBottom: 18,
   },
@@ -119,5 +119,25 @@ export default StyleSheet.create({
     marginTop: 20,
 
     color: COLORS.text
-  }
+  },
+
+  progressInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+
+    marginBottom: 10,
+  },
+
+  point: {
+    fontSize: 15,
+    fontWeight: FONT_WEIGHT.medium,
+    color: "#64748B",
+  },
+
+  percentage: {
+    fontSize: 15,
+    fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.primary,
+  },
 });

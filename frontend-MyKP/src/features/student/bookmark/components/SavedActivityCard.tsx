@@ -33,6 +33,16 @@ export default function SavedActivityCard({
 }: Props) {
   const router = useRouter();
 
+  const formattedDate = new Date(date).toLocaleDateString(
+    "en-GB",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }
+  );
+
   return (
     <Pressable
       style={styles.card}
@@ -68,7 +78,7 @@ export default function SavedActivityCard({
           />
 
           <Text style={styles.date}>
-            {date}
+            {formattedDate}
           </Text>
         </View>
 

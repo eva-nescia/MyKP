@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
 
   date: {
     fontSize: 14,
-    fontWeight: FONT_WEIGHT.medium,
+    fontWeight: FONT_WEIGHT.regular,
     color: "#64748B",
     marginBottom: 12,
   },

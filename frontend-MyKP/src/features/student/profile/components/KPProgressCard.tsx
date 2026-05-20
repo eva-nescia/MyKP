@@ -66,7 +66,7 @@ export default function KPProgressCard({
 
       <View style={styles.progressInfo}>
         <Text style={styles.point}>
-          {item.current}/{item.target} KP
+          {item.current}/{item.target} 
         </Text>
 
         <Text style={styles.percentage}>
@@ -84,6 +84,13 @@ export default function KPProgressCard({
           ]}
         />
       </View>
+
+      <Text style={styles.progressFooter}>
+        {Math.max(
+          item.target - item.current,
+          0
+        )} KP remaining
+      </Text>
     </TouchableOpacity>
   );
 }
