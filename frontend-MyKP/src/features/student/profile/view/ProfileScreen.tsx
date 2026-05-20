@@ -18,30 +18,17 @@ import useProfileViewModel from "../viewmodel/useProfileViewModel";
 
 import { COLORS } from "@/constants/colors";
 import styles from "@/features/student/profile/view/styles/Profile.styles";
+import ProfileScreenHeader from "../components/ProfileScreenHeader";
 
 export default function ProfileScreen() {
   const vm = useProfileViewModel();
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topRow}>
-        <Text style={styles.header}>
-          Profile
-        </Text>
-
-        <TouchableOpacity
-          onPress={() =>
-            vm.setLogoutVisible(true)
-          }
-        >
-          <Ionicons
-            name="log-out"
-            size={40}
-            color={COLORS.secondary}
-            paddingBottom={26}
-          />
-        </TouchableOpacity>
-      </View>
+     <ProfileScreenHeader 
+        onLogout={() =>
+        vm.setLogoutVisible(true)
+      }/>
 
       <ProfileHeader user={vm.user} onLogout={() => vm.setLogoutVisible(true)} />
 

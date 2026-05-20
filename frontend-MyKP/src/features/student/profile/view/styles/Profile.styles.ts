@@ -18,8 +18,8 @@ export default StyleSheet.create({
   },
 
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: FONT_WEIGHT.semiBold,
+    fontSize: 24,
+    fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
     marginBottom: 14,
   },
