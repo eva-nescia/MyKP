@@ -12,16 +12,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::query()->create([
-            'Name' => 'ExselAdmin',
+            'Name' => 'Student Council',
             'NIM' => '09876543210',
-            'Email' => 'exsel@admin.ac.id',
+            'Email' => 'studentcouncil@ciputra.ac.id',
             'Password' => 'password',
             'Role' => 'admin',
             'ProfilePicture' => 'https://i.pravatar.cc/300?u=exsel.admin',
         ]);
 
         User::query()->create([
-            'Name' => 'KenStudent',
+            'Name' => 'Andi Tubagus Faatih Keane',
             'NIM' => '1234567890',
             'Email' => 'atubagus@student.ciputra.ac.id',
             'Password' => 'password',
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::query()->create([
-            'Name' => 'ExselStudent',
+            'Name' => 'Exsel Octaviand Gosal',
             'NIM' => '89012345678',
             'Email' => 'eoctaviand@student.ciputra.ac.id',
             'Password' => 'password',
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::query()->create([
-            'Name' => 'MichelleStudent',
+            'Name' => 'Michelle Stevany Venda Dati',
             'NIM' => '78901234567',
             'Email' => 'mstevany@student.ciputra.ac.id',
             'Password' => 'password',
