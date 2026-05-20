@@ -52,7 +52,7 @@ export default StyleSheet.create({
   button: {
     flex: 1,
     height: 54,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     borderRadius: 999,
     justifyContent: "center",
     alignItems: "center",

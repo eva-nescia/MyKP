@@ -10,6 +10,7 @@ import SavedActivityCard from "../components/SavedActivityCard";
 import { useSavedActivitiesViewModel } from "../viewmodel/useSavedActivitiesViewModel";
 
 import styles from "src/features/student/bookmark/view/styles/Saved.styles";
+import SavedHeader from "../components/SavedHeader";
 
 export default function SavedScreen() {
   const { data, loading, error } = useSavedActivitiesViewModel();
@@ -17,16 +18,8 @@ export default function SavedScreen() {
   const hasSaved = data.length > 0;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>
-        Saved Activities
-      </Text>
-
-      {hasSaved && (
-        <Text style={styles.subheader}>
-          {data.length} saved {data.length === 1 ? "activity" : "activities"}
-        </Text>
-      )}
+  <View style={styles.container}>
+    <SavedHeader count={data.length} />
 
       {loading ? (
         <View style={{ flex: 1, justifyContent: "center" }}>
@@ -34,7 +27,9 @@ export default function SavedScreen() {
         </View>
       ) : error ? (
         <View style={{ flex: 1, justifyContent: "center" }}>
-          <Text style={{ textAlign: "center" }}>{error}</Text>
+          <Text style={{ textAlign: "center" }}>
+            {error}
+          </Text>
         </View>
       ) : !hasSaved ? (
         <EmptySavedState />

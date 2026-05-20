@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+
 import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
@@ -9,6 +10,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
 
     marginBottom: 22,
+    // marginTop: 2,
   },
 
   textContainer: {
@@ -19,55 +21,18 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: FONT_WEIGHT.bold,
+
     color: COLORS.text,
+
     letterSpacing: -0.4,
   },
 
   subtitle: {
     fontSize: 16,
     fontWeight: FONT_WEIGHT.medium,
+
     color: "#64748B",
 
     marginTop: 4,
-  },
-
-  notificationBtn: {
-    width: 46,
-    height: 46,
-
-    borderRadius: 999,
-
-    backgroundColor: "#FFF7ED",
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    position: "relative",
-
-    // shadowColor: "#000",
-    // shadowOpacity: 0.06,
-    // shadowRadius: 2,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 4,
-    // },
-
-    elevation: 1,
-  },
-
-  badge: {
-    position: "absolute",
-    top: 10,
-    right: 11,
-
-    width: 8,
-    height: 8,
-
-    borderRadius: 999,
-
-    backgroundColor: "#EF4444",
-
-    borderWidth: 1.5,
-    borderColor: COLORS.white,
   },
 });

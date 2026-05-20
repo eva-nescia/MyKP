@@ -6,20 +6,27 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 100,
+    minHeight: 520,
+    paddingHorizontal: 24,
+    marginBottom: 80,
   },
 
-  image: {
-    width: 170,
-    height: 170,
-    marginBottom: 16,
+  iconContainer: {
+    width: 110,
+    height: 110,
+    borderRadius: 999,
+    backgroundColor: "#FFF7ED",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 22,
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "700",
     color: COLORS.text,
     marginBottom: 10,
+    textAlign: "center",
   },
 
   subtitle: {
@@ -27,5 +34,6 @@ export default StyleSheet.create({
     color: "#64748B",
     textAlign: "center",
     lineHeight: 24,
+    maxWidth: 300,
   },
 });

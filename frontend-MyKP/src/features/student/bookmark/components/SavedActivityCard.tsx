@@ -1,5 +1,13 @@
-import { View, Text, Image, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+} from "react-native";
+
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+
 import Badge from "@/components/badge/Badge";
 
 import styles from "./styles/SavedActivityCard.styles";
@@ -38,32 +46,35 @@ export default function SavedActivityCard({
       <Image source={image} style={styles.image} />
 
       <View style={styles.content}>
-        <View style={styles.organizerRow}>
-          <View style={styles.orangeDot} />
-
-          <Text style={styles.organizerText}>
-            Posted by {organizer}
-          </Text>
-        </View>
-
-        <Text style={styles.title}>
+        <Text
+          style={styles.title}
+          numberOfLines={2}
+        >
           {title}
         </Text>
 
-        <Text style={styles.date}>
-          {date}
+        <Text
+          style={styles.organizerText}
+          numberOfLines={1}
+        >
+          Organized by {organizer}
         </Text>
 
-        <View style={styles.badges}>
-          <Badge
-            label={type}
-            variant="outline"
+        <View style={styles.dateRow}>
+          <Ionicons
+            name="calendar-outline"
+            size={13}
+            color="#94A3B8"
           />
 
-          <Badge
-            label={`${points} KP`}
-            variant="primary"
-          />
+          <Text style={styles.date}>
+            {date}
+          </Text>
+        </View>
+
+        <View style={styles.badges}>
+          <Badge label={type} variant="outline" />
+          <Badge label={`${points} KP`} variant="primary" />
         </View>
       </View>
     </Pressable>

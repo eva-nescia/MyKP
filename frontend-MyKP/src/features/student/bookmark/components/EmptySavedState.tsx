@@ -1,23 +1,26 @@
-import { View, Text, Image } from "react-native";
+import { View, Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
+import { COLORS } from "@/constants/colors";
 import styles from "./styles/EmptySaved.styles";
 
 export default function EmptySavedState() {
   return (
     <View style={styles.container}>
-      <Image
-        source={require("assets/images/illustration/no_saved_activity.png")}
-        style={styles.image}
-        resizeMode="contain"
-      />
+      <View style={styles.iconContainer}>
+        <Ionicons
+          name="bookmark-outline"
+          size={56}
+          color={COLORS.primary}
+        />
+      </View>
 
       <Text style={styles.title}>
-        No saved activities yet
+        No Saved Activities
       </Text>
 
       <Text style={styles.subtitle}>
-        Save events you're interested in{"\n"}
-        to find them here later.
+        Save activities you’re interested in to find them here later.
       </Text>
     </View>
   );
