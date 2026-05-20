@@ -21,8 +21,10 @@ export default function KPProgressCard({
   item,
   onPress,
 }: Props) {
-  const percentage =
-    (item.current / item.target) * 100;
+  const percentage = Math.min(
+    (item.current / item.target) * 100,
+    100
+  );
 
   const completed =
     item.current >= item.target;
@@ -31,15 +33,44 @@ export default function KPProgressCard({
     <TouchableOpacity
       style={styles.card}
       onPress={onPress}
-      activeOpacity={0.8}
+      activeOpacity={0.85}
     >
-      <View style={styles.row}>
-        <Text style={styles.title}>
+      <View style={styles.topRow}>
+        <Text
+          style={styles.title}
+          numberOfLines={2}
+        >
           {item.title}
         </Text>
 
+        <View
+          style={[
+            styles.statusBadge,
+            completed &&
+              styles.completedBadge,
+          ]}
+        >
+          <Text
+            style={[
+              styles.statusText,
+              completed &&
+                styles.completedText,
+            ]}
+          >
+            {completed
+              ? "Completed"
+              : "On Progress"}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.progressInfo}>
         <Text style={styles.point}>
-          {item.current}/{item.target}
+          {item.current}/{item.target} KP
+        </Text>
+
+        <Text style={styles.percentage}>
+          {Math.round(percentage)}%
         </Text>
       </View>
 
@@ -53,18 +84,6 @@ export default function KPProgressCard({
           ]}
         />
       </View>
-
-      <Text
-        style={[
-          styles.status,
-          completed &&
-            styles.completed,
-        ]}
-      >
-        {completed
-          ? "Completed"
-          : "On Progress"}
-      </Text>
     </TouchableOpacity>
   );
 }

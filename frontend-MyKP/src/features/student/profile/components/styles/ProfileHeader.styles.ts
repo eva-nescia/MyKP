@@ -1,69 +1,78 @@
 import { StyleSheet } from "react-native";
+
 import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-
     marginBottom: 28,
   },
 
   card: {
     width: "100%",
 
-    flexDirection: "row",
-    alignItems: "center",
-
     backgroundColor: COLORS.white,
 
-    borderRadius: 14,
+    borderRadius: 28,
 
-    padding: 20,
+    paddingVertical: 26,
+    paddingHorizontal: 22,
 
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 3,
-      height: 3,
-    },
+    alignItems: "center",
 
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
 
-    marginRight: 14,
+    elevation: 2,
   },
 
   image: {
-    width: 70,
-    height: 70,
-    borderRadius: 100,
-    marginRight: 14,
-  },
+    width: 92,
+    height: 92,
 
-  info: {
-    flex: 1,
-    paddingVertical: 20,
+    borderRadius: 999,
+
+    marginBottom: 16,
+
+    backgroundColor: "#E5E7EB",
   },
 
   name: {
-    fontSize: 17,
-    fontWeight: FONT_WEIGHT.medium,
+    fontSize: 22,
+    lineHeight: 29,
+
+    fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
-    marginBottom: 6,
+
+    textAlign: "center",
+
+    marginBottom: 14,
   },
 
-  nim: {
+  badgeContainer: {
+    width: "100%",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  badge: {
+    maxWidth: "100%",
+
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 6,
+
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+
+    borderRadius: 999,
+
+    backgroundColor: "#F8FAFC",
+  },
+
+  badgeText: {
     fontSize: 14,
-    color: COLORS.text,
-    marginBottom: 6,
-  },
-
-  major: {
-    fontSize: 13,
-    color: COLORS.text,
-    fontWeight: FONT_WEIGHT.regular,
+    color: "#64748B",
   },
 });
