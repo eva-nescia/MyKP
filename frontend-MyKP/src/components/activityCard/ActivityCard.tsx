@@ -1,5 +1,3 @@
-// src/components/activityCard/ActivityCard.tsx
-
 import { View, Text, Image, Pressable } from "react-native";
 import Badge from "../badge/Badge";
 import { styles } from "../activityCard/styles/ActivityCard.styles";
@@ -16,15 +14,26 @@ interface Props {
 }
 
 export default function ActivityCard({
-  title,
-  image,
-  type,
-  points,
-  date,
-  onPress,
-  rightAction,
-}: Props) {
-  return (
+    title,
+    image,
+    type,
+    points,
+    date,
+    onPress,
+    rightAction,
+  }: Props) {
+
+    const formattedDate = new Date(date).toLocaleDateString(
+      "en-GB",
+      {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
+
+    return (
     <Pressable onPress={onPress} style={styles.container}>
       <Image source={image} style={styles.image} />
 
@@ -42,7 +51,7 @@ export default function ActivityCard({
         />
 
         <Text style={styles.date}>
-          {date}
+          {formattedDate}
         </Text>
       </View>
 

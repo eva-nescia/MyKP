@@ -6,83 +6,72 @@ import { FONT_WEIGHT } from "@/constants/typography";
 export default StyleSheet.create({
   card: {
     flexDirection: "row",
-
-    backgroundColor: COLORS.white,
-
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
+    alignItems: "center",
 
     padding: 12,
 
-    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
 
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    borderRadius: 18,
 
-    elevation: 4,
+    backgroundColor: COLORS.white,
+
+    marginBottom: 16,
+
+    elevation: 1,
   },
 
   image: {
-    width: 80,
-    height: 115,
+    width: 82,
+    height: 118,
 
     borderRadius: 6,
 
-    marginRight: 12,
+    backgroundColor: "#E5E7EB",
   },
 
   content: {
     flex: 1,
-    justifyContent: "center",
-  },
-
-  organizer: {
-    fontSize: 12,
-    color: "#475569",
-    marginBottom: 8,
-  },
-
-  organizerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  
-  orangeDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 999,
-    backgroundColor: COLORS.primary,
-    marginRight: 6,
-  },
-  
-  organizerText: { 
-    fontSize: 12, 
-    fontWeight: FONT_WEIGHT.regular, 
-    color: COLORS.text, 
+    marginLeft: 14,
   },
 
   title: {
-    fontSize: 16,
-    fontWeight: FONT_WEIGHT.medium,
+    fontSize: 18,
+    lineHeight: 22,
+
+    fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
-    marginBottom: 6,
+
+    marginBottom: 4,
+  },
+
+  organizerText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.medium,
+
+    color: "#64748B",
+
+    marginBottom: 8,
+  },
+
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 5,
+
+    marginBottom: 8,
   },
 
   date: {
-    fontSize: 14,
-    color: COLORS.text,
-    marginBottom: 12,
+    fontSize: 12,
+    color: "#64748B",
   },
 
   badges: {
     flexDirection: "row",
-    gap: 8,
-  }
+    alignItems: "center",
+    gap: 6
+  },
 });

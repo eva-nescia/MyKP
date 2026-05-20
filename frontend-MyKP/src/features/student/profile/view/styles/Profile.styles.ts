@@ -3,18 +3,14 @@ import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.white,
-    paddingHorizontal: 25,
-    paddingTop: 12,
-  },
+ container: {
+  flex: 1,
+  backgroundColor: COLORS.white,
+ },
 
-  header: {
-    fontSize: 26,
-    fontWeight: FONT_WEIGHT.bold,
-    color: COLORS.text,
-    marginBottom: 36,
+  listContent: {
+    paddingHorizontal: 25,
+    paddingBottom: 20,
   },
 
   sectionTitle: {
@@ -22,10 +18,6 @@ export default StyleSheet.create({
     fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
     marginBottom: 14,
-  },
-
-  listContent: {
-    paddingBottom: 0,
   },
 
   topRow: {

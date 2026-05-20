@@ -51,7 +51,7 @@ export default StyleSheet.create({
 
   date: {
     fontSize: 12,
-    color: "#94A3B8",
+    color: "#64748B",
   },
 
   badges: {

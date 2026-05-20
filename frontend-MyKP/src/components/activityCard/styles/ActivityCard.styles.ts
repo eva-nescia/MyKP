@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
 
   date: {
     fontSize: 12,
-    fontWeight: FONT_WEIGHT.medium,
+    fontWeight: FONT_WEIGHT.regular,
     marginLeft: 4,
     color: "#64748B",
   },
