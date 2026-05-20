@@ -47,6 +47,7 @@ class ProfileController extends Controller
                 'name'            => $userModel->Name,
                 'nim'             => $userModel->NIM,
                 'email'           => $userModel->Email,
+                'jurusan'         => $userModel->Jurusan,
                 'role'            => $userModel->Role,
                 'profile_picture' => $userModel->ProfilePicture,
             ],
