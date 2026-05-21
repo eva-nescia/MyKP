@@ -17,7 +17,16 @@ export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
     });
 
     if (!response.ok) {
-      throw new Error(`Invalid credentials (HTTP ${response.status})`);
+      // Surface Laravel's specific validation message (wrong domain, bad
+      // credentials, etc.) instead of a generic "Invalid credentials".
+      let message = `Login failed (HTTP ${response.status})`;
+      try {
+        const data = await response.json();
+        message = data?.errors?.email?.[0] ?? data?.message ?? message;
+      } catch {
+        // body wasn't JSON
+      }
+      throw new Error(message);
     }
 
     return await response.json();
@@ -52,26 +61,34 @@ export const logout = async (): Promise<void> => {
   }
 };
 
-// ==========================================================
-// GOOGLE LOGIN — temporarily disabled. Re-enable later.
-// ==========================================================
 export const googleLogin = async (accessToken: string): Promise<AuthResponse> => {
+  const url = `${API_URL}/login/google`;
   try {
-    const response = await fetch(`${API_URL}/login/google`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({ accessToken }),
     });
 
     if (!response.ok) {
-      throw new Error('Google login failed');
+      // Parse Laravel's validation error envelope to surface the real reason
+      // (wrong domain, account not registered, invalid Google token, …).
+      let message = `Google login failed (HTTP ${response.status})`;
+      try {
+        const data = await response.json();
+        message = data?.errors?.email?.[0] ?? data?.message ?? message;
+      } catch {
+        // body wasn't JSON; keep default message
+      }
+      throw new Error(message);
     }
 
     return await response.json();
-  } catch (error) {
-    console.error('Google login error:', error);
+  } catch (error: any) {
+    console.error(`Google login error against ${url}:`, error?.message ?? error);
     throw error;
   }
 };

@@ -6,6 +6,7 @@ use App\Models\Activity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OA;
 
 class ActivityController extends Controller
@@ -279,13 +280,13 @@ class ActivityController extends Controller
                     // Move the file
                     if ($file->move($imagesDir, $filename)) {
                         $posterPath = 'images/' . $filename;
-                        \Log::info('Image uploaded successfully: ' . $posterPath);
+                        Log::info('Image uploaded successfully: ' . $posterPath);
                     } else {
-                        \Log::error('Failed to move image file');
+                        Log::error('Failed to move image file');
                     }
                 }
             } catch (\Exception $e) {
-                \Log::error('Image upload error: ' . $e->getMessage());
+                Log::error('Image upload error: ' . $e->getMessage());
                 // Don't fail the whole request if image fails - just log it
             }
         }
@@ -375,14 +376,14 @@ class ActivityController extends Controller
             // Update activity with new image path
             $activity->update(['event_poster' => 'images/' . $filename]);
             
-            \Log::info('Image uploaded for activity ' . $activityId . ': images/' . $filename);
+            Log::info('Image uploaded for activity ' . $activityId . ': images/' . $filename);
 
             return response()->json([
                 'message' => 'Image uploaded successfully',
                 'event_poster' => 'images/' . $filename,
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Image upload error: ' . $e->getMessage());
+            Log::error('Image upload error: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to upload image: ' . $e->getMessage()], 500);
         }
     }
