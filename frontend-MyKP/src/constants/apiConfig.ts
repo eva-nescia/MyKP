@@ -16,4 +16,4 @@ const devHost =
 
 const host = devHost ?? 'localhost';
 
-export const API_URL = `http://${host}:${BACKEND_PORT}/api`;
+export const API_URL = `http://10.150.69.119:${BACKEND_PORT}/api`;
