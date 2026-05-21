@@ -8,7 +8,6 @@ export interface KPCategory {
 }
 
 export interface KPSummary {
-  total_categories: number;
   completed: number;
   in_progress: number;
   total_current: number;

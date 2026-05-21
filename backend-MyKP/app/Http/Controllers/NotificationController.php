@@ -84,11 +84,28 @@ class NotificationController extends Controller
 
     #[OA\Get(
         path: "/api/notifications",
-        summary: "List notifications and mark them as read",
+        summary: "List notifications and mark them all as read. Two kinds are interleaved: 'notification' (new activity created) and 'reminder' (3/2/1 days before a bookmarked activity's registration deadline).",
         tags: ["Notifications"],
         security: [["sanctum" => []]]
     )]
-    #[OA\Response(response: 200, description: "OK")]
+    #[OA\Response(
+        response: 200,
+        description: "OK — sorted newest first. Calling this endpoint marks every returned item as read.",
+        content: new OA\JsonContent(
+            type: "array",
+            items: new OA\Items(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "id", type: "string", example: "act-1", description: "Stable ID. 'act-{ActivityID}' for new-activity notifications, 'bm-{BookmarkID}-{days}d' for deadline reminders."),
+                    new OA\Property(property: "type", type: "string", enum: ["notification", "reminder"], example: "reminder"),
+                    new OA\Property(property: "title", type: "string", example: "Registration deadline in 3 days"),
+                    new OA\Property(property: "description", type: "string", example: "Seminar Bela Negara & Anti Narkoba 2026"),
+                    new OA\Property(property: "fired_at", type: "string", format: "date-time", example: "2026-05-15T00:00:00+07:00"),
+                ]
+            )
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -104,11 +121,21 @@ class NotificationController extends Controller
 
     #[OA\Get(
         path: "/api/notifications/unread-count",
-        summary: "Number of notifications the user hasn't viewed yet",
+        summary: "Number of notifications the user hasn't viewed yet (drives the bell badge on the dashboard)",
         tags: ["Notifications"],
         security: [["sanctum" => []]]
     )]
-    #[OA\Response(response: 200, description: "OK")]
+    #[OA\Response(
+        response: 200,
+        description: "OK",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "count", type: "integer", example: 3, description: "Number of currently-visible notifications not yet acknowledged by reading /api/notifications"),
+            ]
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
     public function unreadCount(Request $request): JsonResponse
     {
         $user = $request->user();

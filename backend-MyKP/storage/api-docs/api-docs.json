@@ -6,6 +6,440 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/activities": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Search activities by title or type",
+                "operationId": "b4d1c282116d1f6e0c5a1a907c6efe44",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by activity title or type",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "seminar"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "Filter by activity category",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Talkshow Wajib BMA"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activities retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Seminar Bela Negara"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "url or null"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "Talkshow Wajib BMA"
+                                            },
+                                            "points": {
+                                                "type": "integer",
+                                                "example": 6
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "example": "Sat, 29 May 2026"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Create a new activity (Admin only)",
+                "operationId": "8aa12114961e22767ecdad7c24be367e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Seminar Title"
+                                    },
+                                    "kp_category": {
+                                        "type": "string",
+                                        "example": "Talkshow Wajib BMA"
+                                    },
+                                    "kp_amount": {
+                                        "type": "integer",
+                                        "example": 6
+                                    },
+                                    "eligible_generation": {
+                                        "type": "string",
+                                        "example": "All Gen"
+                                    },
+                                    "eligible_study_program": {
+                                        "type": "string",
+                                        "example": "All Prodi"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-05-29"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "07:30:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "09:30:00"
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "Auditorium, 7th Floor"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "requirements": {
+                                        "type": "string"
+                                    },
+                                    "claiming_procedure": {
+                                        "type": "string"
+                                    },
+                                    "contact_person": {
+                                        "type": "string"
+                                    },
+                                    "registration_link": {
+                                        "type": "string"
+                                    },
+                                    "registration_deadline_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "registration_deadline_time": {
+                                        "type": "string",
+                                        "format": "time"
+                                    },
+                                    "event_poster": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Activity created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ActivityID of the newly created activity",
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Activity created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized — missing or invalid bearer token"
+                    },
+                    "422": {
+                        "description": "Validation error — see `errors` map for per-field messages"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/activities/{id}": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Get activity details by ID",
+                "operationId": "584d36705f8ae637f6834b234678dde3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Activity ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activity details retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Seminar Bela Negara"
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "example": "url or null"
+                                        },
+                                        "organizer": {
+                                            "type": "string",
+                                            "example": "BMA"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "Talkshow Wajib BMA"
+                                        },
+                                        "points": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "eligibleStudyProgram": {
+                                            "type": "string",
+                                            "example": "All Study Program"
+                                        },
+                                        "eligibleCohort": {
+                                            "type": "string",
+                                            "example": "All Gen"
+                                        },
+                                        "date": {
+                                            "type": "string",
+                                            "example": "Fri, 26 Feb 2026"
+                                        },
+                                        "startTime": {
+                                            "type": "string",
+                                            "example": "07:30:00"
+                                        },
+                                        "endTime": {
+                                            "type": "string",
+                                            "example": "09:30:00"
+                                        },
+                                        "location": {
+                                            "type": "string",
+                                            "example": "Auditorium, 7th Floor"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "requirement": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "howToClaim": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "contactPerson": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "registrationLink": {
+                                            "type": "string",
+                                            "example": "https://forms.google.com/..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/activities/{activityId}/upload-image": {
+            "post": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Upload (or replace) the poster image for an existing activity. Body is base64-encoded so Swagger UI can call it without multipart.",
+                "description": "Upload image for an existing activity",
+                "operationId": "c19519e2a15f84ce6943f957cf731de3",
+                "parameters": [
+                    {
+                        "name": "activityId",
+                        "in": "path",
+                        "description": "ActivityID of the activity to attach the image to",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "image_data",
+                                    "mime_type",
+                                    "file_name"
+                                ],
+                                "properties": {
+                                    "image_data": {
+                                        "description": "Base64-encoded image bytes",
+                                        "type": "string",
+                                        "example": "iVBORw0KGgoAAAANSUhEUgAA..."
+                                    },
+                                    "mime_type": {
+                                        "type": "string",
+                                        "example": "image/jpeg"
+                                    },
+                                    "file_name": {
+                                        "type": "string",
+                                        "example": "poster.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Image uploaded successfully"
+                                        },
+                                        "event_poster": {
+                                            "description": "Server-relative path; resolved to an absolute URL when activities are listed",
+                                            "type": "string",
+                                            "example": "images/1747654321_a1b2c3.jpg"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid base64 data"
+                    },
+                    "403": {
+                        "description": "Not the activity owner"
+                    },
+                    "404": {
+                        "description": "Activity not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/activities": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Get activities created by authenticated admin",
+                "description": "Get all activities created by the authenticated admin",
+                "operationId": "08fab45ab859990b2d4b1a2af2412525",
+                "responses": {
+                    "200": {
+                        "description": "Admin activities retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "kp_category": {
+                                                "type": "string"
+                                            },
+                                            "date": {
+                                                "type": "string"
+                                            },
+                                            "event_poster": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -109,6 +543,375 @@
                 }
             }
         },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Revoke the current Sanctum access token (only this device's token, other sessions stay valid)",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Logged out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "logged_out": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized — no valid token in Authorization header"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/login/google": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login with Google OAuth Access Token",
+                "operationId": "1da99ed35da5200d3fb60b8361f36ba6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "accessToken"
+                                ],
+                                "properties": {
+                                    "accessToken": {
+                                        "description": "Google OAuth access token from the frontend SDK",
+                                        "type": "string",
+                                        "example": "ya29.a0AfB_byCdefGHIJKlmnop..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Google login (same shape as /login)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdef1234567890..."
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "KenStudent"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "atubagus@student.ciputra.ac.id"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "student"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error (invalid token, wrong domain, or email not registered)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This Google account is not registered."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/bookmarks": {
+            "get": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "summary": "List the authenticated user's saved (bookmarked) activities, newest-first by save time",
+                "operationId": "1fb0d12ef5da5cdfdcc709532c40d31f",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ActivityID as a string",
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Seminar Bela Negara & Anti Narkoba 2026"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "http://10.0.0.5:8000/images/seminarAntiNarkoba.jpeg",
+                                                "nullable": true
+                                            },
+                                            "organizer": {
+                                                "type": "string",
+                                                "example": "BMA"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "Talkshow (Wajib BMA)"
+                                            },
+                                            "points": {
+                                                "type": "integer",
+                                                "example": 6
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "example": "Friday, 29 May 2026"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "summary": "Save (bookmark) an activity for the authenticated user",
+                "operationId": "ea5e1d78c03dc599b884aefaf8705143",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "activity_id"
+                                ],
+                                "properties": {
+                                    "activity_id": {
+                                        "description": "ActivityID to bookmark",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created — new bookmark inserted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "saved": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "activity_id": {
+                                            "type": "string",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK — already bookmarked, no change",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "saved": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "activity_id": {
+                                            "type": "string",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error — missing or non-existent activity_id"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/bookmarks/{activity_id}": {
+            "get": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "summary": "Check whether the authenticated user has bookmarked a specific activity",
+                "operationId": "5a64ddd62e43c6da4a2824cf87653918",
+                "parameters": [
+                    {
+                        "name": "activity_id",
+                        "in": "path",
+                        "description": "ActivityID to check",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "saved": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "activity_id": {
+                                            "type": "string",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "summary": "Remove a bookmarked activity for the authenticated user",
+                "operationId": "039d6cf7ab463474a1d4b11cb50452d4",
+                "parameters": [
+                    {
+                        "name": "activity_id",
+                        "in": "path",
+                        "description": "ActivityID to un-bookmark",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK — bookmark removed (idempotent: returns 200 even if it wasn't bookmarked)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "saved": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "activity_id": {
+                                            "type": "string",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/dashboard": {
             "get": {
                 "tags": [
@@ -182,6 +985,397 @@
                     }
                 ]
             }
+        },
+        "/api/notifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "List notifications and mark them all as read. Two kinds are interleaved: 'notification' (new activity created) and 'reminder' (3/2/1 days before a bookmarked activity's registration deadline).",
+                "operationId": "911565ad9aff9ba7eded3f189509e578",
+                "responses": {
+                    "200": {
+                        "description": "OK — sorted newest first. Calling this endpoint marks every returned item as read.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "Stable ID. 'act-{ActivityID}' for new-activity notifications, 'bm-{BookmarkID}-{days}d' for deadline reminders.",
+                                                "type": "string",
+                                                "example": "act-1"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "reminder",
+                                                "enum": [
+                                                    "notification",
+                                                    "reminder"
+                                                ]
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Registration deadline in 3 days"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Seminar Bela Negara & Anti Narkoba 2026"
+                                            },
+                                            "fired_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2026-05-15T00:00:00+07:00"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/notifications/unread-count": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Number of notifications the user hasn't viewed yet (drives the bell badge on the dashboard)",
+                "operationId": "0272623bed30dd4d72141741fb3f25da",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "count": {
+                                            "description": "Number of currently-visible notifications not yet acknowledged by reading /api/notifications",
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/activities/{activity_id}/register": {
+            "post": {
+                "tags": [
+                    "Participations"
+                ],
+                "summary": "Register the authenticated user for an activity. Records a participation row and increments matching KP_Progress.",
+                "operationId": "8695c1c9f5a4b99444d8074e581f5f23",
+                "parameters": [
+                    {
+                        "name": "activity_id",
+                        "in": "path",
+                        "description": "ActivityID of the activity to register for",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Registered",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "registered": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "activity_id": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "kp_category": {
+                                            "type": "string",
+                                            "example": "Talkshow (Wajib BMA)"
+                                        },
+                                        "kp_amount": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "kp_progress_updated": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Already registered"
+                    },
+                    "404": {
+                        "description": "Activity not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/participations": {
+            "get": {
+                "tags": [
+                    "Participations"
+                ],
+                "summary": "List the authenticated user's participation history. Optionally filter by kp_category.",
+                "operationId": "c0f38359763db28ed2698f348cdaa27b",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "Filter by kp_category (exact match on activity category name)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Talkshow Wajib BMA"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK — sorted newest-registered first",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ParticipationID as a string",
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "activity_id": {
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Seminar Bela Negara & Anti Narkoba 2026"
+                                            },
+                                            "organizer": {
+                                                "type": "string",
+                                                "example": "BMA"
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "example": "Fri, 29 May 2026"
+                                            },
+                                            "kp": {
+                                                "type": "string",
+                                                "example": "6 KP"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "Completed",
+                                                "enum": [
+                                                    "Completed",
+                                                    "On Progress"
+                                                ]
+                                            },
+                                            "kp_category": {
+                                                "type": "string",
+                                                "example": "Talkshow (Wajib BMA)"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "http://10.0.0.5:8000/images/seminarAntiNarkoba.jpeg",
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/profile/{user}": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get a user's profile and KP category progress summary",
+                "operationId": "177fa94c02add9deecf901cc420a273b",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "UserID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Andi Tubagus Faatih Keane"
+                                                },
+                                                "nim": {
+                                                    "type": "string",
+                                                    "example": "1234567890"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "atubagus@student.ciputra.ac.id"
+                                                },
+                                                "jurusan": {
+                                                    "description": "Study program code; null for admins",
+                                                    "type": "string",
+                                                    "example": "IMT",
+                                                    "nullable": true
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "student"
+                                                },
+                                                "profile_picture": {
+                                                    "type": "string",
+                                                    "example": "https://i.pravatar.cc/300?u=ken.student",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "kp_categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ProgressID (per-user category row)",
+                                                        "type": "integer",
+                                                        "example": 7
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Talkshow (Wajib BMA)"
+                                                    },
+                                                    "current": {
+                                                        "type": "integer",
+                                                        "example": 6
+                                                    },
+                                                    "target": {
+                                                        "type": "integer",
+                                                        "example": 6
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "Completed",
+                                                        "enum": [
+                                                            "Completed",
+                                                            "On Progress"
+                                                        ]
+                                                    },
+                                                    "percentage": {
+                                                        "type": "integer",
+                                                        "example": 100
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "kp_summary": {
+                                            "properties": {
+                                                "total_categories": {
+                                                    "type": "integer",
+                                                    "example": 12
+                                                },
+                                                "completed": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "in_progress": {
+                                                    "type": "integer",
+                                                    "example": 7
+                                                },
+                                                "total_current": {
+                                                    "type": "integer",
+                                                    "example": 36
+                                                },
+                                                "total_target": {
+                                                    "type": "integer",
+                                                    "example": 100
+                                                },
+                                                "overall_percentage": {
+                                                    "type": "integer",
+                                                    "example": 36
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -196,12 +1390,32 @@
     },
     "tags": [
         {
+            "name": "Activities",
+            "description": "Activities"
+        },
+        {
             "name": "Authentication",
             "description": "Authentication"
         },
         {
+            "name": "Bookmarks",
+            "description": "Bookmarks"
+        },
+        {
             "name": "Dashboard",
             "description": "Dashboard"
+        },
+        {
+            "name": "Notifications",
+            "description": "Notifications"
+        },
+        {
+            "name": "Participations",
+            "description": "Participations"
+        },
+        {
+            "name": "Profile",
+            "description": "Profile"
         }
     ]
 }

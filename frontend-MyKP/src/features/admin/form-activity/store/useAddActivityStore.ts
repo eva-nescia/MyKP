@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { getToken } from '../../../auth/services/session';
 import { API_URL } from '../../../../constants/apiConfig';
-import * as FileSystem from 'expo-file-system';
 
 export type ActivityFormMode = "create" | "edit";
 
@@ -289,9 +288,11 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
       end_time: formatTimeToString(state.endTime) || '',
       location: state.location,
       description: state.description || '',
-      requirements: state.requirements.length > 0 ? state.requirements.join('\n') : '',
-      claiming_procedure: state.claimRequirements || '',
-      contact_person: state.contacts.length > 0 ? state.contacts.join('\n') : '',
+      requirements: state.requirements,
+      claiming_procedure: state.claimRequirements
+        ? state.claimRequirements.split('\n').map((s) => s.trim()).filter(Boolean)
+        : [],
+      contact_person: state.contacts,
       registration_link: state.registrationLink || '',
       registration_deadline_date: formatDateToString(state.registrationDeadlineDate) || '',
       registration_deadline_time: formatTimeToString(state.registrationDeadlineTime) || '',
@@ -326,31 +327,29 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
       const activityId = result.id;
       console.log("Activity created:", activityId);
 
-      // Second: Upload image if provided
+      // Second: Upload image if provided (multipart/form-data)
       if (state.image?.uri) {
         try {
           console.log('Uploading image for activity:', activityId);
-          
-          // Read image as base64
-          const base64Data = await FileSystem.readAsStringAsync(state.image.uri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-          
+
           const fileName = state.image.fileName || state.image.uri.split('/').pop() || `activity_${Date.now()}.jpg`;
           const mimeType = state.image.type || 'image/jpeg';
-          
-          // Send as base64 in JSON
+
+          const formData = new FormData();
+          // React Native FormData accepts { uri, name, type } for file fields
+          formData.append('event_poster', {
+            uri: state.image.uri,
+            name: fileName,
+            type: mimeType,
+          } as any);
+
           const imageResponse = await fetch(`${API_URL}/activities/${activityId}/upload-image`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              Accept: 'application/json',
               ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
-            body: JSON.stringify({
-              image_data: base64Data,
-              mime_type: mimeType,
-              file_name: fileName,
-            }),
+            body: formData,
           });
 
           if (imageResponse.ok) {

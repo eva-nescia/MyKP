@@ -54,7 +54,6 @@ class ProfileTest extends TestCase
                     ['id', 'title', 'current', 'target', 'status', 'percentage'],
                 ],
                 'kp_summary' => [
-                    'total_categories',
                     'completed',
                     'in_progress',
                     'total_current',
@@ -64,7 +63,6 @@ class ProfileTest extends TestCase
             ])
             ->assertJsonPath('user.email', 'profile.test@mykp.test')
             ->assertJsonPath('user.profile_picture', 'https://example.com/avatar.png')
-            ->assertJsonPath('kp_summary.total_categories', 3)
             ->assertJsonPath('kp_summary.completed', 2)
             ->assertJsonPath('kp_summary.in_progress', 1)
             // 9 capped at target 6 contributes 6, plus 6 + 5 = 17 current; targets 6+6+10=22

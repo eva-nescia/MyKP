@@ -40,9 +40,6 @@ class ActivityFactory extends Factory
             'registration_deadline_date' => fake()->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
             'registration_deadline_time' => fake()->time('H:i'),
             'description' => fake()->paragraph(),
-            'requirements' => fake()->paragraph(),
-            'claiming_procedure' => fake()->paragraph(),
-            'contact_person' => fake()->name() . ' (' . fake()->phoneNumber() . ')',
             'event_poster' => fake()->imageUrl(800, 600, 'events', true),
         ];
     }

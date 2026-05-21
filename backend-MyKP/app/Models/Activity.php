@@ -25,14 +25,26 @@ class Activity extends Model
         'registration_deadline_date',
         'registration_deadline_time',
         'description',
-        'requirements',
-        'claiming_procedure',
-        'contact_person',
         'event_poster',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'UserID');
+    }
+
+    public function requirements()
+    {
+        return $this->hasMany(ActivityRequirement::class, 'activity_id', 'ActivityID');
+    }
+
+    public function claimingProcedures()
+    {
+        return $this->hasMany(ActivityClaimingProcedure::class, 'activity_id', 'ActivityID');
+    }
+
+    public function contactPersons()
+    {
+        return $this->hasMany(ActivityContactPerson::class, 'activity_id', 'ActivityID');
     }
 }
