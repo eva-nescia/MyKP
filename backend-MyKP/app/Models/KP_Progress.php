@@ -51,9 +51,8 @@ class KP_Progress extends Model
             ];
         })->values();
 
-        $totalCategories  = $categories->count();
         $completedCount   = $categories->where('status', 'Completed')->count();
-        $inProgressCount  = $totalCategories - $completedCount;
+        $inProgressCount  = $categories->count() - $completedCount;
         $totalCurrent     = (int) $categories->sum('current');
         $totalTarget      = (int) $categories->sum('target');
         $overallPercent   = $totalTarget > 0
@@ -63,7 +62,6 @@ class KP_Progress extends Model
         return [
             'categories' => $categories->all(),
             'summary'    => [
-                'total_categories'    => $totalCategories,
                 'completed'           => $completedCount,
                 'in_progress'         => $inProgressCount,
                 'total_current'       => $totalCurrent,

@@ -16,9 +16,31 @@ class ParticipationController extends Controller
         path: "/api/activities/{activity_id}/register",
         summary: "Register the authenticated user for an activity. Records a participation row and increments matching KP_Progress.",
         tags: ["Participations"],
-        security: [["sanctum" => []]]
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(
+                name: "activity_id",
+                in: "path",
+                required: true,
+                description: "ActivityID of the activity to register for",
+                schema: new OA\Schema(type: "integer", example: 1)
+            ),
+        ]
     )]
-    #[OA\Response(response: 201, description: "Registered")]
+    #[OA\Response(
+        response: 201,
+        description: "Registered",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "registered", type: "boolean", example: true),
+                new OA\Property(property: "activity_id", type: "string", example: "1"),
+                new OA\Property(property: "kp_category", type: "string", example: "Talkshow (Wajib BMA)"),
+                new OA\Property(property: "kp_amount", type: "integer", example: 6),
+                new OA\Property(property: "kp_progress_updated", type: "boolean", example: true),
+            ]
+        )
+    )]
     #[OA\Response(response: 409, description: "Already registered")]
     #[OA\Response(response: 404, description: "Activity not found")]
     public function register(Request $request, string $activity_id): JsonResponse
@@ -98,7 +120,28 @@ class ParticipationController extends Controller
             ),
         ]
     )]
-    #[OA\Response(response: 200, description: "OK")]
+    #[OA\Response(
+        response: 200,
+        description: "OK — sorted newest-registered first",
+        content: new OA\JsonContent(
+            type: "array",
+            items: new OA\Items(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "id", type: "string", example: "1", description: "ParticipationID as a string"),
+                    new OA\Property(property: "activity_id", type: "string", example: "1"),
+                    new OA\Property(property: "title", type: "string", example: "Seminar Bela Negara & Anti Narkoba 2026"),
+                    new OA\Property(property: "organizer", type: "string", example: "BMA"),
+                    new OA\Property(property: "date", type: "string", example: "Fri, 29 May 2026"),
+                    new OA\Property(property: "kp", type: "string", example: "6 KP"),
+                    new OA\Property(property: "status", type: "string", enum: ["Completed", "On Progress"], example: "Completed"),
+                    new OA\Property(property: "kp_category", type: "string", example: "Talkshow (Wajib BMA)"),
+                    new OA\Property(property: "image", type: "string", nullable: true, example: "http://10.0.0.5:8000/images/seminarAntiNarkoba.jpeg"),
+                ]
+            )
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
     public function history(Request $request): JsonResponse
     {
         $user = $request->user();

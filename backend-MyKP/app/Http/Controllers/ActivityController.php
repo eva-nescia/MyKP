@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\ActivityClaimingProcedure;
+use App\Models\ActivityContactPerson;
+use App\Models\ActivityRequirement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OA;
 
@@ -54,7 +58,6 @@ class ActivityController extends Controller
     {
         $query = Activity::query();
 
-        // Search filter — by title or type
         if ($request->has('search') && $request->input('search') !== '') {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -63,7 +66,6 @@ class ActivityController extends Controller
             });
         }
 
-        // Category filter
         $query = $this->filterByCategory($query, $request);
 
         $activities = $query->orderBy('date', 'desc')->get();
@@ -119,12 +121,16 @@ class ActivityController extends Controller
                 new OA\Property(property: "howToClaim", type: "array", items: new OA\Items(type: "string")),
                 new OA\Property(property: "contactPerson", type: "array", items: new OA\Items(type: "string")),
                 new OA\Property(property: "registrationLink", type: "string", example: "https://forms.google.com/..."),
+                new OA\Property(property: "registrationDeadlineDate", type: "string", format: "date", nullable: true, example: "2026-05-28"),
+                new OA\Property(property: "registrationDeadlineTime", type: "string", format: "time", nullable: true, example: "23:59:00"),
             ]
         )
     )]
     public function getById(Request $request, string $id): JsonResponse
     {
-        $activity = Activity::where('ActivityID', $id)->with('user')->first();
+        $activity = Activity::where('ActivityID', $id)
+            ->with(['user', 'requirements', 'claimingProcedures', 'contactPersons'])
+            ->first();
 
         if (!$activity) {
             return response()->json(['error' => 'Activity not found'], 404);
@@ -146,17 +152,15 @@ class ActivityController extends Controller
             'endTime'               => $activity->end_time,
             'location'              => $activity->location,
             'description'           => $activity->description,
-            'requirement'           => $this->parseListField($activity->requirements),
-            'howToClaim'            => $this->parseListField($activity->claiming_procedure),
-            'contactPerson'         => $this->parseListField($activity->contact_person),
+            'requirement'           => $activity->requirements->pluck('value')->all(),
+            'howToClaim'            => $activity->claimingProcedures->pluck('value')->all(),
+            'contactPerson'         => $activity->contactPersons->pluck('value')->all(),
             'registrationLink'      => $activity->registration_link,
+            'registrationDeadlineDate' => $activity->registration_deadline_date,
+            'registrationDeadlineTime' => $activity->registration_deadline_time,
         ]);
     }
 
-    /**
-     * Build an absolute image URL based on the current request host.
-     * Passes through if already an absolute URL (e.g. factory-generated fake URLs).
-     */
     public static function buildImageUrl(Request $request, ?string $poster): ?string
     {
         if (!$poster) {
@@ -168,18 +172,6 @@ class ActivityController extends Controller
         return $request->getSchemeAndHttpHost() . '/' . ltrim($poster, '/');
     }
 
-    private function parseListField(?string $field): array
-    {
-        if (!$field) {
-            return [];
-        }
-
-        return array_map(
-            fn($item) => trim(ltrim($item, '•')),
-            array_filter(explode("\n", $field), fn($item) => trim($item) !== '')
-        );
-    }
-
     private function filterByCategory(Builder $query, Request $request): Builder
     {
         if ($request->has('category') && $request->input('category') !== '' && $request->input('category') !== 'All') {
@@ -188,10 +180,55 @@ class ActivityController extends Controller
         return $query;
     }
 
+    /**
+     * Accepts either a plain array of strings or a single newline/bullet
+     * separated string and normalises it to a clean array of trimmed lines.
+     */
+    private function normaliseList(mixed $field): array
+    {
+        if ($field === null || $field === '') {
+            return [];
+        }
+
+        if (is_array($field)) {
+            $items = $field;
+        } else {
+            $items = explode("\n", (string) $field);
+        }
+
+        return array_values(array_filter(array_map(
+            fn ($item) => trim(ltrim((string) $item, '•')),
+            $items
+        ), fn ($item) => $item !== ''));
+    }
+
+    private function syncRelatedItems(Activity $activity, array $payload): void
+    {
+        $map = [
+            'requirements'        => [ActivityRequirement::class, 'requirements'],
+            'claiming_procedure'  => [ActivityClaimingProcedure::class, 'claimingProcedures'],
+            'contact_person'      => [ActivityContactPerson::class, 'contactPersons'],
+        ];
+
+        foreach ($map as $key => [$model, $relation]) {
+            if (! array_key_exists($key, $payload)) {
+                continue;
+            }
+            $activity->{$relation}()->delete();
+            foreach ($this->normaliseList($payload[$key]) as $value) {
+                $model::create([
+                    'activity_id' => $activity->ActivityID,
+                    'value'       => $value,
+                ]);
+            }
+        }
+    }
+
     #[OA\Post(
         path: "/api/activities",
         summary: "Create a new activity (Admin only)",
         tags: ["Activities"],
+        security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -207,13 +244,12 @@ class ActivityController extends Controller
                     new OA\Property(property: "end_time", type: "string", format: "time", example: "09:30:00"),
                     new OA\Property(property: "location", type: "string", example: "Auditorium, 7th Floor"),
                     new OA\Property(property: "description", type: "string"),
-                    new OA\Property(property: "requirements", type: "string"),
-                    new OA\Property(property: "claiming_procedure", type: "string"),
-                    new OA\Property(property: "contact_person", type: "string"),
+                    new OA\Property(property: "requirements", type: "array", items: new OA\Items(type: "string"), example: ["Active UCM Student"]),
+                    new OA\Property(property: "claiming_procedure", type: "array", items: new OA\Items(type: "string"), example: ["Auto input by BMA"]),
+                    new OA\Property(property: "contact_person", type: "array", items: new OA\Items(type: "string"), example: ["081234567890 - Gladys"]),
                     new OA\Property(property: "registration_link", type: "string"),
                     new OA\Property(property: "registration_deadline_date", type: "string", format: "date"),
                     new OA\Property(property: "registration_deadline_time", type: "string", format: "time"),
-                    new OA\Property(property: "event_poster", type: "string"),
                 ]
             )
         )
@@ -224,11 +260,14 @@ class ActivityController extends Controller
         content: new OA\JsonContent(
             type: "object",
             properties: [
-                new OA\Property(property: "id", type: "string", example: "1"),
+                new OA\Property(property: "id", type: "string", example: "1", description: "ActivityID of the newly created activity"),
                 new OA\Property(property: "message", type: "string", example: "Activity created successfully"),
             ]
         )
     )]
+    #[OA\Response(response: 401, description: "Unauthorized — missing or invalid bearer token")]
+    #[OA\Response(response: 403, description: "Forbidden — admin role required")]
+    #[OA\Response(response: 422, description: "Validation error — see `errors` map for per-field messages")]
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -242,75 +281,45 @@ class ActivityController extends Controller
             'end_time' => 'required|date_format:H:i:s',
             'location' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'requirements' => 'nullable|string',
-            'claiming_procedure' => 'nullable|string',
-            'contact_person' => 'nullable|string',
+            'requirements' => 'nullable',
+            'requirements.*' => 'string',
+            'claiming_procedure' => 'nullable',
+            'claiming_procedure.*' => 'string',
+            'contact_person' => 'nullable',
+            'contact_person.*' => 'string',
             'registration_link' => 'nullable|url',
             'registration_deadline_date' => 'nullable|date',
             'registration_deadline_time' => 'nullable|date_format:H:i:s',
-            'event_poster' => 'nullable', // Accept anything, we'll validate after
         ]);
 
-        // Get the authenticated user's ID
         $userId = auth()->id();
 
-        if (!$userId) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        $activity = DB::transaction(function () use ($validated, $userId, $request) {
+            $activity = Activity::create([
+                'user_id' => $userId,
+                'name' => $validated['name'],
+                'kp_category' => $validated['kp_category'],
+                'kp_amount' => $validated['kp_amount'],
+                'eligible_generation' => $validated['eligible_generation'],
+                'eligible_study_program' => $validated['eligible_study_program'],
+                'date' => $validated['date'],
+                'start_time' => $validated['start_time'],
+                'end_time' => $validated['end_time'],
+                'location' => $validated['location'],
+                'description' => $validated['description'] ?? null,
+                'registration_link' => $validated['registration_link'] ?? null,
+                'registration_deadline_date' => $validated['registration_deadline_date'] ?? null,
+                'registration_deadline_time' => $validated['registration_deadline_time'] ?? null,
+            ]);
 
-        // Handle image upload
-        $posterPath = null;
-        if ($request->hasFile('event_poster')) {
-            try {
-                $file = $request->file('event_poster');
-                if ($file && $file->isValid()) {
-                    // Ensure images directory exists and is writable
-                    $imagesDir = public_path('images');
-                    if (!is_dir($imagesDir)) {
-                        mkdir($imagesDir, 0755, true);
-                    }
-                    if (!is_writable($imagesDir)) {
-                        chmod($imagesDir, 0755);
-                    }
-                    
-                    // Generate unique filename
-                    $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                    $destination = $imagesDir . DIRECTORY_SEPARATOR . $filename;
-                    
-                    // Move the file
-                    if ($file->move($imagesDir, $filename)) {
-                        $posterPath = 'images/' . $filename;
-                        Log::info('Image uploaded successfully: ' . $posterPath);
-                    } else {
-                        Log::error('Failed to move image file');
-                    }
-                }
-            } catch (\Exception $e) {
-                Log::error('Image upload error: ' . $e->getMessage());
-                // Don't fail the whole request if image fails - just log it
-            }
-        }
+            $this->syncRelatedItems($activity, [
+                'requirements'       => $request->input('requirements'),
+                'claiming_procedure' => $request->input('claiming_procedure'),
+                'contact_person'     => $request->input('contact_person'),
+            ]);
 
-        $activity = Activity::create([
-            'user_id' => $userId,
-            'name' => $validated['name'],
-            'kp_category' => $validated['kp_category'],
-            'kp_amount' => $validated['kp_amount'],
-            'eligible_generation' => $validated['eligible_generation'],
-            'eligible_study_program' => $validated['eligible_study_program'],
-            'date' => $validated['date'],
-            'start_time' => $validated['start_time'],
-            'end_time' => $validated['end_time'],
-            'location' => $validated['location'],
-            'description' => $validated['description'] ?? null,
-            'requirements' => $validated['requirements'] ?? null,
-            'claiming_procedure' => $validated['claiming_procedure'] ?? null,
-            'contact_person' => $validated['contact_person'] ?? null,
-            'registration_link' => $validated['registration_link'] ?? null,
-            'registration_deadline_date' => $validated['registration_deadline_date'] ?? null,
-            'registration_deadline_time' => $validated['registration_deadline_time'] ?? null,
-            'event_poster' => $posterPath,
-        ]);
+            return $activity;
+        });
 
         return response()->json([
             'id' => (string) $activity->ActivityID,
@@ -318,79 +327,204 @@ class ActivityController extends Controller
         ], 201);
     }
 
-    /**
-     * Upload image for an existing activity
-     */
-    #[OA\Post(
-        path: "/api/activities/{activityId}/upload-image",
-        summary: "Upload image for activity",
+    #[OA\Put(
+        path: "/api/activities/{id}",
+        summary: "Update an existing activity (Admin only)",
         tags: ["Activities"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "ActivityID of the activity to update",
+                schema: new OA\Schema(type: "integer", example: 1)
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "name", type: "string"),
+                    new OA\Property(property: "kp_category", type: "string"),
+                    new OA\Property(property: "kp_amount", type: "integer"),
+                    new OA\Property(property: "eligible_generation", type: "string"),
+                    new OA\Property(property: "eligible_study_program", type: "string"),
+                    new OA\Property(property: "date", type: "string", format: "date"),
+                    new OA\Property(property: "start_time", type: "string", format: "time"),
+                    new OA\Property(property: "end_time", type: "string", format: "time"),
+                    new OA\Property(property: "location", type: "string"),
+                    new OA\Property(property: "description", type: "string"),
+                    new OA\Property(property: "requirements", type: "array", items: new OA\Items(type: "string")),
+                    new OA\Property(property: "claiming_procedure", type: "array", items: new OA\Items(type: "string")),
+                    new OA\Property(property: "contact_person", type: "array", items: new OA\Items(type: "string")),
+                    new OA\Property(property: "registration_link", type: "string"),
+                    new OA\Property(property: "registration_deadline_date", type: "string", format: "date"),
+                    new OA\Property(property: "registration_deadline_time", type: "string", format: "time"),
+                ]
+            )
+        )
     )]
-    #[OA\Response(response: 200, description: "Image uploaded successfully")]
-    public function uploadImage(Request $request, $activityId): JsonResponse
+    #[OA\Response(
+        response: 200,
+        description: "Activity updated successfully",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "id", type: "string", example: "1"),
+                new OA\Property(property: "message", type: "string", example: "Activity updated successfully"),
+            ]
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
+    #[OA\Response(response: 403, description: "Forbidden — admin role required")]
+    #[OA\Response(response: 404, description: "Activity not found")]
+    #[OA\Response(response: 422, description: "Validation error")]
+    public function update(Request $request, string $id): JsonResponse
     {
-        $activity = Activity::findOrFail($activityId);
-
-        // Check authorization
-        if ($activity->user_id !== auth()->id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        $activity = Activity::find($id);
+        if (! $activity) {
+            return response()->json(['error' => 'Activity not found'], 404);
         }
 
         $validated = $request->validate([
-            'image_data' => 'required|string',
-            'mime_type' => 'required|string',
-            'file_name' => 'required|string',
+            'name' => 'sometimes|string|max:255',
+            'kp_category' => 'sometimes|string|max:255',
+            'kp_amount' => 'sometimes|integer|min:1',
+            'eligible_generation' => 'sometimes|string',
+            'eligible_study_program' => 'sometimes|string',
+            'date' => 'sometimes|date',
+            'start_time' => 'sometimes|date_format:H:i:s',
+            'end_time' => 'sometimes|date_format:H:i:s',
+            'location' => 'sometimes|string|max:255',
+            'description' => 'sometimes|nullable|string',
+            'requirements' => 'sometimes|nullable',
+            'requirements.*' => 'string',
+            'claiming_procedure' => 'sometimes|nullable',
+            'claiming_procedure.*' => 'string',
+            'contact_person' => 'sometimes|nullable',
+            'contact_person.*' => 'string',
+            'registration_link' => 'sometimes|nullable|url',
+            'registration_deadline_date' => 'sometimes|nullable|date',
+            'registration_deadline_time' => 'sometimes|nullable|date_format:H:i:s',
         ]);
 
-        try {
-            // Decode base64 image
-            $imageData = base64_decode($validated['image_data']);
-            if ($imageData === false) {
-                return response()->json(['error' => 'Invalid base64 data'], 400);
+        DB::transaction(function () use ($activity, $validated, $request) {
+            $columnFields = array_intersect_key($validated, array_flip([
+                'name', 'kp_category', 'kp_amount', 'eligible_generation',
+                'eligible_study_program', 'date', 'start_time', 'end_time',
+                'location', 'description', 'registration_link',
+                'registration_deadline_date', 'registration_deadline_time',
+            ]));
+
+            if (! empty($columnFields)) {
+                $activity->update($columnFields);
             }
 
-            // Ensure images directory exists
-            $imagesDir = public_path('images');
-            if (!is_dir($imagesDir)) {
-                mkdir($imagesDir, 0755, true);
-            }
-
-            // Delete old image if exists
-            if ($activity->event_poster) {
-                $oldPath = public_path($activity->event_poster);
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
+            $relationPayload = [];
+            foreach (['requirements', 'claiming_procedure', 'contact_person'] as $key) {
+                if ($request->has($key)) {
+                    $relationPayload[$key] = $request->input($key);
                 }
             }
-
-            // Generate unique filename
-            $ext = pathinfo($validated['file_name'], PATHINFO_EXTENSION) ?: 'jpg';
-            $filename = time() . '_' . uniqid() . '.' . $ext;
-            $filePath = $imagesDir . DIRECTORY_SEPARATOR . $filename;
-            
-            // Write file
-            if (file_put_contents($filePath, $imageData) === false) {
-                return response()->json(['error' => 'Failed to write file'], 500);
+            if (! empty($relationPayload)) {
+                $this->syncRelatedItems($activity, $relationPayload);
             }
-            
-            // Update activity with new image path
-            $activity->update(['event_poster' => 'images/' . $filename]);
-            
-            Log::info('Image uploaded for activity ' . $activityId . ': images/' . $filename);
+        });
 
-            return response()->json([
-                'message' => 'Image uploaded successfully',
-                'event_poster' => 'images/' . $filename,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Image upload error: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to upload image: ' . $e->getMessage()], 500);
-        }
+        return response()->json([
+            'id' => (string) $activity->ActivityID,
+            'message' => 'Activity updated successfully',
+        ]);
     }
 
-    /**
-     * Get all activities created by the authenticated admin
-     */
+    #[OA\Post(
+        path: "/api/activities/{activityId}/upload-image",
+        summary: "Upload (or replace) the poster image for an existing activity via multipart/form-data.",
+        tags: ["Activities"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(
+                name: "activityId",
+                in: "path",
+                required: true,
+                description: "ActivityID of the activity to attach the image to",
+                schema: new OA\Schema(type: "integer", example: 1)
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\MediaType(
+                mediaType: "multipart/form-data",
+                schema: new OA\Schema(
+                    required: ["event_poster"],
+                    properties: [
+                        new OA\Property(
+                            property: "event_poster",
+                            type: "string",
+                            format: "binary",
+                            description: "Image file (jpeg, png, gif, webp, max 5 MB)"
+                        ),
+                    ]
+                )
+            )
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Image uploaded successfully",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "message", type: "string", example: "Image uploaded successfully"),
+                new OA\Property(property: "event_poster", type: "string", example: "images/1747654321_a1b2c3.jpg"),
+            ]
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
+    #[OA\Response(response: 403, description: "Forbidden — admin role required")]
+    #[OA\Response(response: 404, description: "Activity not found")]
+    #[OA\Response(response: 422, description: "Validation error — missing or invalid file")]
+    public function uploadImage(Request $request, $activityId): JsonResponse
+    {
+        $activity = Activity::find($activityId);
+        if (! $activity) {
+            return response()->json(['error' => 'Activity not found'], 404);
+        }
+
+        $request->validate([
+            'event_poster' => 'required|file|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
+        ]);
+
+        $file = $request->file('event_poster');
+
+        $imagesDir = public_path('images');
+        if (! is_dir($imagesDir)) {
+            mkdir($imagesDir, 0755, true);
+        }
+
+        if ($activity->event_poster) {
+            $oldPath = public_path($activity->event_poster);
+            if (file_exists($oldPath)) {
+                @unlink($oldPath);
+            }
+        }
+
+        $ext = $file->getClientOriginalExtension() ?: 'jpg';
+        $filename = time() . '_' . uniqid() . '.' . $ext;
+        $file->move($imagesDir, $filename);
+
+        $activity->update(['event_poster' => 'images/' . $filename]);
+
+        Log::info('Image uploaded for activity ' . $activityId . ': images/' . $filename);
+
+        return response()->json([
+            'message' => 'Image uploaded successfully',
+            'event_poster' => 'images/' . $filename,
+        ]);
+    }
+
     #[OA\Get(
         path: "/api/admin/activities",
         summary: "Get activities created by authenticated admin",
@@ -414,13 +548,11 @@ class ActivityController extends Controller
             )
         )
     )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
+    #[OA\Response(response: 403, description: "Forbidden — admin role required")]
     public function getAdminActivities(): JsonResponse
     {
         $userId = auth()->id();
-
-        if (!$userId) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
         $activities = Activity::where('user_id', $userId)
             ->orderBy('date', 'desc')
@@ -442,4 +574,3 @@ class ActivityController extends Controller
         return response()->json($activities);
     }
 }
-

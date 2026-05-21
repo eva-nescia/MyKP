@@ -43,6 +43,8 @@ try {
       howToClaim: act.howToClaim,
       contactPerson: act.contactPerson,
       registrationLink: act.registrationLink,
+      registrationDeadlineDate: act.registrationDeadlineDate,
+      registrationDeadlineTime: act.registrationDeadlineTime,
     };
   } catch (error) {
     console.error('Error fetching activity:', error);

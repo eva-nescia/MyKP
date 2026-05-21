@@ -20,4 +20,6 @@ export interface Activity {
   howToClaim?: string[];
   contactPerson?: string[];
   registrationLink?: string;
+  registrationDeadlineDate?: string;
+  registrationDeadlineTime?: string;
 }

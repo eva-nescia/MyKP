@@ -112,11 +112,21 @@ class AuthController extends Controller
 
     #[OA\Post(
         path: "/api/logout",
-        summary: "Revoke the current Sanctum access token",
+        summary: "Revoke the current Sanctum access token (only this device's token, other sessions stay valid)",
         tags: ["Authentication"],
         security: [["sanctum" => []]]
     )]
-    #[OA\Response(response: 200, description: "Logged out")]
+    #[OA\Response(
+        response: 200,
+        description: "Logged out",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "logged_out", type: "boolean", example: true),
+            ]
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized — no valid token in Authorization header")]
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
@@ -145,8 +155,42 @@ class AuthController extends Controller
             ]
         )
     )]
-    #[OA\Response(response: 200, description: "Successful Google login (same shape as /login)")]
-    #[OA\Response(response: 422, description: "Validation error (invalid token, wrong domain, or email not registered)")]
+    #[OA\Response(
+        response: 200,
+        description: "Successful Google login (same shape as /login)",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "token", type: "string", example: "1|abcdef1234567890..."),
+                new OA\Property(
+                    property: "user",
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 2),
+                        new OA\Property(property: "name", type: "string", example: "KenStudent"),
+                        new OA\Property(property: "email", type: "string", format: "email", example: "atubagus@student.ciputra.ac.id"),
+                        new OA\Property(property: "role", type: "string", example: "student"),
+                    ]
+                ),
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error (invalid token, wrong domain, or email not registered)",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "message", type: "string", example: "This Google account is not registered."),
+                new OA\Property(
+                    property: "errors",
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "email", type: "array", items: new OA\Items(type: "string")),
+                    ]
+                ),
+            ]
+        )
+    )]
     public function googleLogin(Request $request): JsonResponse
     {
         $request->headers->set('Accept', 'application/json');

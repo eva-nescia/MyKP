@@ -9,6 +9,10 @@ import {
   removeBookmark,
 } from "@/features/student/bookmark/services/bookmarkService";
 import { registerForActivity } from "@/features/student/profile/services/participationService";
+import {
+  cancelBookmarkReminders,
+  scheduleBookmarkReminders,
+} from "@/features/notifications/services/pushService";
 
 export const useActivityDetailViewModel = (
   id: string
@@ -59,8 +63,18 @@ export const useActivityDetailViewModel = (
     try {
       if (nextSaved) {
         await addBookmark(id);
+        // Local notif: schedule 3/2/1-day reminders. No-ops if there's no
+        // deadline, or if all 3 fire-points are already past.
+        if (activity?.registrationDeadlineDate) {
+          await scheduleBookmarkReminders({
+            activityId: id,
+            activityName: activity.title,
+            deadlineDate: activity.registrationDeadlineDate,
+          });
+        }
       } else {
         await removeBookmark(id);
+        await cancelBookmarkReminders(id);
       }
 
       setSaveMessage(
