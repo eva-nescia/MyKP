@@ -55,6 +55,13 @@ export default StyleSheet.create({
     gap: 8,
   },
 
+  badgeRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 8,
+  },
+
   badge: {
     maxWidth: "100%",
 
