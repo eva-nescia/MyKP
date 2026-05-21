@@ -18,15 +18,15 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(148,163,184,0.08)",
 
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    // shadowColor: "#000",
+    // shadowOpacity: 0.04,
+    // shadowRadius: 10,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 4,
+    // },
 
-    elevation: 2,
+    elevation: 1,
   },
 
   iconContainer: {
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     flex: 1,
 
     fontSize: 18,
-    fontWeight: FONT_WEIGHT.medium,
+    fontWeight: FONT_WEIGHT.bold,
 
     color: COLORS.text,
 

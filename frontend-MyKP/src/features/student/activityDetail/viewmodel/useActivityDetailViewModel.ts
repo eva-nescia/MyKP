@@ -16,7 +16,9 @@ export const useActivityDetailViewModel = (
   const [activity, setActivity] =
     useState<Activity | null>(null);
 
-  const [saved, setSaved] =
+  const [saved, setSaved] = useState(false);
+
+  const [modalSavedState, setModalSavedState] =
     useState(false);
 
   const [saveMessage, setSaveMessage] =
@@ -36,22 +38,23 @@ export const useActivityDetailViewModel = (
       setActivity(data);
 
       try {
-        const status = await getBookmarkStatus(id);
+        const status =
+          await getBookmarkStatus(id);
+
         setSaved(status);
       } catch {
-        // ignore — unauthenticated viewers default to unsaved
+        // unauthenticated viewers default to unsaved
       }
     };
 
     load();
   }, [id]);
 
-  /* SAVE */
-
   const handleSave = async () => {
     const nextSaved = !saved;
 
     setSaved(nextSaved);
+    setModalSavedState(nextSaved);
 
     try {
       if (nextSaved) {
@@ -67,6 +70,8 @@ export const useActivityDetailViewModel = (
       );
     } catch {
       setSaved(!nextSaved);
+      setModalSavedState(!nextSaved);
+
       setSaveMessage(
         "Couldn't update saved status. Please try again."
       );
@@ -79,8 +84,6 @@ export const useActivityDetailViewModel = (
     }, 1600);
   };
 
-  /* REGISTER */
-
   const handleRegister = () => {
     setShowLinkModal(true);
   };
@@ -88,29 +91,37 @@ export const useActivityDetailViewModel = (
   const confirmRegister = async () => {
     setShowLinkModal(false);
 
-    // Prototype behaviour: record the participation + bump KP and just toast
-    // success. We don't open the external registration link any more because
-    // leaving the app drops the session on return (would need a custom dev
-    // build to round-trip cleanly).
     try {
-      const result = await registerForActivity(id);
+      const result =
+        await registerForActivity(id);
+
+      setModalSavedState(true);
+
       setSaveMessage(
         result.alreadyRegistered
           ? "You're already registered for this activity."
           : "Successfully registered!"
       );
     } catch {
-      setSaveMessage("Couldn't register right now. Please try again.");
+      setModalSavedState(false);
+
+      setSaveMessage(
+        "Couldn't register right now. Please try again."
+      );
     }
 
     setShowSaveModal(true);
-    setTimeout(() => setShowSaveModal(false), 1600);
+
+    setTimeout(() => {
+      setShowSaveModal(false);
+    }, 1600);
   };
 
   return {
     activity,
 
     saved,
+    modalSavedState,
     saveMessage,
 
     showSaveModal,

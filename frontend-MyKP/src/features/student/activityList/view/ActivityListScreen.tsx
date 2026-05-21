@@ -13,6 +13,7 @@ import { useActivityListViewModel } from "../viewmodel/useActivityListViewModel"
 import { styles } from "./styles/ActivityList.styles";
 import ActivityListHeader from "../components/ActivityListHeader";
 import Loading from "src/components/loading/GlobalLoading";
+import EmptyActivityList from "../components/EmptyActivityList";
 
 export default function ActivityListScreen() {
   const vm = useActivityListViewModel();
@@ -42,6 +43,7 @@ export default function ActivityListScreen() {
         keyExtractor={(item) => item.id}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.list}
+        ListEmptyComponent={<EmptyActivityList />}
         renderItem={({ item }) => (
           <ActivityCard
             {...item}

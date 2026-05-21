@@ -119,7 +119,7 @@ export default StyleSheet.create({
 
   categoryBadgeText: {
     fontSize: 12,
-    fontWeight: FONT_WEIGHT.medium,
+    fontWeight: FONT_WEIGHT.regular,
 
     color: "#475569",
   },
@@ -133,7 +133,7 @@ export default StyleSheet.create({
 
   kpBadgeText: {
     fontSize: 12,
-    fontWeight: FONT_WEIGHT.semiBold,
+    fontWeight: FONT_WEIGHT.regular,
     color: COLORS.white,
   },
 
@@ -152,7 +152,7 @@ export default StyleSheet.create({
 
   metaTagText: {
     fontSize: 12,
-    fontWeight: FONT_WEIGHT.medium,
+    fontWeight: FONT_WEIGHT.regular,
 
     color: COLORS.primary,
   },

@@ -34,6 +34,6 @@ export const styles = StyleSheet.create({
     color: COLORS.white,
     alignContent: "center",
     fontSize: 14,
-    fontWeight: FONT_WEIGHT.semiBold,
+    fontWeight: FONT_WEIGHT.regular,
   },
 });
