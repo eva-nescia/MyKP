@@ -7,7 +7,7 @@ import {
 
 import { BlurView } from "expo-blur";
 
-import { LogOut } from "lucide-react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import styles from "@/components/modal/logout/LogoutModal.styles";
 import { COLORS } from "@/constants/colors";
@@ -32,7 +32,7 @@ export default function LogoutModal({
       <View style={styles.overlay}>
         <BlurView
           intensity={30}
-          tint="light"
+          tint="dark"
           style={styles.blur}
         />
 
@@ -40,7 +40,8 @@ export default function LogoutModal({
           <View
             style={styles.iconContainer}
           >
-            <LogOut
+            <Ionicons
+              name="log-out"
               size={28}
               color={COLORS.primary}
             />

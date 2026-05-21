@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "expo-router";
 
@@ -10,15 +10,16 @@ import { setSession } from "../services/session";
 // ==========================================================
 // GOOGLE LOGIN — functionality temporarily disabled. Re-enable later.
 // ==========================================================
-// import Constants from 'expo-constants';
-// import {
-//   GoogleSignin,
-//   isSuccessResponse,
-//   isErrorWithCode,
-//   statusCodes,
-// } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
+import {
+  GoogleSignin,
+  isSuccessResponse,
+  isErrorWithCode,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
-// import { googleLogin } from '../services/authService';
+import { googleLogin } from '../services/authService';
+import { Alert } from "react-native";
 
 export default function useLoginViewModel() {
   const { signIn } = useAuth();
@@ -54,15 +55,15 @@ export default function useLoginViewModel() {
     setFeedbackVisible(true);
   };
 
-  // useEffect(() => {
-  //   const extra = Constants.expoConfig?.extra ?? {};
-  //   GoogleSignin.configure({
-  //     webClientId: extra.googleWebClientId,
-  //     iosClientId: extra.googleIosClientId || undefined,
-  //     scopes: ['openid', 'profile', 'email'],
-  //     offlineAccess: false,
-  //   });
-  // }, []);
+  useEffect(() => {
+    const extra = Constants.expoConfig?.extra ?? {};
+    GoogleSignin.configure({
+      webClientId: extra.googleWebClientId,
+      iosClientId: extra.googleIosClientId || undefined,
+      scopes: ['openid', 'profile', 'email'],
+      offlineAccess: false,
+    });
+  }, []);
 
   const routeForRole = (
     role: string
@@ -85,45 +86,45 @@ export default function useLoginViewModel() {
   };
 
   // Google sign-in functionality temporarily disabled. Button still renders but does nothing useful.
-  const handleGoogleSignIn = () => {
-    showFeedback(
-      "Coming Soon",
-      "Google login is temporarily disabled. Please use email and password.",
-      "info"
-    );
-  };
+  // const handleGoogleSignIn = () => {
+  //   showFeedback(
+  //     "Coming Soon",
+  //     "Google login is temporarily disabled. Please use email and password.",
+  //     "info"
+  //   );
+  // };
 
   // Original Google sign-in implementation — re-enable later.
-  // const handleGoogleSignIn = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  //     try {
-  //       await GoogleSignin.signOut();
-  //     } catch {}
-  //     const response = await GoogleSignin.signIn();
-  //     if (!isSuccessResponse(response)) {
-  //       return;
-  //     }
-  //     const { accessToken } = await GoogleSignin.getTokens();
-  //     if (!accessToken) {
-  //       Alert.alert('Google login failed', 'Could not retrieve token. Please try again.');
-  //       return;
-  //     }
-  //     const res = await googleLogin(accessToken);
-  //     routeForRole(res.user.role);
-  //   } catch (error: any) {
-  //     if (isErrorWithCode(error)) {
-  //       if (error.code === statusCodes.SIGN_IN_CANCELLED) return;
-  //       if (error.code === statusCodes.IN_PROGRESS) return;
-  //       if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-  //         Alert.alert('Google login failed', 'Google Play Services is not available on this device.');
-  //         return;
-  //       }
-  //     }
-  //     console.error('Google sign-in error:', error);
-  //     Alert.alert('Google login failed', 'Your Google account is not registered in the system.');
-  //   }
-  // };
+  const handleGoogleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      try {
+        await GoogleSignin.signOut();
+      } catch {}
+      const response = await GoogleSignin.signIn();
+      if (!isSuccessResponse(response)) {
+        return;
+      }
+      const { accessToken } = await GoogleSignin.getTokens();
+      if (!accessToken) {
+        Alert.alert('Google login failed', 'Could not retrieve token. Please try again.');
+        return;
+      }
+      const res = await googleLogin(accessToken);
+      routeForRole(res.user.role);
+    } catch (error: any) {
+      if (isErrorWithCode(error)) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) return;
+        if (error.code === statusCodes.IN_PROGRESS) return;
+        if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          Alert.alert('Google login failed', 'Google Play Services is not available on this device.');
+          return;
+        }
+      }
+      console.error('Google sign-in error:', error);
+      Alert.alert('Google login failed', 'Your Google account is not registered in the system.');
+    }
+  };
 
   const handleLogin = async () => {
     if (!email.trim()) {

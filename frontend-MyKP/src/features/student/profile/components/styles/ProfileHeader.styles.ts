@@ -75,4 +75,26 @@ export default StyleSheet.create({
     fontSize: 14,
     color: "#64748B",
   },
+
+  badgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    flexWrap: "wrap",
+  },
+
+  emailBadge: {
+    maxWidth: "100%",
+
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+
+    borderRadius: 999,
+    backgroundColor: "#F8FAFC",
+  },
 });

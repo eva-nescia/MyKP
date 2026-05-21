@@ -55,23 +55,23 @@ export const logout = async (): Promise<void> => {
 // ==========================================================
 // GOOGLE LOGIN — temporarily disabled. Re-enable later.
 // ==========================================================
-// export const googleLogin = async (accessToken: string): Promise<AuthResponse> => {
-//   try {
-//     const response = await fetch(`${API_URL}/login/google`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ accessToken }),
-//     });
-//
-//     if (!response.ok) {
-//       throw new Error('Google login failed');
-//     }
-//
-//     return await response.json();
-//   } catch (error) {
-//     console.error('Google login error:', error);
-//     throw error;
-//   }
-// };
+export const googleLogin = async (accessToken: string): Promise<AuthResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/login/google`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ accessToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Google login failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Google login error:', error);
+    throw error;
+  }
+};

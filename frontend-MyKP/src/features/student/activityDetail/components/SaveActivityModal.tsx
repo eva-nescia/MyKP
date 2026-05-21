@@ -8,16 +8,18 @@ import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./styles/Modal.styles";
 
-interface Props {
+type Props = {
   visible: boolean;
   onClose: () => void;
   message: string;
-}
+  saved: boolean;
+};
 
 export default function SaveActivityModal({
   visible,
   onClose,
   message,
+  saved,
 }: Props) {
   return (
     <Modal
@@ -29,16 +31,28 @@ export default function SaveActivityModal({
     >
       <View style={styles.overlay}>
         <View style={styles.modal}>
-          <View style={styles.iconContainer}>
+          <View
+            style={[
+              styles.iconContainer,
+              !saved &&
+                styles.unsavedIconContainer,
+            ]}
+          >
             <Ionicons
-              name="bookmark"
+              name={
+                saved
+                  ? "bookmark"
+                  : "bookmark-outline"
+              }
               size={32}
               color="white"
             />
           </View>
 
           <Text style={styles.title}>
-            Saved Activities
+            {saved
+              ? "Saved Activity"
+              : "Removed Activity"}
           </Text>
 
           <Text style={styles.description}>

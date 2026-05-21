@@ -23,6 +23,7 @@ export default StyleSheet.create({
 
     paddingHorizontal: 24,
     paddingVertical: 28,
+  
 
     alignItems: "center",
   },
@@ -108,5 +109,9 @@ export default StyleSheet.create({
 
     fontSize: 16,
     fontWeight: "700",
+  },
+
+  unsavedIconContainer: {
+    backgroundColor: "#94A3B8",
   },
 });
