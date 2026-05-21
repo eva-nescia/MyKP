@@ -2,7 +2,8 @@ import {
   Text,
   FlatList,
 } from "react-native";
-
+import { useRef, useCallback } from "react";
+import { useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -17,6 +18,16 @@ import ProfileScreenHeader from "../components/ProfileScreenHeader";
 
 export default function ProfileScreen() {
   const vm = useProfileViewModel();
+  const listRef = useRef<FlatList>(null);
+
+useFocusEffect(
+  useCallback(() => {
+    listRef.current?.scrollToOffset({
+      offset: 0,
+      animated: false,
+    });
+  }, [])
+);
 
   return (
    <SafeAreaView style={styles.container}>
@@ -25,6 +36,7 @@ export default function ProfileScreen() {
     />
 
     <FlatList
+      ref={listRef}
       data={vm.categories}
       keyExtractor={(item) => item.id.toString()}
       showsVerticalScrollIndicator={false}

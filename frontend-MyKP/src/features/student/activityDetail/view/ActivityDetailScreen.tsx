@@ -11,7 +11,7 @@ import {
   useLocalSearchParams,
 } from "expo-router";
 
-import { Ionicons, Feather } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import Section from "@/features/student/activityDetail/components/Section";
 import FloatingActionBar from "@/features/student/activityDetail/components/FloatingActionBar";
@@ -34,6 +34,8 @@ export default function ActivityDetailScreen() {
   const {
     activity,
     saved,
+
+    modalSavedState,
 
     saveMessage,
 
@@ -231,6 +233,7 @@ export default function ActivityDetailScreen() {
       <SaveActivityModal
         visible={showSaveModal}
         message={saveMessage}
+        saved={modalSavedState}
         onClose={() =>
           setShowSaveModal(false)
         }

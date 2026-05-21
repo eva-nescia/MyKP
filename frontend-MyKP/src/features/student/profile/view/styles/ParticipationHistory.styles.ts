@@ -51,15 +51,15 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E2E8F0",
 
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    // shadowColor: "#000",
+    // shadowOpacity: 0.06,
+    // shadowRadius: 12,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 4,
+    // },
 
-    elevation: 4,
+    elevation: 1,
   },
 
   progressHeader: {
