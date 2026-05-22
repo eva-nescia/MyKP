@@ -171,7 +171,7 @@ export default function ActivityCardAdm({
               <Ionicons
                 name="calendar-outline"
                 size={13}
-                color="#94A3B8"
+                color="#64748B"
               />
 
               <Text style={styles.date}>
