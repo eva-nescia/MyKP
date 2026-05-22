@@ -29,7 +29,7 @@ export async function getAdminActivities(): Promise<Activity[]> {
       image: activity.event_poster ? { uri: `${API_URL.replace('/api', '')}/${activity.event_poster}` } : require("assets/images/activity-placeholder/seminarAntiNarkoba.jpeg"),
       type: activity.kp_category,
       points: activity.kp_amount,
-      date: new Date(activity.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }),
+      date: activity.date,
       year: new Date(activity.date).getFullYear().toString(),
       organizer: "Admin",
     }));
