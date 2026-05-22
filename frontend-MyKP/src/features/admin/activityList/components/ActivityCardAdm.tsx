@@ -1,3 +1,5 @@
+import { useRef } from "react";
+
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import Animated, {
@@ -7,18 +9,20 @@ import Animated, {
 } from "react-native-reanimated";
 
 import {
-  View,
   Text,
   Image,
   TouchableOpacity,
   Alert,
 } from "react-native";
 
-import Badge from "@/components/badge/Badge";
+import { Ionicons } from "@expo/vector-icons";
 
+import Badge from "@/components/badge/Badge";
 import SwipeAction from "src/features/admin/activityList/components/SwipeAction";
 
 import styles from "./styles/ActivityCardAdm.styles";
+
+let openedSwipeable: any = null;
 
 type Props = {
   title: string;
@@ -26,8 +30,6 @@ type Props = {
   type: string;
   points: number;
   date: string;
-
-  onPress?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
 };
@@ -38,44 +40,67 @@ export default function ActivityCardAdm({
   type,
   points,
   date,
-  onPress,
   onEdit,
   onDelete,
 }: Props) {
-  const radius = useSharedValue(14);
+  const swipeableRef = useRef<any>(null);
+  const radius = useSharedValue(18);
 
-  const animatedCardStyle =
-    useAnimatedStyle(() => {
-      return {
-        borderTopRightRadius:
-          withTiming(radius.value, {
-            duration: 180,
-          }),
+  const closeActions = () => {
+    swipeableRef.current?.close();
 
-        borderBottomRightRadius:
-          withTiming(radius.value, {
-            duration: 180,
-          }),
-      };
-    });
+    if (openedSwipeable === swipeableRef.current) {
+      openedSwipeable = null;
+    }
+  };
+
+  const openActions = () => {
+    if (
+      openedSwipeable &&
+      openedSwipeable !== swipeableRef.current
+    ) {
+      openedSwipeable.close();
+    }
+
+    openedSwipeable = swipeableRef.current;
+    swipeableRef.current?.openRight();
+  };
+
+  const parsedDate = new Date(date);
+
+  const formattedDate = isNaN(parsedDate.getTime())
+    ? date
+    : parsedDate.toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+  const animatedCardStyle = useAnimatedStyle(() => ({
+    borderTopRightRadius: withTiming(radius.value, {
+      duration: 240,
+    }),
+    borderBottomRightRadius: withTiming(radius.value, {
+      duration: 240,
+    }),
+  }));
 
   const handleDelete = () => {
     Alert.alert(
       "Delete Activity",
-
       "Are you sure you want to delete this activity? This action cannot be undone.",
-
       [
         {
           text: "Cancel",
           style: "cancel",
+          onPress: closeActions,
         },
-
         {
           text: "Delete",
           style: "destructive",
-
           onPress: () => {
+            closeActions();
             onDelete?.();
           },
         },
@@ -84,67 +109,90 @@ export default function ActivityCardAdm({
   };
 
   return (
-    <Swipeable
-    overshootRight={false}
+   <Swipeable
+      ref={swipeableRef}
+      overshootRight={false}
+      friction={1.15}
+      rightThreshold={38}
+      dragOffsetFromRightEdge={8}
+      onSwipeableWillOpen={() => {
+        if (
+          openedSwipeable &&
+          openedSwipeable !== swipeableRef.current
+        ) {
+          openedSwipeable.close();
+        }
 
-    friction={1.7}
-
-    rightThreshold={40}
-
-    onSwipeableWillOpen={() => {
+        openedSwipeable = swipeableRef.current;
         radius.value = 0;
-    }}
+      }}
+      onSwipeableWillClose={() => {
+        if (openedSwipeable === swipeableRef.current) {
+          openedSwipeable = null;
+        }
 
-    onSwipeableWillClose={() => {
-        radius.value = 14;
-    }}
-
-    renderRightActions={() => (
+        radius.value = 18;
+      }}
+      renderRightActions={() => (
         <SwipeAction
-        onEdit={() => onEdit?.()}
-        onDelete={handleDelete}
+          onEdit={() => {
+            closeActions();
+            onEdit?.();
+          }}
+          onDelete={handleDelete}
         />
-    )}
+      )}
     >
-    <Animated.View
+      <Animated.View
         style={[
-        styles.card,
-        animatedCardStyle,
+          styles.card,
+          animatedCardStyle,
         ]}
-    >
+      >
         <TouchableOpacity
-        style={styles.touchable}
-        onPress={onPress}
-        activeOpacity={0.92}
+          style={styles.touchable}
+          onPress={openActions}
+          activeOpacity={0.92}
         >
-        <Image
+          <Image
             source={image}
             style={styles.image}
-        />
+          />
 
-        <View style={styles.content}>
-            <Text style={styles.title}>
-            {title}
+          <Animated.View style={styles.content}>
+            <Text
+              style={styles.title}
+              numberOfLines={2}
+            >
+              {title}
             </Text>
 
-            <Text style={styles.date}>
-            {date}
-            </Text>
+            <Animated.View style={styles.dateRow}>
+              <Ionicons
+                name="calendar-outline"
+                size={13}
+                color="#94A3B8"
+              />
 
-            <View style={styles.badges}>
-            <Badge
+              <Text style={styles.date}>
+                {formattedDate}
+              </Text>
+            </Animated.View>
+
+            <Animated.View style={styles.badges}>
+              <Badge
                 label={type}
                 variant="outline"
-            />
+              />
 
-            <Badge
+              <Badge
                 label={`${points} KP`}
                 variant="primary"
-            />
-            </View>
-        </View>
+              />
+            </Animated.View>
+          </Animated.View>
         </TouchableOpacity>
-    </Animated.View>
+      </Animated.View>
     </Swipeable>
   );
 }

@@ -4,12 +4,11 @@ import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
 export default StyleSheet.create({
-  overlay: {
-    flex: 1,
-
+ overlay: {
+  flex: 1,
+    backgroundColor: "rgba(15, 23, 42, 0.55)",
     justifyContent: "center",
     alignItems: "center",
-
     paddingHorizontal: 24,
   },
 
@@ -19,73 +18,68 @@ export default StyleSheet.create({
 
   container: {
     width: "100%",
-
-    backgroundColor: "rgba(255,255,255,0.82)",
-
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    borderRadius: 14,
-    
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
 
     paddingHorizontal: 24,
     paddingVertical: 28,
 
     alignItems: "center",
 
-    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+
+    elevation: 8,
   },
 
   iconContainer: {
-    width: 74,
-    height: 74,
-
+    width: 72,
+    height: 72,
     borderRadius: 999,
 
-    backgroundColor: "rgba(255,255,255,0.82)",
+    backgroundColor: "#FFF7ED",
 
     justifyContent: "center",
     alignItems: "center",
 
-    marginBottom: 22,
+    marginBottom: 18,
   },
 
   title: {
     fontSize: 24,
-    fontWeight: FONT_WEIGHT.semiBold,
-
+    fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
 
-    marginBottom: 8,
+    marginBottom: 10,
+    textAlign: "center",
   },
 
   description: {
     fontSize: 16,
-
-    color: COLORS.text,
+    lineHeight: 24,
+    color: "#64748B",
 
     textAlign: "center",
-
-    lineHeight: 22,
-
-    marginBottom: 30,
+    marginBottom: 26,
   },
 
   buttonRow: {
     flexDirection: "row",
-
-    width: "100%",
-
     gap: 12,
+    width: "100%",
   },
 
   cancelButton: {
     flex: 1,
-
     height: 54,
+    borderRadius: 16,
 
-    borderRadius: 999,
-
-    backgroundColor: COLORS.primary,
+    backgroundColor: "#F1F5F9",
 
     justifyContent: "center",
     alignItems: "center",
@@ -93,10 +87,8 @@ export default StyleSheet.create({
 
   confirmButton: {
     flex: 1,
-
     height: 54,
-
-    borderRadius: 999,
+    borderRadius: 16,
 
     backgroundColor: COLORS.secondary,
 
@@ -105,15 +97,13 @@ export default StyleSheet.create({
   },
 
   cancelText: {
-    color: COLORS.white,
-
+    color: COLORS.text,
     fontSize: 16,
     fontWeight: FONT_WEIGHT.semiBold,
   },
 
   confirmText: {
     color: COLORS.white,
-
     fontSize: 16,
     fontWeight: FONT_WEIGHT.semiBold,
   },

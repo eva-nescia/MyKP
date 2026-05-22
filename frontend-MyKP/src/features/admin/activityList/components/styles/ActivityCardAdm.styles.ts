@@ -13,26 +13,20 @@ export default StyleSheet.create({
 
     borderWidth: 1,
     borderColor: "#E2E8F0",
-    borderRadius: 14,
+    borderRadius: 18,
 
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-
-    elevation: 3,
+    elevation: 1,
   },
 
   image: {
-    width: 90,
-    height: 130,
+    width: 82,
+    height: 118,
 
     borderRadius: 6,
 
     marginRight: 14,
+
+    backgroundColor: "#E5E7EB",
   },
 
   content: {
@@ -41,27 +35,36 @@ export default StyleSheet.create({
   },
 
   title: {
-    fontSize: 17,
+    fontSize: 18,
+    lineHeight: 22,
+
     fontWeight: FONT_WEIGHT.semiBold,
     color: COLORS.text,
+
+    marginBottom: 6,
+  },
+
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 5,
 
     marginBottom: 8,
   },
 
   date: {
-    fontSize: 14,
-    color: COLORS.text,
-
-    marginBottom: 12,
+    fontSize: 12,
+    color: "#94A3B8",
   },
 
   badges: {
     flexDirection: "row",
-    gap: 8,
+    alignItems: "center",
   },
 
   touchable: {
     flexDirection: "row",
     flex: 1,
-  }
+  },
 });

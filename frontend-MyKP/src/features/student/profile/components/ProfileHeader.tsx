@@ -32,18 +32,6 @@ export default function ProfileHeader({
 
         <View style={styles.badgeContainer}>
           <View style={styles.badgeRow}>
-            <View style={styles.badge}>
-              <Ionicons
-                name="card-outline"
-                size={13}
-                color="#64748B"
-              />
-
-              <Text style={styles.badgeText}>
-                {user?.nim ?? "—"}
-              </Text>
-            </View>
-
             {user?.jurusan ? (
               <View style={styles.badge}>
                 <Ionicons
@@ -57,9 +45,21 @@ export default function ProfileHeader({
                 </Text>
               </View>
             ) : null}
+
+            <View style={styles.badge}>
+              <Ionicons
+                name="card-outline"
+                size={13}
+                color="#64748B"
+              />
+
+              <Text style={styles.badgeText}>
+                {user?.nim ?? "—"}
+              </Text>
+            </View>
           </View>
 
-          <View style={styles.badge}>
+          <View style={styles.emailBadge}>
             <Ionicons
               name="mail-outline"
               size={13}

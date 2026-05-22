@@ -55,13 +55,6 @@ export default StyleSheet.create({
     gap: 8,
   },
 
-  badgeRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: 8,
-  },
-
   badge: {
     maxWidth: "100%",
 
@@ -81,5 +74,27 @@ export default StyleSheet.create({
   badgeText: {
     fontSize: 14,
     color: "#64748B",
+  },
+
+  badgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    flexWrap: "wrap",
+  },
+
+  emailBadge: {
+    maxWidth: "100%",
+
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+
+    borderRadius: 999,
+    backgroundColor: "#F8FAFC",
   },
 });

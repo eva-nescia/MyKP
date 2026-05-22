@@ -14,6 +14,7 @@ const devHost =
   (Constants as any).expoGoConfig?.debuggerHost?.split(':')[0] ??
   (Constants.manifest2 as any)?.extra?.expoClient?.hostUri?.split(':')[0];
 
-const host = devHost ?? 'localhost';
+// const host = devHost ?? 'localhost';
+const host = devHost ?? "172.20.10.2";
 
-export const API_URL = `http://10.150.69.119:${BACKEND_PORT}/api`;
+export const API_URL = `http://172.20.10.2:${BACKEND_PORT}/api`;

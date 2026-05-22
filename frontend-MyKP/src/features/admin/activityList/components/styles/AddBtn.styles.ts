@@ -19,14 +19,14 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
 
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    // shadowColor: "#000",
+    // shadowOpacity: 0.15,
+    // shadowRadius: 8,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 4,
+    // },
 
-    elevation: 6,
+    elevation: 1,
   },
 });

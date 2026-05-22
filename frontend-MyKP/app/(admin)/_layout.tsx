@@ -39,7 +39,7 @@ export default function AdminLayout() {
 
             borderTopWidth: 0,
 
-            height: 60 + insets.bottom,
+            height: 85 + insets.bottom,
 
             paddingBottom:
               insets.bottom,
