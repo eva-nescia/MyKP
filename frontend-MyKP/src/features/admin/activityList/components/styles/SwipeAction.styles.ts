@@ -6,15 +6,14 @@ export default StyleSheet.create({
   container: {
     justifyContent: "space-between",
 
-    height: 156,
+    height: 143,
 
-    marginBottom: 18,
-
+    marginBottom: 16,
     marginLeft: -8,
   },
 
   actionButton: {
-    width: 82,
+    width: 78,
     flex: 1,
 
     justifyContent: "center",
@@ -23,13 +22,11 @@ export default StyleSheet.create({
 
   editButton: {
     backgroundColor: COLORS.primary,
-
-    borderTopRightRadius: 14,
+    borderTopRightRadius: 18,
   },
 
   deleteButton: {
     backgroundColor: "#EF4444",
-
-    borderBottomRightRadius: 14,
+    borderBottomRightRadius: 18,
   },
 });
