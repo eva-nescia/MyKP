@@ -45,6 +45,10 @@ export async function deleteAdminActivity(
   try {
     const token = getToken();
 
+    console.log("DEBUG: Deleting activity with ID:", id);
+    console.log("DEBUG: Using API_URL:", API_URL);
+    console.log("DEBUG: Token present:", !!token);
+
     const response = await fetch(
       `${API_URL}/activities/${id}`,
       {
@@ -60,20 +64,28 @@ export async function deleteAdminActivity(
       }
     );
 
+    console.log("DEBUG: Delete response status:", response.status);
+    console.log("DEBUG: Delete response ok:", response.ok);
+
     if (!response.ok) {
+      const errorText = await response.text();
       console.error(
         "Failed to delete activity:",
-        response.status
+        response.status,
+        errorText
       );
 
       return false;
     }
 
+    const result = await response.json();
+    console.log("DEBUG: Activity deleted successfully:", result);
+
     return true;
   } catch (error) {
     console.error(
       "Error deleting activity:",
-      error
+      error instanceof Error ? error.message : String(error)
     );
 
     return false;

@@ -11,6 +11,7 @@ export function useActivityListAdminViewModel() {
 
   const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadActivities = async () => {
@@ -55,11 +56,29 @@ export function useActivityListAdminViewModel() {
     }, [search, selectedYear, activities]);
   
   const deleteActivity = async (id: string) => {
-    await deleteAdminActivity(id);
+    console.log("DEBUG: Starting delete for activity:", id);
+    
+    try {
+      const success = await deleteAdminActivity(id);
 
-    setActivities((prev) =>
-      prev.filter((item) => item.id !== id)
-    );
+      if (success) {
+        console.log("DEBUG: Delete succeeded, removing from list");
+        setActivities((prev) =>
+          prev.filter((item) => item.id !== id)
+        );
+        setDeleteError(null);
+      } else {
+        console.error("DEBUG: Delete returned false");
+        setDeleteError("Failed to delete activity. Please try again.");
+      }
+    } catch (error) {
+      console.error("DEBUG: Delete error:", error);
+      setDeleteError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while deleting the activity"
+      );
+    }
   };
 
   return {
@@ -73,5 +92,7 @@ export function useActivityListAdminViewModel() {
     setSelectedYear,
 
     deleteActivity,
+    deleteError,
+    setDeleteError,
   };
 }
