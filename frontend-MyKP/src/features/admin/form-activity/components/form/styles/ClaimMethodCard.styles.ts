@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
 
 import { COLORS } from "@/constants/colors";
+import { FONT_WEIGHT } from "@/constants/typography";
 
 export const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFF7ED",
 
-    borderRadius: 16,
+    borderRadius: 20,
 
     padding: 18,
 
@@ -15,24 +16,18 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 16,
-    fontWeight: "700",
+    fontSize: 17,
+    fontWeight: FONT_WEIGHT.bold,
 
-    color: COLORS.primary,
+    color: COLORS.text,
 
     marginBottom: 10,
-  },
-
-  item: {
-    fontSize: 14,
-    color: COLORS.text,
-    marginBottom: 6,
   },
 
   methodBadge: {
     alignSelf: "flex-start",
 
-    backgroundColor: "#FFEDD5",
+    backgroundColor: COLORS.primary,
 
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -43,15 +38,16 @@ export const styles = StyleSheet.create({
   },
 
   methodText: {
-    color: COLORS.primary,
-    fontWeight: "600",
+    color: COLORS.white,
+    fontWeight: FONT_WEIGHT.semiBold,
     fontSize: 12,
   },
 
   description: {
     fontSize: 14,
     lineHeight: 22,
-    color: COLORS.text,
+
+    color: "#475569",
 
     marginBottom: 16,
   },
@@ -83,5 +79,52 @@ export const styles = StyleSheet.create({
     lineHeight: 20,
 
     color: "#92400E",
+  },
+
+  emptyCard: {
+    backgroundColor: COLORS.white,
+
+    borderRadius: 20,
+
+    padding: 22,
+
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+
+    alignItems: "center",
+  },
+
+  emptyIcon: {
+    width: 58,
+    height: 58,
+
+    borderRadius: 999,
+
+    backgroundColor: "#FFF7ED",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginBottom: 14,
+  },
+
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: FONT_WEIGHT.bold,
+
+    color: COLORS.text,
+
+    marginBottom: 6,
+
+    textAlign: "center",
+  },
+
+  emptyDescription: {
+    fontSize: 14,
+    lineHeight: 22,
+
+    color: "#64748B",
+
+    textAlign: "center",
   },
 });

@@ -38,3 +38,44 @@ export async function getAdminActivities(): Promise<Activity[]> {
     return [];
   }
 }
+
+export async function deleteAdminActivity(
+  id: string
+): Promise<boolean> {
+  try {
+    const token = getToken();
+
+    const response = await fetch(
+      `${API_URL}/activities/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.error(
+        "Failed to delete activity:",
+        response.status
+      );
+
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error(
+      "Error deleting activity:",
+      error
+    );
+
+    return false;
+  }
+}

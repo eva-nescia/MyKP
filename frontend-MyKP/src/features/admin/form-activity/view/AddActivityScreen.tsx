@@ -3,10 +3,15 @@ import {
   ScrollView,
   ActivityIndicator,
   Text,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
 } from "react-native";
-import { useEffect, useRef } from "react";
 
-import Header from "@/features/admin/form-activity/components/header/Header";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+import React, { useEffect, useRef, useState } from "react";
+
 import StepProgress from "@/features/admin/form-activity/components/stepper/StepProgress";
 import StepNavigation from "@/features/admin/form-activity/components/navigation/StepNavigation";
 
@@ -16,16 +21,22 @@ import PublishSection from "@/features/admin/form-activity/components/step-conte
 
 import ConfirmPublishModal from "@/features/admin/form-activity/components/feedback/ConfirmPublishModal";
 import ConfirmDiscardModal from "@/features/admin/form-activity/components/feedback/ConfirmDiscardModal";
+import FormValidationModal from "../components/feedback/FormValidationModal";
 
 import { useAddActivityViewModel } from "@/features/admin/form-activity/viewmodel/useAddActivityViewModel";
 
 import { styles } from "@/features/admin/form-activity/view/styles/AddActivity.styles";
 import { loadingStyles } from "src/components/loading/styles/Loading.styles";
 
+import FormActivityHeader from "../components/form/FormActivityHeader";
+
 export default function AddActivityScreen() {
   const vm = useAddActivityViewModel();
 
   const scrollRef = useRef<ScrollView>(null);
+
+  const [keyboardVisible, setKeyboardVisible] =
+    useState(false);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -33,6 +44,23 @@ export default function AddActivityScreen() {
       animated: false,
     });
   }, [vm.step]);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setKeyboardVisible(true)
+    );
+
+    const hideSub = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setKeyboardVisible(false)
+    );
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const renderStep = () => {
     switch (vm.step) {
@@ -48,29 +76,49 @@ export default function AddActivityScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Header
-        title={vm.isEditMode ? "Edit Activity" : "Add New Activity"}
-        onBack={vm.handleBackPress}
-      />
-
-      <StepProgress currentStep={vm.step} />
-
-      <ScrollView
-        ref={scrollRef}
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
+    <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={
+          Platform.OS === "ios"
+            ? "padding"
+            : undefined
+        }
       >
-        {renderStep()}
-      </ScrollView>
+        <View style={styles.container}>
+          <FormActivityHeader
+            title={
+              vm.isEditMode
+                ? "Edit Activity"
+                : "Add New Activity"
+            }
+            onBack={vm.handleBackPress}
+          />
 
-      <StepNavigation
-        step={vm.step}
-        isEditMode={vm.isEditMode}
-        onBack={vm.prevStep}
-        onNext={vm.nextStep}
-        onSubmit={vm.handlePublish}
-      />
+          <StepProgress currentStep={vm.step} />
+
+         <KeyboardAwareScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="handled"
+            enableOnAndroid
+            extraScrollHeight={120}
+            showsVerticalScrollIndicator={false}
+          >
+            {renderStep()}
+          </KeyboardAwareScrollView>
+        </View>
+      </KeyboardAvoidingView>
+
+      {!keyboardVisible && (
+        <StepNavigation
+          step={vm.step}
+          isEditMode={vm.isEditMode}
+          onBack={vm.prevStep}
+          onNext={vm.nextStep}
+          onSubmit={vm.handlePublish}
+        />
+      )}
 
       <ConfirmPublishModal
         visible={vm.showConfirm}
@@ -87,10 +135,15 @@ export default function AddActivityScreen() {
       {vm.loading && (
         <View style={loadingStyles.overlay}>
           <View style={loadingStyles.card}>
-            <ActivityIndicator size="large" color="#fff" />
+            <ActivityIndicator
+              size="large"
+              color="#fff"
+            />
 
             <Text style={loadingStyles.title}>
-              {vm.isEditMode ? "Saving Changes" : "Publishing"}
+              {vm.isEditMode
+                ? "Saving Changes"
+                : "Publishing"}
             </Text>
 
             <Text style={loadingStyles.subtitle}>
@@ -99,6 +152,14 @@ export default function AddActivityScreen() {
           </View>
         </View>
       )}
+
+      <FormValidationModal
+        visible={vm.showValidationModal}
+        message={vm.validationMessage}
+        onClose={() =>
+          vm.setShowValidationModal(false)
+        }
+      />
     </View>
   );
 }

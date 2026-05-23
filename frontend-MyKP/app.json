@@ -13,13 +13,14 @@
       "bundleIdentifier": "com.keaneken.frontendmykp"
     },
     "android": {
-      "package": "com.keaneken.frontendmykp",
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+    "package": "com.keaneken.frontendmykp",
+    "softwareKeyboardLayoutMode": "resize",
+    "adaptiveIcon": {
+      "backgroundColor": "#E6F4FE"
     },
+    "edgeToEdgeEnabled": true,
+    "predictiveBackGestureEnabled": false
+  },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"

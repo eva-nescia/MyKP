@@ -15,22 +15,23 @@ import { styles } from
 interface Props {
   label: string;
   values: string[];
-  placeholder?: string;
   onChange: (values: string[]) => void;
 }
 
-export default function BulletInputField({
+export default function ContactInputField({
   label,
   values,
-  placeholder,
   onChange,
 }: Props) {
   const updateItem = (
     index: number,
     text: string
   ) => {
+    const cleaned = text.replace(/\D/g, "");
+
     const updated = [...values];
-    updated[index] = text;
+
+    updated[index] = cleaned;
 
     onChange(updated);
   };
@@ -58,16 +59,17 @@ export default function BulletInputField({
           key={index}
           style={styles.bulletRow}
         >
-          <View style={styles.bulletNumber}>
-            <Text style={styles.bulletNumberText}>
-              {index + 1}
+          <View style={styles.contactPrefix}>
+            <Text style={styles.contactPrefixText}>
+              +62
             </Text>
           </View>
 
           <TextInput
             value={item}
-            placeholder={placeholder}
+            placeholder="8123456789"
             placeholderTextColor="#9CA3AF"
+            keyboardType="number-pad"
             onChangeText={(text) =>
               updateItem(index, text)
             }
@@ -79,7 +81,6 @@ export default function BulletInputField({
               removeItem(index)
             }
             style={styles.removeBulletBtn}
-            hitSlop={8}
           >
             <Ionicons
               name="close"
@@ -101,7 +102,7 @@ export default function BulletInputField({
         />
 
         <Text style={styles.addBulletText}>
-          Add Item
+          Add Contact
         </Text>
       </Pressable>
     </View>
