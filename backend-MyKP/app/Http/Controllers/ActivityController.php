@@ -439,6 +439,65 @@ class ActivityController extends Controller
         ]);
     }
 
+    #[OA\Delete(
+        path: "/api/activities/{id}",
+        summary: "Delete an activity by ID",
+        tags: ["Activities"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "ActivityID of the activity to delete",
+                schema: new OA\Schema(type: "integer", example: 1)
+            ),
+        ]
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Activity deleted successfully",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "message", type: "string", example: "Activity deleted successfully"),
+            ]
+        )
+    )]
+    #[OA\Response(response: 401, description: "Unauthorized")]
+    #[OA\Response(response: 403, description: "Forbidden — admin role required")]
+    #[OA\Response(response: 404, description: "Activity not found")]
+    public function destroy(string $id): JsonResponse
+    {
+        $activity = Activity::find($id);
+        if (! $activity) {
+            return response()->json(['error' => 'Activity not found'], 404);
+        }
+
+        // Delete associated image file if it exists
+        if ($activity->event_poster) {
+            $imagePath = public_path($activity->event_poster);
+            if (file_exists($imagePath)) {
+                @unlink($imagePath);
+                Log::info('Deleted image for activity ' . $id . ': ' . $activity->event_poster);
+            }
+        }
+
+        // Delete related records (cascade handled by foreign keys, but explicit for clarity)
+        $activity->requirements()->delete();
+        $activity->claimingProcedures()->delete();
+        $activity->contactPersons()->delete();
+
+        // Delete the activity
+        $activity->delete();
+
+        Log::info('Activity deleted: ' . $id);
+
+        return response()->json([
+            'message' => 'Activity deleted successfully',
+        ]);
+    }
+
     #[OA\Post(
         path: "/api/activities/{activityId}/upload-image",
         summary: "Upload (or replace) the poster image for an existing activity via multipart/form-data.",

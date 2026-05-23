@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { Platform } from "react-native";
 import { getToken } from '../../../auth/services/session';
 import { API_URL } from '../../../../constants/apiConfig';
 import {
@@ -336,9 +337,86 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
     };
 
     if (state.mode === "edit") {
-      console.log("UPDATE ACTIVITY:", state.editingId);
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      return;
+      console.log("UPDATING ACTIVITY:", state.editingId);
+      const token = getToken();
+
+      try {
+        // Update activity data via PUT
+        const updateResponse = await fetch(`${API_URL}/activities/${state.editingId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(activityData),
+        });
+
+        if (!updateResponse.ok) {
+          throw new Error(`Failed to update activity: ${updateResponse.status}`);
+        }
+
+        const updateResult = await updateResponse.json();
+        console.log("Activity updated:", state.editingId);
+
+        // Second: Upload image if it's new (has uri property indicating it was selected)
+        if (state.image?.uri && state.image.uri.startsWith('file://')) {
+          try {
+            console.log('Uploading image for activity:', state.editingId);
+
+            const fileName = state.image.fileName || state.image.uri.split('/').pop() || `activity_${Date.now()}.jpg`;
+            const mimeType = state.image.mimeType || 'image/jpeg';
+
+            const formData = new FormData();
+            
+            if (Platform.OS === 'web' && state.image instanceof File) {
+              formData.append('event_poster', state.image);
+              console.log('Using web File object');
+            } else {
+              const fileObject = {
+                uri: state.image.uri,
+                name: fileName,
+                type: mimeType,
+              };
+              console.log('Using React Native file object:', fileObject);
+              formData.append('event_poster', fileObject as any);
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+            const imageResponse = await fetch(`${API_URL}/activities/${state.editingId}/upload-image`, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: formData,
+              signal: controller.signal,
+            });
+
+            clearTimeout(timeoutId);
+            console.log('Image upload response status:', imageResponse.status);
+            
+            if (imageResponse.ok) {
+              const imageData = await imageResponse.json();
+              console.log('Image uploaded successfully:', imageData);
+            } else {
+              const errorText = await imageResponse.text();
+              console.warn('Image upload failed:', imageResponse.status, errorText);
+            }
+          } catch (imageError) {
+            console.error('Image upload error (activity still updated):', {
+              message: imageError instanceof Error ? imageError.message : String(imageError),
+            });
+          }
+        }
+
+        return updateResult;
+      } catch (error) {
+        console.error("ERROR UPDATING ACTIVITY:", error);
+        throw error;
+      }
     }
 
     const token = getToken();
@@ -370,15 +448,42 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
           console.log('Uploading image for activity:', activityId);
 
           const fileName = state.image.fileName || state.image.uri.split('/').pop() || `activity_${Date.now()}.jpg`;
-          const mimeType = state.image.type || 'image/jpeg';
+          const mimeType = state.image.mimeType || 'image/jpeg';
+
+          console.log('Image picker asset:', {
+            uri: state.image.uri,
+            fileName: state.image.fileName,
+            type: state.image.type,
+            width: state.image.width,
+            height: state.image.height,
+            mimeType: state.image.mimeType,
+          });
 
           const formData = new FormData();
-          // React Native FormData accepts { uri, name, type } for file fields
-          formData.append('event_poster', {
-            uri: state.image.uri,
-            name: fileName,
-            type: mimeType,
-          } as any);
+          
+          if (Platform.OS === 'web' && state.image instanceof File) {
+            // Web: Append File object directly
+            formData.append('event_poster', state.image);
+            console.log('Using web File object');
+          } else {
+            // Mobile: React Native FormData accepts { uri, name, type } for file fields
+            const fileObject = {
+              uri: state.image.uri,
+              name: fileName,
+              type: mimeType,
+            };
+            console.log('Using React Native file object:', fileObject);
+            formData.append('event_poster', fileObject as any);
+          }
+
+          console.log('Image upload details:', {
+            url: `${API_URL}/activities/${activityId}/upload-image`,
+            token: token ? 'present' : 'missing',
+            platform: Platform.OS,
+          });
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
           const imageResponse = await fetch(`${API_URL}/activities/${activityId}/upload-image`, {
             method: 'POST',
@@ -387,15 +492,25 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
               ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
             body: formData,
+            signal: controller.signal,
           });
 
+          clearTimeout(timeoutId);
+          console.log('Image upload response status:', imageResponse.status);
+          
           if (imageResponse.ok) {
-            console.log('Image uploaded successfully');
+            const imageData = await imageResponse.json();
+            console.log('Image uploaded successfully:', imageData);
           } else {
-            console.warn('Image upload failed, but activity was created');
+            const errorText = await imageResponse.text();
+            console.warn('Image upload failed:', imageResponse.status, errorText);
           }
         } catch (imageError) {
-          console.warn('Image upload error (activity still created):', imageError);
+          console.error('Image upload error (activity still created):', {
+            message: imageError instanceof Error ? imageError.message : String(imageError),
+            code: imageError instanceof Error && 'code' in imageError ? (imageError as any).code : undefined,
+            stack: imageError instanceof Error ? imageError.stack : undefined,
+          });
         }
       }
 

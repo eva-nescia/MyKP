@@ -16,6 +16,7 @@ Route::get('/activities/{id}', [ActivityController::class, 'getById'])->whereNum
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/activities', [ActivityController::class, 'store']);
     Route::put('/activities/{id}', [ActivityController::class, 'update'])->whereNumber('id');
+    Route::delete('/activities/{id}', [ActivityController::class, 'destroy'])->whereNumber('id');
     Route::post('/activities/{activityId}/upload-image', [ActivityController::class, 'uploadImage'])->whereNumber('activityId');
     Route::get('/admin/activities', [ActivityController::class, 'getAdminActivities']);
 });
