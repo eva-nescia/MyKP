@@ -14,7 +14,12 @@ const devHost =
   (Constants as any).expoGoConfig?.debuggerHost?.split(':')[0] ??
   (Constants.manifest2 as any)?.extra?.expoClient?.hostUri?.split(':')[0];
 
-// const host = devHost ?? 'localhost';
-const host = devHost ?? "172.20.10.2";
+// Dev-machine LAN IP — used when Expo's hostUri auto-detection comes back empty
+// (typical with custom dev clients / dev builds, where Constants.expoConfig
+// doesn't include the bundler host). Replace with your own IPv4 when running
+// from a different machine.
+const FALLBACK_LAN_HOST = '192.168.1.7';
 
-export const API_URL = `http://192.168.100.49:${BACKEND_PORT}/api`;
+const host = devHost ?? FALLBACK_LAN_HOST;
+
+export const API_URL = `http://${host}:${BACKEND_PORT}/api`;
