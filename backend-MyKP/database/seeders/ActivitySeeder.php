@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\ActivityClaimingProcedure;
 use App\Models\ActivityContactPerson;
 use App\Models\ActivityRequirement;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class ActivitySeeder extends Seeder
@@ -22,11 +23,36 @@ class ActivitySeeder extends Seeder
      */
     public function run(): void
     {
-        $adminUserId = 1;
+        // Map each activity to the admin who actually organises it. Look ups
+        // are by email so the seeder is order-independent — adding or removing
+        // organisers in DatabaseSeeder won't shift IDs and break the wiring.
+        $admins = User::query()
+            ->whereIn('Email', [
+                'studentcouncil@ciputra.ac.id',
+                'fdu@ciputra.ac.id',
+                'empowercare@ciputra.ac.id',
+                'diktisaintek@ciputra.ac.id',
+                'msu@ciputra.ac.id',
+                'oweek2026@ciputra.ac.id',
+                'reflektif@ciputra.ac.id',
+                'oyc@ciputra.ac.id',
+                'expoeii@ciputra.ac.id',
+            ])
+            ->pluck('UserID', 'Email');
+
+        $studentCouncil = $admins['studentcouncil@ciputra.ac.id'];
+        $fdu            = $admins['fdu@ciputra.ac.id'];
+        $empowerCareAdm = $admins['empowercare@ciputra.ac.id'];
+        $dikti          = $admins['diktisaintek@ciputra.ac.id'];
+        $msu            = $admins['msu@ciputra.ac.id'];
+        $oWeekCommittee = $admins['oweek2026@ciputra.ac.id'];
+        $reflektifAdm   = $admins['reflektif@ciputra.ac.id'];
+        $oyc            = $admins['oyc@ciputra.ac.id'];
+        $eiiCommittee   = $admins['expoeii@ciputra.ac.id'];
 
         // 1. Seminar Bela Negara & Anti Narkoba 2026
         $seminarBelaNegara = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $studentCouncil,
             'name' => 'Seminar Bela Negara & Anti Narkoba 2026',
             'kp_category' => 'Talkshow Wajib BMA',
             'kp_amount' => 6,
@@ -66,7 +92,7 @@ EOT,
 
         // 2. Doa Lintas Iman — fires a 2-day reminder on seed day
         $doaLintasIman = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $fdu,
             'name' => 'Doa Lintas Iman: Faith in Diversity, Strength in Unity',
             'kp_category' => 'Talkshow Wajib BMA',
             'kp_amount' => 4,
@@ -107,7 +133,7 @@ EOT,
 
         // 3. Open Donasi Empower & Care
         $empowerCare = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $empowerCareAdm,
             'name' => 'Open Donasi: Empower & Care',
             'kp_category' => 'Pengabdian Masyarakat',
             'kp_amount' => 5,
@@ -154,7 +180,7 @@ EOT,
 
         // 4. Oprec Presiden & Wakil Presiden Student Council 26/27
         $oprecSC = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $studentCouncil,
             'name' => 'Open Recruitment Presiden & Wakil Presiden Student Council 26/27',
             'kp_category' => 'Organisasi Kemahasiswaan',
             'kp_amount' => 20,
@@ -207,7 +233,7 @@ EOT,
 
         // 5. Panitia Campus Expo EII 2026 — fires a 3-day reminder on seed day
         $panitiaExpoEII = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $dikti,
             'name' => 'Open Recruitment Panitia Campus Expo EII 2026',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 5,
@@ -260,7 +286,7 @@ EOT,
 
         // 6. Oprec Committee Flamians Cup 4.0
         $flamiansCup = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $msu,
             'name' => 'Open Recruitment Committee Flamians Cup 4.0',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 8,
@@ -322,7 +348,7 @@ EOT,
 
         // 7. Oprec HOD & Koor O-Week 2026
         $oWeek = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $oWeekCommittee,
             'name' => 'Open Recruitment HOD & Koor O-Week 2026',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 10,
@@ -376,7 +402,7 @@ EOT,
 
         // 8. Oprec Seminar Reflektif Akhir Tahun
         $seminarReflektif = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $reflektifAdm,
             'name' => 'Open Recruitment Panitia Seminar Reflektif Akhir Tahun',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 5,
@@ -434,7 +460,7 @@ EOT,
 
         // 9. Oprec HOD & Koor Brand Expo — fires a 1-day reminder on seed day
         $brandExpo = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $oyc,
             'name' => 'Open Recruitment HOD & Koor Brand Expo',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 8,
@@ -495,7 +521,7 @@ EOT,
 
         // 10. Oprec Expo Entrepreneurial Innovations
         $expoEI = Activity::factory()->create([
-            'user_id' => $adminUserId,
+            'user_id' => $eiiCommittee,
             'name' => 'Open Recruitment Expo Entrepreneurial Innovations',
             'kp_category' => 'Kepanitiaan',
             'kp_amount' => 6,
