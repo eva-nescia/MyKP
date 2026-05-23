@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 
-import { getAdminActivities } from "src/features/admin/activityList/services/activityListAdmService";
+import { deleteAdminActivity, getAdminActivities } from "src/features/admin/activityList/services/activityListAdmService";
 
 export function useActivityListAdminViewModel() {
   const [search, setSearch] =
@@ -53,6 +53,14 @@ export function useActivityListAdminViewModel() {
         );
     });
     }, [search, selectedYear, activities]);
+  
+  const deleteActivity = async (id: string) => {
+    await deleteAdminActivity(id);
+
+    setActivities((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
+  };
 
   return {
     data,
@@ -63,5 +71,7 @@ export function useActivityListAdminViewModel() {
 
     selectedYear,
     setSelectedYear,
+
+    deleteActivity,
   };
 }

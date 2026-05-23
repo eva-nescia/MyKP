@@ -28,7 +28,6 @@ export default function DropdownField({
   value,
   items,
   onSelect,
-  placeholder,
 }: Props) {
   return (
     <View style={styles.fieldContainer}>
@@ -47,7 +46,9 @@ export default function DropdownField({
               active &&
                 styles.dropdownItemActive,
             ]}
-            onPress={() => onSelect(item)}
+           onPress={() =>
+            onSelect(active ? "" : item)
+          }
           >
             <Text
               style={[
@@ -69,12 +70,6 @@ export default function DropdownField({
           </Pressable>
         );
       })}
-
-      {!value && placeholder && (
-        <Text style={styles.placeholderHelper}>
-          {placeholder}
-        </Text>
-      )}
     </View>
   );
 }

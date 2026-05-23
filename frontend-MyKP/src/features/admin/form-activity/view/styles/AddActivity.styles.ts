@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
+    paddingTop: 145
   },
 
   scroll: {
@@ -14,6 +15,6 @@ export const styles = StyleSheet.create({
   content: {
     backgroundColor: COLORS.white,
     padding: 24,
-    paddingBottom: 120,
+    paddingBottom: 165,
   },
 });

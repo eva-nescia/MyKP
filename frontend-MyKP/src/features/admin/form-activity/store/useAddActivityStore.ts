@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import { getToken } from '../../../auth/services/session';
 import { API_URL } from '../../../../constants/apiConfig';
+import {
+  GENERATIONS,
+  STUDY_PROGRAMS,
+} from "../model/constants";
 
 export type ActivityFormMode = "create" | "edit";
 
@@ -149,55 +153,88 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
     } as Pick<AddActivityState, keyof AddActivityFields>);
   },
 
-  toggleGeneration: (value) => {
-    const current = get().generations;
+ toggleGeneration: (value) => {
+  const current = get().generations;
 
-    if (value === "All Gen") {
-      set({
-        generations: ["All Gen"],
-      });
-
-      return;
-    }
-
-    let updated = current.filter((item) => item !== "All Gen");
-
-    if (updated.includes(value)) {
-      updated = updated.filter((item) => item !== value);
-    } else {
-      updated = [...updated, value];
-    }
-
+  if (value === "All Gen") {
     set({
-      generations: updated,
+      generations: current.includes("All Gen")
+        ? []
+        : ["All Gen"],
     });
-  },
 
-  toggleStudyProgram: (value) => {
-    const current = get().studyPrograms;
+    return;
+  }
 
-    if (value === "All Study Program") {
-      set({
-        studyPrograms: ["All Study Program"],
-      });
+  const nonAllItems = GENERATIONS.filter(
+    (item: string) => item !== "All Gen"
+  );
 
-      return;
-    }
+  let updated = current.filter(
+    (item) => item !== "All Gen"
+  );
 
-    let updated = current.filter(
-      (item) => item !== "All Study Program"
+  if (updated.includes(value)) {
+    updated = updated.filter(
+      (item) => item !== value
+    );
+  } else {
+    updated = [...updated, value];
+  }
+
+  const selectedAllIndividuals =
+    nonAllItems.every((item: string) =>
+      updated.includes(item)
     );
 
-    if (updated.includes(value)) {
-      updated = updated.filter((item) => item !== value);
-    } else {
-      updated = [...updated, value];
-    }
+  set({
+    generations: selectedAllIndividuals
+      ? ["All Gen"]
+      : updated,
+  });
+},
 
+ toggleStudyProgram: (value) => {
+  const current = get().studyPrograms;
+
+  if (value === "All Study Program") {
     set({
-      studyPrograms: updated,
+      studyPrograms: current.includes("All Study Program")
+        ? []
+        : ["All Study Program"],
     });
-  },
+
+    return;
+  }
+
+  const nonAllItems = STUDY_PROGRAMS.filter(
+    (item: string) =>
+      item !== "All Study Program"
+  );
+
+  let updated = current.filter(
+    (item) => item !== "All Study Program"
+  );
+
+  if (updated.includes(value)) {
+    updated = updated.filter(
+      (item) => item !== value
+    );
+  } else {
+    updated = [...updated, value];
+  }
+
+  const selectedAllIndividuals =
+    nonAllItems.every((item: string) =>
+      updated.includes(item)
+    );
+
+  set({
+    studyPrograms: selectedAllIndividuals
+      ? ["All Study Program"]
+      : updated,
+  });
+},
 
   openPicker: (mode, field) => {
     set({

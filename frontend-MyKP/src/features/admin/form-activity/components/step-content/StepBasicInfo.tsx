@@ -13,8 +13,13 @@ import {
 } from "../../model/constants";
 
 import { useAddActivityStore } from "../../store/useAddActivityStore";
+import { useState } from "react";
+import InvalidImageModal from "../feedback/InvalidImageModal";
 
 export default function StepBasicInfo() {
+  const [showInvalidImageModal, setShowInvalidImageModal] =
+    useState(false);
+    
   const {
     image,
     name,
@@ -34,13 +39,19 @@ export default function StepBasicInfo() {
       <ImageUploadField
         label="Activity Poster"
         image={image}
-        onChange={(value) => setField("image", value)}
+        onChange={(value) =>
+          setField("image", value)
+        }
+        onInvalidFile={() =>
+          setShowInvalidImageModal(true)
+        }
       />
 
       <TextInputField
         label="Activity Name"
         placeholder="Enter activity title"
         value={name}
+        maxLength={100}
         onChange={(text: string) =>
           setField("name", text)
         }
@@ -58,7 +69,7 @@ export default function StepBasicInfo() {
 
       <TextInputField
         label="KP Amount"
-        placeholder="e.g. 10"
+        placeholder="e.g. 10, 6-10"
         value={kp}
         keyboardType="numeric"
         onChange={(text: string) =>
@@ -81,14 +92,20 @@ export default function StepBasicInfo() {
       />
 
       <TextAreaField
-        label="Event Description"
+        label="Activity Description"
         placeholder="Write detailed event description..."
         value={description}
-        maxLength={300}
+        maxLength={1000}
         onChange={(text: string) =>
           setField("description", text)
         }
       />
+       <InvalidImageModal
+          visible={showInvalidImageModal}
+          onClose={() =>
+            setShowInvalidImageModal(false)
+          }
+        />
     </View>
   );
 }

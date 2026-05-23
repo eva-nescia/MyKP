@@ -4,6 +4,7 @@ import BulletInputField from "../form/BulletInputField";
 import ClaimMethodCard from "../form/ClaimMethodCard";
 
 import { useAddActivityStore } from "../../store/useAddActivityStore";
+import ContactInputField from "../form/ContactInputField";
 
 export default function StepRequirements() {
   const {
@@ -25,10 +26,9 @@ export default function StepRequirements() {
         }
       />
 
-      <BulletInputField
+      <ContactInputField
         label="Contacts"
         values={contacts}
-        placeholder="Enter contact information..."
         onChange={(values) =>
           setField("contacts", values)
         }

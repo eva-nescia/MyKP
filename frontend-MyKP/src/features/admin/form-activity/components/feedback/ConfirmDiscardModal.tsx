@@ -60,7 +60,7 @@ export default function ConfirmDiscardModal({
               </Pressable>
 
               <Pressable
-                style={[styles.button, { backgroundColor: COLORS.primary }]}
+                style={[styles.button, { backgroundColor: COLORS.secondary }]}
                 onPress={onConfirm}
               >
                 <Text style={styles.buttonText}>

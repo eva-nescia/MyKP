@@ -22,8 +22,9 @@ export const styles = StyleSheet.create({
   },
 
   chip: {
+    minHeight: 42,
+
     paddingHorizontal: 14,
-    paddingVertical: 10,
 
     borderRadius: 999,
 
@@ -32,6 +33,9 @@ export const styles = StyleSheet.create({
 
     marginRight: 10,
     marginBottom: 10,
+
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   chipActive: {
@@ -42,10 +46,11 @@ export const styles = StyleSheet.create({
   chipText: {
     color: COLORS.text,
     fontSize: 13,
+    fontWeight: FONT_WEIGHT.regular,
   },
 
   chipTextActive: {
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: FONT_WEIGHT.regular,
   },
 });

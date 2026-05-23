@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 18,
-    fontWeight: FONT_WEIGHT.semiBold,
+    fontSize: 20,
+    fontWeight: FONT_WEIGHT.bold,
     color: COLORS.text,
     marginBottom: 8,
   },
@@ -31,7 +31,8 @@ export const styles = StyleSheet.create({
   },
 
   textArea: {
-    minHeight: 160,
+    minHeight: 260,
+    maxHeight: 360,
 
     borderWidth: 1,
     borderColor: "#E5E7EB",
@@ -74,7 +75,7 @@ export const styles = StyleSheet.create({
 
   dropdownTextActive: {
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: FONT_WEIGHT.regular,
   },
 
   dateText: {
@@ -156,43 +157,84 @@ export const styles = StyleSheet.create({
   bulletRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+
     marginBottom: 12,
   },
 
-  bulletDot: {
-    width: 8,
-    height: 8,
+  bulletNumber: {
+    width: 28,
+    height: 28,
+
     borderRadius: 999,
-    backgroundColor: COLORS.secondary,
+
+    backgroundColor: "#FFF7ED",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginRight: 10,
+  },
+
+  bulletNumberText: {
+    fontSize: 12,
+    fontWeight: FONT_WEIGHT.semiBold,
+
+    color: COLORS.primary,
   },
 
   bulletInput: {
     flex: 1,
 
-    height: 48,
+    minHeight: 50,
 
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E2E8F0",
 
-    borderRadius: 12,
+    borderRadius: 14,
 
     paddingHorizontal: 14,
+
+    fontSize: 14,
+    color: COLORS.text,
 
     backgroundColor: COLORS.white,
   },
 
+  removeBulletBtn: {
+    width: 36,
+    height: 36,
+
+    borderRadius: 999,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginLeft: 8,
+
+    backgroundColor: "#F8FAFC",
+  },
+
   addBulletBtn: {
+    alignSelf: "flex-start",
+
     flexDirection: "row",
     alignItems: "center",
+
     gap: 6,
 
     marginTop: 4,
+
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+
+    borderRadius: 999,
+
+    backgroundColor: "#FFF7ED",
   },
 
   addBulletText: {
     color: COLORS.primary,
-    fontWeight: "600",
+    fontWeight: FONT_WEIGHT.semiBold,
   },
 
   imageUploadBox: {
@@ -233,4 +275,45 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     color: "#64748B",
   },
+
+  textInput: {
+    flex: 1,
+    fontSize: 14,
+    color: COLORS.text,
+    paddingVertical: 0,
+  },
+  
+  prefix: {
+    marginLeft: 12,
+    marginRight: 4,
+
+    fontSize: 14,
+    fontWeight: FONT_WEIGHT.regular,
+
+    color: "#64748B",
+  },
+
+   contactPrefix: {
+        height: 50,
+
+        paddingHorizontal: 14,
+
+        borderWidth: 1,
+        borderColor: "#E2E8F0",
+
+        borderRadius: 14,
+
+        backgroundColor: "#FFF7ED",
+
+        justifyContent: "center",
+        alignItems: "center",
+
+        marginRight: 10,
+        },
+
+        contactPrefixText: {
+        fontSize: 14,
+        fontWeight: FONT_WEIGHT.semiBold,
+        color: COLORS.primary,
+      }
 });

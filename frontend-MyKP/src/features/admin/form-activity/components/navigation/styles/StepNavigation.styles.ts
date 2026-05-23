@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+
 import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
@@ -13,7 +14,9 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
 
     padding: 20,
-    backgroundColor: "#fff",
+    paddingBottom: 65,
+
+    backgroundColor: COLORS.white,
 
     borderTopWidth: 1,
     borderColor: "#F3F4F6",
@@ -22,8 +25,8 @@ export const styles = StyleSheet.create({
   backBtn: {
     flex: 1,
 
-    height: 50,
-    borderRadius: 12,
+    height: 52,
+    borderRadius: 14,
 
     justifyContent: "center",
     alignItems: "center",
@@ -32,13 +35,15 @@ export const styles = StyleSheet.create({
     borderColor: "#D1D5DB",
 
     marginRight: 10,
+
+    backgroundColor: COLORS.white,
   },
 
   nextBtn: {
     flex: 1,
 
-    height: 50,
-    borderRadius: 12,
+    height: 52,
+    borderRadius: 14,
 
     justifyContent: "center",
     alignItems: "center",
@@ -47,15 +52,19 @@ export const styles = StyleSheet.create({
   },
 
   backText: {
+    fontSize: 15,
     fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.text,
   },
 
   nextText: {
-    color: "#fff",
+    fontSize: 15,
     fontWeight: FONT_WEIGHT.semiBold,
+    color: COLORS.white,
   },
 
   fullWidth: {
     flex: 1,
+    marginRight: 0,
   },
 });

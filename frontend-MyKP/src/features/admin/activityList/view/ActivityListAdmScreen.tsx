@@ -85,7 +85,7 @@ export default function ActivityListAdminScreen() {
                 });
               }}
               onDelete={() => {
-                console.log("Delete activity");
+                vm.deleteActivity(item.id);
               }}
             />
           )}
