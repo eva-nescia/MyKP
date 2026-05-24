@@ -46,9 +46,15 @@ class ParticipationController extends Controller
     public function register(Request $request, string $activity_id): JsonResponse
     {
         $user = $request->user();
+        
+        \Illuminate\Support\Facades\Log::info('[REGISTER] Starting registration', [
+            'user_id' => $user->UserID,
+            'activity_id' => $activity_id,
+        ]);
 
         $activity = Activity::query()->where('ActivityID', $activity_id)->first();
         if (! $activity) {
+            \Illuminate\Support\Facades\Log::warning('[REGISTER] Activity not found', ['activity_id' => $activity_id]);
             return response()->json(['message' => 'Activity not found.'], 404);
         }
 
@@ -58,6 +64,7 @@ class ParticipationController extends Controller
             ->exists();
 
         if ($alreadyRegistered) {
+            \Illuminate\Support\Facades\Log::info('[REGISTER] Already registered', ['user_id' => $user->UserID, 'activity_id' => $activity->ActivityID]);
             return response()->json([
                 'message'     => 'You have already registered for this activity.',
                 'activity_id' => (string) $activity->ActivityID,
@@ -71,13 +78,15 @@ class ParticipationController extends Controller
         // Wrap participation insert + KP_Progress bump in a transaction so we
         // never end up with a participation row whose KP wasn't applied.
         DB::transaction(function () use ($user, $activity, $kpCategory, $kpAmount, &$kpProgressUpdated) {
-            Participation::create([
+            $participation = Participation::create([
                 'user_id'     => $user->UserID,
                 'activity_id' => $activity->ActivityID,
                 'kp_category' => $kpCategory,
                 'kp_amount'   => $kpAmount,
                 'status'      => 'Completed',
             ]);
+            
+            \Illuminate\Support\Facades\Log::info('[REGISTER] Participation created', ['participation_id' => $participation->ParticipationID]);
 
             $progress = KP_Progress::query()
                 ->where('user_id', $user->UserID)
@@ -86,6 +95,7 @@ class ParticipationController extends Controller
                 ->first();
 
             if ($progress) {
+                $oldAmount = $progress->kp_current_amount;
                 $progress->kp_current_amount = (int) $progress->kp_current_amount + $kpAmount;
                 $progress->kp_status = ($progress->kp_amount_requirement > 0
                     && $progress->kp_current_amount >= $progress->kp_amount_requirement)
@@ -93,8 +103,21 @@ class ParticipationController extends Controller
                     : 'On Progress';
                 $progress->save();
                 $kpProgressUpdated = true;
+                
+                \Illuminate\Support\Facades\Log::info('[REGISTER] KP Progress updated', [
+                    'old_amount' => $oldAmount,
+                    'new_amount' => $progress->kp_current_amount,
+                    'status' => $progress->kp_status,
+                ]);
+            } else {
+                \Illuminate\Support\Facades\Log::warning('[REGISTER] No KP Progress found for category', ['category' => $kpCategory]);
             }
         });
+
+        \Illuminate\Support\Facades\Log::info('[REGISTER] Registration completed successfully', [
+            'activity_id' => $activity->ActivityID,
+            'kp_updated' => $kpProgressUpdated,
+        ]);
 
         return response()->json([
             'registered'         => true,

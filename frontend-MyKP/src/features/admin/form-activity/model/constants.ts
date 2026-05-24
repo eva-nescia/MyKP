@@ -1,7 +1,7 @@
 export const CATEGORIES = [
   "Organisasi",
   "Kepanitiaan",
-  "Talkshow Wajib",
+  "Talkshow Wajib BMA",
   "Kompetisi",
   "Pengabdian Masyarakat",
   "Penelitian",

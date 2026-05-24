@@ -56,9 +56,85 @@ const sortByNearestUpcomingDate = (
   });
 };
 
-export const fetchActivities = async (search?: string, category?: string): Promise<Activity[]> => {
+// Cache structure for storing search results
+interface CacheEntry {
+  timestamp: number;
+  data: Activity[];
+  pagination: {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+  };
+}
+
+// In-memory cache with TTL (5 minutes)
+const CACHE_TTL = 5 * 60 * 1000;
+const searchCache: Map<string, CacheEntry> = new Map();
+
+function getCacheKey(search?: string, category?: string): string {
+  return `search:${search || ''}_category:${category || ''}`;
+}
+
+function getCachedResult(key: string): CacheEntry | null {
+  const entry = searchCache.get(key);
+  if (!entry) return null;
+
+  // Check if cache has expired
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    searchCache.delete(key);
+    return null;
+  }
+
+  return entry;
+}
+
+function cacheResult(key: string, data: Activity[], pagination: any): void {
+  searchCache.set(key, {
+    timestamp: Date.now(),
+    data,
+    pagination,
+  });
+}
+
+// Track active requests for cancellation
+let activeController: AbortController | null = null;
+
+/**
+ * Fetch activities with pagination, caching, and request cancellation support
+ * @param search Search query
+ * @param category Category filter
+ * @param page Page number (default: 1)
+ * @param perPage Results per page (default: 20)
+ */
+export const fetchActivities = async (
+  search?: string,
+  category?: string,
+  page: number = 1,
+  perPage: number = 20
+): Promise<{ activities: Activity[]; pagination: any }> => {
   try {
-    // Build query string
+    // Cancel previous request if still pending
+    if (activeController) {
+      activeController.abort();
+    }
+    activeController = new AbortController();
+
+    const cacheKey = getCacheKey(search, category);
+
+    // Check cache first (only for page 1)
+    if (page === 1) {
+      const cached = getCachedResult(cacheKey);
+      if (cached) {
+        console.log('[SEARCH] Cache hit for:', cacheKey);
+        return {
+          activities: cached.data,
+          pagination: cached.pagination,
+        };
+      }
+    }
+
+    // Build query string with pagination
     const params = new URLSearchParams();
     if (search && search.trim()) {
       params.append('search', search.trim());
@@ -66,20 +142,57 @@ export const fetchActivities = async (search?: string, category?: string): Promi
     if (category && category !== 'All' && category.trim()) {
       params.append('category', category.trim());
     }
+    params.append('page', page.toString());
+    params.append('per_page', perPage.toString());
 
     const queryString = params.toString();
     const url = queryString ? `${API_URL}/activities?${queryString}` : `${API_URL}/activities`;
 
-    const response = await fetch(url, { headers: { Accept: 'application/json' } });
-    
+    console.log('[SEARCH] Fetching:', url);
+
+    const response = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      signal: activeController.signal,
+    });
+
     if (!response.ok) {
       throw new Error(`Failed to fetch activities (HTTP ${response.status})`);
     }
 
-    const data = await response.json();
+    const payload = await response.json();
+    
+    // Extract data array from response (new paginated format vs old format)
+    let data: any[] = [];
+    let paginationData: any = {};
+    
+    if (payload.data && Array.isArray(payload.data)) {
+      // New paginated format: { data: [...], total, per_page, current_page, last_page }
+      data = payload.data;
+      paginationData = {
+        total: payload.total || data.length,
+        per_page: payload.per_page || perPage,
+        current_page: payload.current_page || 1,
+        last_page: payload.last_page || 1,
+      };
+    } else if (Array.isArray(payload)) {
+      // Old format: just array
+      data = payload;
+      paginationData = {
+        total: data.length,
+        per_page: perPage,
+        current_page: 1,
+        last_page: 1,
+      };
+    } else {
+      // Unexpected format, default to empty
+      console.warn('[SEARCH] Unexpected API response format:', payload);
+      data = [];
+      paginationData = { total: 0, per_page: perPage, current_page: 1, last_page: 1 };
+    }
+
+    console.log('[SEARCH] Extracted data array length:', data.length);
 
     // Map backend response to frontend Activity interface
-    // Handle image as URI if available, otherwise use placeholder
     const activities = data.map((act: any) => ({
       id: act.id,
       title: act.title,
@@ -89,9 +202,33 @@ export const fetchActivities = async (search?: string, category?: string): Promi
       date: act.date,
     }));
 
-    return sortByNearestUpcomingDate(activities);
+    const sorted = sortByNearestUpcomingDate(activities);
+
+    // Cache only first page
+    if (page === 1) {
+      cacheResult(cacheKey, sorted, paginationData);
+    }
+
+    return {
+      activities: sorted,
+      pagination: paginationData,
+    };
   } catch (error) {
-    console.error('Error fetching activities:', error);
+    // Don't log abort errors as they're expected when searching rapidly
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.log('[SEARCH] Request cancelled');
+      return { activities: [], pagination: {} };
+    }
+    console.error('[SEARCH] Error fetching activities:', error);
     throw error;
   }
 };
+
+/**
+ * Clear search cache (useful for manual refresh)
+ */
+export const clearSearchCache = (): void => {
+  searchCache.clear();
+  console.log('[SEARCH] Cache cleared');
+};
+

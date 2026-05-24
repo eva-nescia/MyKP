@@ -34,43 +34,80 @@ class ActivityController extends Controller
                 required: false,
                 schema: new OA\Schema(type: "string", example: "Talkshow Wajib BMA")
             ),
+            new OA\Parameter(
+                name: "page",
+                in: "query",
+                description: "Page number for pagination (default: 1)",
+                required: false,
+                schema: new OA\Schema(type: "integer", example: 1)
+            ),
+            new OA\Parameter(
+                name: "per_page",
+                in: "query",
+                description: "Results per page (default: 20, max: 100)",
+                required: false,
+                schema: new OA\Schema(type: "integer", example: 20)
+            ),
         ]
     )]
     #[OA\Response(
         response: 200,
         description: "Activities retrieved successfully",
         content: new OA\JsonContent(
-            type: "array",
-            items: new OA\Items(
-                type: "object",
-                properties: [
-                    new OA\Property(property: "id", type: "string", example: "1"),
-                    new OA\Property(property: "title", type: "string", example: "Seminar Bela Negara"),
-                    new OA\Property(property: "image", type: "string", example: "url or null"),
-                    new OA\Property(property: "type", type: "string", example: "Talkshow Wajib BMA"),
-                    new OA\Property(property: "points", type: "integer", example: 6),
-                    new OA\Property(property: "date", type: "string", example: "Sat, 29 May 2026")
-                ]
-            )
+            type: "object",
+            properties: [
+                new OA\Property(property: "data", type: "array", items: new OA\Items(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "string", example: "1"),
+                        new OA\Property(property: "title", type: "string", example: "Seminar Bela Negara"),
+                        new OA\Property(property: "image", type: "string", example: "url or null"),
+                        new OA\Property(property: "type", type: "string", example: "Talkshow Wajib BMA"),
+                        new OA\Property(property: "points", type: "integer", example: 6),
+                        new OA\Property(property: "date", type: "string", example: "Sat, 29 May 2026")
+                    ]
+                )),
+                new OA\Property(property: "total", type: "integer", example: 42),
+                new OA\Property(property: "per_page", type: "integer", example: 20),
+                new OA\Property(property: "current_page", type: "integer", example: 1),
+                new OA\Property(property: "last_page", type: "integer", example: 3),
+            ]
         )
     )]
     public function getAll(Request $request): JsonResponse
     {
+        $perPage = min((int) $request->input('per_page', 20), 100); // Max 100 per page
+        $page = max((int) $request->input('page', 1), 1);
+
         $query = Activity::query();
 
+        // Search optimization: use indexed columns
         if ($request->has('search') && $request->input('search') !== '') {
             $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('kp_category', 'LIKE', "%{$search}%");
+            $search = trim($search);
+            
+            // Split search into words for better matching
+            $keywords = preg_split('/\s+/', $search, -1, PREG_SPLIT_NO_EMPTY);
+            
+            $query->where(function ($q) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                    $q->where(function ($innerQ) use ($keyword) {
+                        $innerQ->where('name', 'LIKE', "%{$keyword}%")
+                                ->orWhere('kp_category', 'LIKE', "%{$keyword}%");
+                    });
+                }
             });
         }
 
         $query = $this->filterByCategory($query, $request);
 
-        $activities = $query->orderBy('date', 'desc')->get();
+        // Get paginated results
+        $paginated = $query
+            ->orderBy('date', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
 
-        $formatted = $activities->map(function ($act) use ($request) {
+        // Format response data
+        $formatted = $paginated->map(function ($act) use ($request) {
             return [
                 'id'     => (string) $act->ActivityID,
                 'title'  => $act->name,
@@ -81,7 +118,13 @@ class ActivityController extends Controller
             ];
         });
 
-        return response()->json($formatted);
+        return response()->json([
+            'data' => $formatted,
+            'total' => $paginated->total(),
+            'per_page' => $paginated->perPage(),
+            'current_page' => $paginated->currentPage(),
+            'last_page' => $paginated->lastPage(),
+        ]);
     }
 
     #[OA\Get(
