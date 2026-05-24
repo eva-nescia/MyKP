@@ -16,6 +16,7 @@ import {
   cancelBookmarkReminders,
   scheduleBookmarkReminders,
 } from "@/features/notifications/services/pushService";
+import { registerForActivity } from "@/features/student/profile/services/participationService";
 
 export const useActivityDetailViewModel = (
   id: string
@@ -99,29 +100,61 @@ export const useActivityDetailViewModel = (
   };
 
   const handleRegister = async () => {
-    const registrationLink =
-      activity?.registrationLink;
-
-    if (!registrationLink) {
-      Alert.alert(
-        "Registration unavailable",
-        "This activity does not have a registration link yet."
-      );
+    if (!activity) {
+      Alert.alert("Error", "Activity data not loaded");
       return;
     }
 
-    const canOpen =
-      await Linking.canOpenURL(registrationLink);
+    try {
+      // Step 1: Call API to record participation + update KP
+      console.log('[REGISTER] Calling API for activity ID:', activity.id);
+      const result = await registerForActivity(activity.id);
 
-    if (!canOpen) {
-      Alert.alert(
-        "Cannot open link",
-        "Please check the registration link and try again."
-      );
-      return;
+      // Step 2: Check if already registered
+      if (result.alreadyRegistered) {
+        Alert.alert(
+          "Already Registered",
+          "You have already registered for this activity."
+        );
+        return;
+      }
+
+      // Step 3: Show success message
+      let message = "✅ Registered! KP recorded.";
+      if (result.kpProgressUpdated) {
+        message += " Progress updated!";
+      }
+
+      // Step 4: Open external registration form if available
+      const registrationLink = activity?.registrationLink;
+      
+      if (!registrationLink) {
+        Alert.alert("Success", message);
+        return;
+      }
+
+      Alert.alert("Success", message + "\n\nOpen the registration form?", [
+        {
+          text: "Open Form",
+          onPress: async () => {
+            const canOpen = await Linking.canOpenURL(registrationLink);
+            if (!canOpen) {
+              Alert.alert(
+                "Cannot open link",
+                "Please copy and paste the link manually."
+              );
+              return;
+            }
+            Linking.openURL(registrationLink);
+          },
+        },
+        { text: "Done", style: "default" },
+      ]);
+    } catch (error) {
+      console.error('[REGISTER] Error:', error);
+      const errorMsg = error instanceof Error ? error.message : "Unknown error";
+      Alert.alert("Registration Failed", errorMsg);
     }
-
-    Linking.openURL(registrationLink);
   };
 
   return {

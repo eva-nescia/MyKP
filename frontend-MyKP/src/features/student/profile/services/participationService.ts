@@ -30,22 +30,45 @@ export interface RegisterResult {
 }
 
 export const registerForActivity = async (activityId: string): Promise<RegisterResult> => {
-  const response = await fetch(`${API_URL}/activities/${activityId}/register`, {
-    method: 'POST',
-    headers: authHeaders(),
-  });
+  try {
+    const token = getToken();
+    const url = `${API_URL}/activities/${activityId}/register`;
+    
+    console.log('[REGISTER] API call details:', {
+      url,
+      activityId,
+      hasToken: !!token,
+    });
 
-  if (response.status === 409) {
-    return { alreadyRegistered: true, kpProgressUpdated: false };
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: authHeaders(),
+    });
+
+    console.log('[REGISTER] API response status:', response.status);
+
+    if (response.status === 409) {
+      console.log('[REGISTER] Already registered (409)');
+      return { alreadyRegistered: true, kpProgressUpdated: false };
+    }
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[REGISTER] API error:', { status: response.status, text: errorText });
+      throw new Error(`Failed to register (HTTP ${response.status}): ${errorText}`);
+    }
+    
+    const data = await response.json();
+    console.log('[REGISTER] Success response:', data);
+    
+    return {
+      alreadyRegistered: false,
+      kpProgressUpdated: Boolean(data?.kp_progress_updated),
+    };
+  } catch (error) {
+    console.error('[REGISTER] Fatal error:', error);
+    throw error;
   }
-  if (!response.ok) {
-    throw new Error(`Failed to register (HTTP ${response.status})`);
-  }
-  const data = await response.json();
-  return {
-    alreadyRegistered: false,
-    kpProgressUpdated: Boolean(data?.kp_progress_updated),
-  };
 };
 
 export const fetchParticipationHistory = async (
