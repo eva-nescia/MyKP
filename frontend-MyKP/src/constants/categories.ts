@@ -51,7 +51,7 @@ export const CATEGORIES: CategoryConfig[] = [
   },
 
   {
-    label: "Talkshow Wajib",
+    label: "Talkshow Wajib BMA",
     claimType: "auto",
     claimConfig: {
       title: "How to Claim KP",

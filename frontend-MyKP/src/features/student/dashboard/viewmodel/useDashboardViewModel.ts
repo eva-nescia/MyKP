@@ -33,12 +33,16 @@ export const useDashboardViewModel = () => {
       showLoading();
       setError(null);
 
-      const [result, activities] = await Promise.all([
+      const [result, activitiesResult] = await Promise.all([
         fetchDashboard(token),
         fetchActivities(),
       ]);
 
       setData(result);
+      // Extract activities array from paginated response
+      const activities = Array.isArray(activitiesResult.activities) 
+        ? activitiesResult.activities 
+        : [];
       setAllActivities(activities);
     } catch (err: any) {
       setError(

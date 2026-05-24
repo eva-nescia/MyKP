@@ -41,10 +41,7 @@ try {
       description: act.description,
       requirement: act.requirement,
       howToClaim: act.howToClaim,
-      // contactPerson: act.contactPerson,
-      contactPerson: [
-        "8991687653 - Michele"
-      ],
+      contactPerson: act.contactPerson,
       registrationLink: act.registrationLink,
       registrationDeadlineDate: act.registrationDeadlineDate,
       registrationDeadlineTime: act.registrationDeadlineTime,
