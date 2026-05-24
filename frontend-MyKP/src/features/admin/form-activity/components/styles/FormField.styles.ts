@@ -315,5 +315,15 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: FONT_WEIGHT.semiBold,
         color: COLORS.primary,
-      }
+      },
+      
+      helperText: {
+        fontSize: 13,
+        lineHeight: 20,
+
+        color: "#64748B",
+
+        marginTop: -4,
+        marginBottom: 12,
+    },
 });
