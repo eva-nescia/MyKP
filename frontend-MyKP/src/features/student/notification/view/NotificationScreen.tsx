@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   View,
   Text,
   FlatList,
@@ -15,9 +14,12 @@ import EmptyNotification from "src/features/student/notification/components/Empt
 import useNotificationViewModel from "../viewmodel/useNotificationViewModel";
 
 import styles from "src/features/student/notification/view/styles/Notification.styles";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function NotificationScreen() {
   const vm = useNotificationViewModel();
+
+  useGlobalLoading(vm.loading);
 
   const totalNotifications =
     vm.notifications.today.length +
@@ -37,11 +39,7 @@ export default function NotificationScreen() {
         onBack={() => router.back()}
       />
 
-      {vm.loading ? (
-        <View style={{ paddingTop: 60 }}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : vm.error ? (
+      {vm.loading ? null : vm.error ? (
         <Text style={{ textAlign: "center", paddingTop: 60 }}>{vm.error}</Text>
       ) : totalNotifications === 0 ? (
         <EmptyNotification />

@@ -22,12 +22,7 @@ export default function ConfirmDiscardModal({
         <BlurView
           intensity={40}
           tint="dark"
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            paddingHorizontal: 24,
-          }}
+          style={styles.overlay}
         >
           <View
             style={styles.modal}

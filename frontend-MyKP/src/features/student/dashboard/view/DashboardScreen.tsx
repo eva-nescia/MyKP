@@ -4,22 +4,65 @@ import {
   Text,
 } from "react-native";
 
-import { router } from "expo-router";
+import {
+  router,
+  useNavigation,
+} from "expo-router";
+
+import React, {
+  useEffect,
+  useRef,
+} from "react";
+
+import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 import { useDashboardViewModel } from "../viewmodel/useDashboardViewModel";
 
 import KPProgressCard from "../components/KPProgressCard";
 import MandatoryActivityCarousel from "../components/MandatoryActivityCarousel";
 import DashboardHeader from "../components/DashboardHeader";
+import UpcomingActivities from "../components/UpcomingActivities";
 
 import AppSnackbar from "@/components/snackbar/AppSnackbar";
 
 import { styles } from "./styles/Dashboard.styles";
 
+type StudentTabParamList = {
+  dashboard: undefined;
+  activities: undefined;
+  saved: undefined;
+  profile: undefined;
+};
+
 export default function DashboardScreen() {
   const vm = useDashboardViewModel();
 
   const { data, error } = vm;
+
+  const scrollRef =
+    useRef<ScrollView>(null);
+
+  const navigation =
+    useNavigation<
+      BottomTabNavigationProp<
+        StudentTabParamList,
+        "dashboard"
+      >
+    >();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener(
+      "tabPress",
+      () => {
+        scrollRef.current?.scrollTo({
+          y: 0,
+          animated: false,
+        });
+      }
+    );
+
+    return unsubscribe;
+  }, [navigation]);
 
   if (error) {
     return (
@@ -34,13 +77,16 @@ export default function DashboardScreen() {
   return (
     <View style={styles.wrapper}>
       <ScrollView
-        scrollEnabled={false}
+        ref={scrollRef}
+        scrollEnabled
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
         <DashboardHeader
           userName={data.userName}
-          hasUnreadNotifications={vm.unreadCount > 0}
+          hasUnreadNotifications={
+            vm.unreadCount > 0
+          }
           onPressNotification={() => {
             router.push(
               "/notification/notification"
@@ -59,7 +105,10 @@ export default function DashboardScreen() {
 
         <MandatoryActivityCarousel
           data={data.activities}
-          // data={[]}
+        />
+
+        <UpcomingActivities
+          data={vm.allActivities}
         />
       </ScrollView>
 

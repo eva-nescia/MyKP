@@ -1,4 +1,9 @@
-import { Modal, View, Text, Pressable, ActivityIndicator } from "react-native";
+import {
+  Modal,
+  View,
+  Text,
+  Pressable,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 
@@ -23,12 +28,7 @@ export default function ConfirmPublishModal({
         <BlurView
           intensity={40}
           tint="dark"
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            paddingHorizontal: 24,
-          }}
+          style={styles.overlay}
         >
           {/* MODAL CARD */}
           <View

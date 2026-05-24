@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   FlatList,
   Text,
   View,
@@ -11,9 +10,12 @@ import { useSavedActivitiesViewModel } from "../viewmodel/useSavedActivitiesView
 
 import styles from "src/features/student/bookmark/view/styles/Saved.styles";
 import SavedHeader from "../components/SavedHeader";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function SavedScreen() {
   const { data, loading, error } = useSavedActivitiesViewModel();
+
+  useGlobalLoading(loading);
 
   const hasSaved = data.length > 0;
 
@@ -21,11 +23,7 @@ export default function SavedScreen() {
   <View style={styles.container}>
     <SavedHeader count={data.length} />
 
-      {loading ? (
-        <View style={{ flex: 1, justifyContent: "center" }}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : error ? (
+      {loading ? null : error ? (
         <View style={{ flex: 1, justifyContent: "center" }}>
           <Text style={{ textAlign: "center" }}>
             {error}

@@ -6,6 +6,8 @@ import { DashboardData } from "../model/types";
 import { useAuth } from "../../../../core/contexts/AuthContext";
 import { useLoadingStore } from "@/store/useLoadingStore";
 import { fetchUnreadCount } from "@/features/student/notification/services/notificationService";
+import { fetchActivities } from "@/features/student/activity-list-stu/services/activityListService";
+import type { Activity as StudentActivity } from "@/features/student/activity-list-stu/model/types";
 
 export const useDashboardViewModel = () => {
   const { token } = useAuth();
@@ -16,6 +18,7 @@ export const useDashboardViewModel = () => {
   const hideLoading = useLoadingStore((state) => state.hideLoading);
 
   const [data, setData] = useState<DashboardData | null>(null);
+  const [allActivities, setAllActivities] = useState<StudentActivity[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -30,9 +33,13 @@ export const useDashboardViewModel = () => {
       showLoading();
       setError(null);
 
-      const result = await fetchDashboard(token);
+      const [result, activities] = await Promise.all([
+        fetchDashboard(token),
+        fetchActivities(),
+      ]);
 
       setData(result);
+      setAllActivities(activities);
     } catch (err: any) {
       setError(
         err.message ||
@@ -70,6 +77,7 @@ export const useDashboardViewModel = () => {
 
   return {
     data,
+    allActivities,
     error,
     unreadCount,
 

@@ -3,9 +3,15 @@ import {
   Text,
   Pressable,
   Modal,
+  Animated,
+  Easing,
 } from "react-native";
 
-import { BlurView } from "expo-blur";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { styles } from "./styles/FilterDropdown.styles";
 
@@ -20,6 +26,9 @@ const CATEGORIES = [
   "Lain-lain",
 ];
 
+const AnimatedPressable =
+  Animated.createAnimatedComponent(Pressable);
+
 interface Props {
   visible: boolean;
   selected: string | null;
@@ -33,45 +42,104 @@ export default function FilterDropdown({
   onApply,
   onClose,
 }: Props) {
-  const handleSelect = (
-    category: string
-  ) => {
-    onApply(
-      category === "All"
-        ? null
-        : category
-    );
+  const [showModal, setShowModal] =
+    useState(visible);
 
-    onClose();
+  const slideAnim = useRef(
+    new Animated.Value(420)
+  ).current;
+
+  const backdropOpacity = useRef(
+    new Animated.Value(0)
+  ).current;
+
+  useEffect(() => {
+    if (visible) {
+      setShowModal(true);
+
+      Animated.parallel([
+        Animated.spring(slideAnim, {
+          toValue: 0,
+          damping: 22,
+          mass: 0.9,
+          stiffness: 180,
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(backdropOpacity, {
+          toValue: 1,
+          duration: 220,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [backdropOpacity, slideAnim, visible]);
+
+  const handleClose = (
+    onClosed?: () => void
+  ) => {
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: 520,
+        duration: 280,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+
+      Animated.timing(backdropOpacity, {
+        toValue: 0,
+        duration: 240,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowModal(false);
+      onClose();
+      onClosed?.();
+    });
+  };
+
+  const handleSelect = (category: string) => {
+    handleClose(() => {
+      onApply(
+        category === "All"
+          ? null
+          : category
+      );
+    });
   };
 
   return (
     <Modal
-      visible={visible}
+      visible={showModal}
       transparent
-      animationType="slide"
-      onRequestClose={onClose}
+      animationType="none"
       statusBarTranslucent
+      onRequestClose={() => handleClose()}
     >
       <View style={styles.overlay}>
-        {/* blur backdrop */}
-        <BlurView
-          intensity={18}
-          tint="light"
-          style={styles.backdrop}
+       <AnimatedPressable
+          style={[
+            styles.backdrop,
+            {
+              opacity: backdropOpacity,
+            },
+          ]}
+          onPress={() => handleClose()}
         />
 
-        {/* press outside to close */}
-        <Pressable
-          style={styles.backdrop}
-          onPress={onClose}
-        />
-
-        {/* bottom sheet */}
-        <View style={styles.container}>
-          <View
-            style={styles.dragIndicator}
-          />
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              transform: [
+                { translateY: slideAnim },
+              ],
+            },
+          ]}
+        >
+          <View style={styles.dragIndicator} />
 
           <Text style={styles.title}>
             Filter KP Category
@@ -107,7 +175,7 @@ export default function FilterDropdown({
               </Pressable>
             );
           })}
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );

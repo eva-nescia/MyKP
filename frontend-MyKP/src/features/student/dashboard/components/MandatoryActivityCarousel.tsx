@@ -35,6 +35,7 @@ export default function MandatoryActivityCarousel({
     useState(0);
 
   const activeItem = data[activeIndex];
+  // const isCompactMode = data.length <= 2;
 
   const handleScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>

@@ -1,8 +1,6 @@
 import {
   View,
   ScrollView,
-  ActivityIndicator,
-  Text,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
@@ -26,9 +24,9 @@ import FormValidationModal from "../components/feedback/FormValidationModal";
 import { useAddActivityViewModel } from "@/features/admin/form-activity/viewmodel/useAddActivityViewModel";
 
 import { styles } from "@/features/admin/form-activity/view/styles/AddActivity.styles";
-import { loadingStyles } from "src/components/loading/styles/Loading.styles";
 
 import FormActivityHeader from "../components/form/FormActivityHeader";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function AddActivityScreen() {
   const vm = useAddActivityViewModel();
@@ -37,6 +35,8 @@ export default function AddActivityScreen() {
 
   const [keyboardVisible, setKeyboardVisible] =
     useState(false);
+
+  useGlobalLoading(vm.loading);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -131,27 +131,6 @@ export default function AddActivityScreen() {
         onCancel={() => vm.setShowDiscardConfirm(false)}
         onConfirm={vm.confirmDiscard}
       />
-
-      {vm.loading && (
-        <View style={loadingStyles.overlay}>
-          <View style={loadingStyles.card}>
-            <ActivityIndicator
-              size="large"
-              color="#fff"
-            />
-
-            <Text style={loadingStyles.title}>
-              {vm.isEditMode
-                ? "Saving Changes"
-                : "Publishing"}
-            </Text>
-
-            <Text style={loadingStyles.subtitle}>
-              Please wait...
-            </Text>
-          </View>
-        </View>
-      )}
 
       <FormValidationModal
         visible={vm.showValidationModal}

@@ -1,8 +1,6 @@
 import {
   View,
-  Text,
   FlatList,
-  ActivityIndicator,
 } from "react-native";
 
 import React, { useState, useEffect } from "react";
@@ -22,6 +20,7 @@ import { useActivityListAdminViewModel } from "../viewmodel/useActivityListAdmVi
 import styles from "./styles/ActivityListAdm.styles";
 import ActivityListHeaderAdm from "../components/ActivityListHeaderAdm";
 import EmptyActivityListAdm from "../components/EmptyActivityListAdm";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function ActivityListAdminScreen() {
   const vm = useActivityListAdminViewModel();
@@ -36,6 +35,8 @@ export default function ActivityListAdminScreen() {
     showLoginSuccess,
     setShowLoginSuccess,
   ] = useState(false);
+
+  useGlobalLoading(vm.loading);
 
   useEffect(() => {
     if (loginSuccess === "true") {
@@ -57,13 +58,7 @@ export default function ActivityListAdminScreen() {
         }
       />
 
-      {vm.loading ? (
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-          style={{ marginTop: 20 }}
-        />
-      ) : (
+      {vm.loading ? null : (
         <FlatList
           data={vm.data}
           keyExtractor={(item) => item.id}

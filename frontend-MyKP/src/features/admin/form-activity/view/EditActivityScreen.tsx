@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, View, Text } from "react-native";
+import { View, Text } from "react-native";
 
 import AddActivityScreen from "./AddActivityScreen";
 import { useAddActivityStore } from "../store/useAddActivityStore";
 import { API_URL } from "../../../../constants/apiConfig";
 import { getToken } from "../../../auth/services/session";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function EditActivityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,6 +17,8 @@ export default function EditActivityScreen() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useGlobalLoading(loading);
 
   useEffect(() => {
     if (!id) return;
@@ -152,20 +155,7 @@ export default function EditActivityScreen() {
   }, [id, setEditData]);
 
   if (loading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-        />
-      </View>
-    );
+    return null;
   }
 
   if (error) {

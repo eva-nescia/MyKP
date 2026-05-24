@@ -5,7 +5,8 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    padding: 24,
+    paddingTop: 24,
+    paddingHorizontal: 24,
   },
 
   title: {
@@ -28,7 +29,7 @@ export const styles = StyleSheet.create({
   },
 
   list: {
-    paddingBottom: 100,
+    paddingBottom: 0,
   },
 });
 

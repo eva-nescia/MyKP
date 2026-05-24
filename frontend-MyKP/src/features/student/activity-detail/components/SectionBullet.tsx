@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import styles from "src/features/student/activityDetail/components/styles/SectionBullet.styles";
+import styles from "@/features/student/activity-detail/components/styles/SectionBullet.styles";
 
 type Props = {
   children: string;

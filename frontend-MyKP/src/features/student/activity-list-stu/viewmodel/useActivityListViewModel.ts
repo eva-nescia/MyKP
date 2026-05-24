@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchActivities } from "src/features/student/activityList/services/activityListService";
+import { fetchActivities } from "@/features/student/activity-list-stu/services/activityListService";
 import { Activity } from "../model/types";
 
 export const useActivityListViewModel = () => {

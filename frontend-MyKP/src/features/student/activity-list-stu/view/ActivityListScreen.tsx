@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   FlatList,
 } from "react-native";
 import { useState } from "react";
@@ -12,8 +11,8 @@ import FilterDropdown from "@/components/search-filter/FilterDropdown";
 import { useActivityListViewModel } from "../viewmodel/useActivityListViewModel";
 import { styles } from "./styles/ActivityList.styles";
 import ActivityListHeader from "../components/ActivityListHeader";
-import Loading from "src/components/loading/GlobalLoading";
 import EmptyActivityList from "../components/EmptyActivityList";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function ActivityListScreen() {
   const vm = useActivityListViewModel();
@@ -23,8 +22,10 @@ export default function ActivityListScreen() {
 
   const router = useRouter();
 
+  useGlobalLoading(vm.loading);
+
   if (vm.loading) {
-    return <Loading />;
+    return null;
   }
 
   return (

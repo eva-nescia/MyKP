@@ -1,32 +1,28 @@
 import {
   ScrollView,
   Text,
-  Pressable,
   View,
   Image,
 } from "react-native";
 
 import {
-  useRouter,
   useLocalSearchParams,
 } from "expo-router";
 
 import { Feather } from "@expo/vector-icons";
 
-import Section from "@/features/student/activityDetail/components/Section";
-import FloatingActionBar from "@/features/student/activityDetail/components/FloatingActionBar";
-import SaveActivityModal from "@/features/student/activityDetail/components/SaveActivityModal";
-import RegistrationModal from "@/features/student/activityDetail/components/RegistrationModal";
-import ActivityDetailHeader from "@/features/student/activityDetail/components/ActivityDetailHeader";
-import styles from "@/features/student/activityDetail/view/styles/ActivityDetail.styles";
+import Section from "@/features/student/activity-detail/components/Section";
+import FloatingActionBar from "@/features/student/activity-detail/components/FloatingActionBar";
+import SaveActivityModal from "@/features/student/activity-detail/components/SaveActivityModal";
+import ActivityDetailHeader from "@/features/student/activity-detail/components/ActivityDetailHeader";
+import styles from "@/features/student/activity-detail/view/styles/ActivityDetail.styles";
 import SectionBullet from "../components/SectionBullet";
 import ContactItem from "../components/ContactItem";
 
-import { useActivityDetailViewModel } from "@/features/student/activityDetail/viewmodel/useActivityDetailViewModel";
+import { useActivityDetailViewModel } from "@/features/student/activity-detail/viewmodel/useActivityDetailViewModel";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function ActivityDetailScreen() {
-  const router = useRouter();
-
   const { id } = useLocalSearchParams<{
     id: string;
   }>();
@@ -42,20 +38,14 @@ export default function ActivityDetailScreen() {
     showSaveModal,
     setShowSaveModal,
 
-    showLinkModal,
-    setShowLinkModal,
-
     handleSave,
     handleRegister,
-    confirmRegister,
   } = useActivityDetailViewModel(id as string);
 
+  useGlobalLoading(!activity);
+
   if (!activity) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
-      </View>
-    );
+    return null;
   }
 
   return (
@@ -213,11 +203,27 @@ export default function ActivityDetailScreen() {
         {/* CONTACT */}
         <Section title="Contact Person">
           {activity.contactPerson?.map(
-            (item, index) => (
-            <ContactItem key={index}>
-              {item}
-            </ContactItem>
-            )
+            (item, index) => {
+              const [number = "", name = ""] =
+                item.split(" - ");
+
+              const cleanNumber =
+                number.replace(/\D/g, "");
+
+              const waNumber =
+                cleanNumber.startsWith("62")
+                  ? cleanNumber
+                  : `62${cleanNumber}`;
+
+              return (
+                <ContactItem
+                  key={index}
+                  name={name || "Contact Person"}
+                  number={cleanNumber}
+                  whatsappUrl={`https://wa.me/${waNumber}`}
+                />
+              );
+            }
           )}
         </Section>
       </ScrollView>
@@ -237,15 +243,6 @@ export default function ActivityDetailScreen() {
         onClose={() =>
           setShowSaveModal(false)
         }
-      />
-
-      {/* REGISTER MODAL */}
-      <RegistrationModal
-        visible={showLinkModal}
-        onClose={() =>
-          setShowLinkModal(false)
-        }
-        onConfirm={confirmRegister}
       />
     </View>
     

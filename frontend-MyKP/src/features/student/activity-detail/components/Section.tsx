@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import styles from "src/features/student/activityDetail/components/styles/Section.styles";
+import styles from "@/features/student/activity-detail/components/styles/Section.styles";
 
 export default function Section({ title, children }: any) {
   return (
