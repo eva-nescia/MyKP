@@ -87,7 +87,7 @@ EOT,
         $this->seedListItems($seminarBelaNegara->ActivityID, [
             'requirements' => ['Active UCM Student'],
             'claiming_procedures' => ['Auto input by BMA after attendance is recorded'],
-            'contact_persons' => ['0852-1234-5678 (BMA Liaison)'],
+            'contact_persons' => ['852-1234-5678 (BMA Liaison)'],
         ]);
 
         // 2. Doa Lintas Iman — fires a 2-day reminder on seed day
@@ -128,7 +128,7 @@ EOT,
                 'Berpakaian rapi dan sopan',
             ],
             'claiming_procedures' => ['Auto input by BMA after attendance is recorded'],
-            'contact_persons' => ['0856-7890-1234 (Audric)'],
+            'contact_persons' => ['856-7890-1234 (Audric)'],
         ]);
 
         // 3. Open Donasi Empower & Care
@@ -175,7 +175,7 @@ EOT,
                 'Submit request KP via CIS dengan kategori Pengabdian Masyarakat',
                 'Tunggu verifikasi BMA',
             ],
-            'contact_persons' => ['0856-9603-0800 (Andrew)'],
+            'contact_persons' => ['856-9603-0800 (Andrew)'],
         ]);
 
         // 4. Oprec Presiden & Wakil Presiden Student Council 26/27
@@ -225,8 +225,8 @@ EOT,
                 'Pastikan terdaftar sebagai pengurus aktif Student Council',
             ],
             'contact_persons' => [
-                '0813-9264-0842 (Amirul)',
-                '0851-0661-2388 (Evelyn)',
+                '813-9264-0842 (Amirul)',
+                '851-0661-2388 (Evelyn)',
             ],
         ]);
 
@@ -280,7 +280,7 @@ EOT,
                 'KP awarded after the event by the organising team',
                 'Pastikan nama terdaftar pada susunan panitia',
             ],
-            'contact_persons' => ['0899-0326-8881 (Carol)'],
+            'contact_persons' => ['899-0326-8881 (Carol)'],
         ]);
 
         // 6. Oprec Committee Flamians Cup 4.0
@@ -340,8 +340,8 @@ EOT,
                 'Pastikan nama terdaftar pada susunan panitia final',
             ],
             'contact_persons' => [
-                '0812-4329-1544 (Andhini)',
-                '0812-9126-1064 (Jennifer)',
+                '812-4329-1544 (Andhini)',
+                '812-9126-1064 (Jennifer)',
             ],
         ]);
 
@@ -396,7 +396,7 @@ EOT,
                 'KP diberikan otomatis oleh BMA setelah O-Week selesai',
                 'Pastikan terdaftar pada susunan HOD/Koor final',
             ],
-            'contact_persons' => ['0813-1090-6378 (Diana)'],
+            'contact_persons' => ['813-1090-6378 (Diana)'],
         ]);
 
         // 8. Oprec Seminar Reflektif Akhir Tahun
@@ -452,8 +452,8 @@ EOT,
                 'Pastikan nama tertera di susunan panitia',
             ],
             'contact_persons' => [
-                '0852-1565-2431 (Naura)',
-                '0851-1741-5107 (Ratu)',
+                '852-1565-2431 (Naura)',
+                '851-1741-5107 (Ratu)',
             ],
         ]);
 
@@ -515,7 +515,7 @@ EOT,
                 'KP diinput otomatis oleh BMA setelah event selesai',
                 'Pastikan terdaftar di susunan HOD/Koor final',
             ],
-            'contact_persons' => ['0821-9520-8675 (Allan)'],
+            'contact_persons' => ['821-9520-8675 (Allan)'],
         ]);
 
         // 10. Oprec Expo Entrepreneurial Innovations
@@ -570,7 +570,7 @@ EOT,
                 'KP diinput otomatis oleh BMA setelah event selesai',
                 'Pastikan terdaftar pada susunan panitia final',
             ],
-            'contact_persons' => ['0823-3555-5516 (Howeld)'],
+            'contact_persons' => ['823-3555-5516 (Howeld)'],
         ]);
     }
 
