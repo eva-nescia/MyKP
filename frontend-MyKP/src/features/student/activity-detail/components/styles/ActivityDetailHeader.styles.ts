@@ -20,6 +20,9 @@ export default StyleSheet.create({
     paddingBottom: 16,
 
     backgroundColor: COLORS.white,
+
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
   },
 
   backButton: {

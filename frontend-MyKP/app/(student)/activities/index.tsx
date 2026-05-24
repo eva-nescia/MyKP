@@ -1,3 +1,3 @@
-import ActivityListScreen from "@/features/student/activityList/view/ActivityListScreen";
+import ActivityListScreen from "@/features/student/activity-list-stu/view/ActivityListScreen";
 
 export default ActivityListScreen;

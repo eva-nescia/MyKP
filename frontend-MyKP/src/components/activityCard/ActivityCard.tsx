@@ -50,9 +50,12 @@ export default function ActivityCard({
           color="#94A3B8"
         />
 
-        <Text style={styles.date}>
-          {formattedDate}
-        </Text>
+       <Text
+        style={styles.date}
+        numberOfLines={1}
+      >
+        {formattedDate}
+      </Text>
       </View>
 
       <View style={styles.badges}>

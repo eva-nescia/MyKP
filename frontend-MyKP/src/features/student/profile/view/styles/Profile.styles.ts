@@ -10,7 +10,7 @@ export default StyleSheet.create({
 
   listContent: {
     paddingHorizontal: 25,
-    paddingBottom: 20,
+    paddingBottom: 0,
   },
 
   sectionTitle: {

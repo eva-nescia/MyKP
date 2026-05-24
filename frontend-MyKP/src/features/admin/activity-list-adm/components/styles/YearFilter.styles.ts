@@ -10,7 +10,7 @@ export default StyleSheet.create({
 
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(15, 23, 42, 0.55)",
+    backgroundColor: "rgba(15, 23, 42, 0.45)",
   },
 
   container: {

@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     width: 165,
     marginRight: 12,
+    marginLeft: 10,
     marginBottom: 20,
   },
 

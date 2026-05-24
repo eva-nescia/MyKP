@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import {
+  Alert,
+  Linking,
+} from "react-native";
 
 import { Activity } from "@/models/activity";
 
@@ -8,7 +12,6 @@ import {
   getBookmarkStatus,
   removeBookmark,
 } from "@/features/student/bookmark/services/bookmarkService";
-import { registerForActivity } from "@/features/student/profile/services/participationService";
 import {
   cancelBookmarkReminders,
   scheduleBookmarkReminders,
@@ -29,9 +32,6 @@ export const useActivityDetailViewModel = (
     useState("");
 
   const [showSaveModal, setShowSaveModal] =
-    useState(false);
-
-  const [showLinkModal, setShowLinkModal] =
     useState(false);
 
   useEffect(() => {
@@ -95,40 +95,33 @@ export const useActivityDetailViewModel = (
 
     setTimeout(() => {
       setShowSaveModal(false);
-    }, 1600);
+    }, 1000);
   };
 
-  const handleRegister = () => {
-    setShowLinkModal(true);
-  };
+  const handleRegister = async () => {
+    const registrationLink =
+      activity?.registrationLink;
 
-  const confirmRegister = async () => {
-    setShowLinkModal(false);
-
-    try {
-      const result =
-        await registerForActivity(id);
-
-      setModalSavedState(true);
-
-      setSaveMessage(
-        result.alreadyRegistered
-          ? "You're already registered for this activity."
-          : "Successfully registered!"
+    if (!registrationLink) {
+      Alert.alert(
+        "Registration unavailable",
+        "This activity does not have a registration link yet."
       );
-    } catch {
-      setModalSavedState(false);
-
-      setSaveMessage(
-        "Couldn't register right now. Please try again."
-      );
+      return;
     }
 
-    setShowSaveModal(true);
+    const canOpen =
+      await Linking.canOpenURL(registrationLink);
 
-    setTimeout(() => {
-      setShowSaveModal(false);
-    }, 1600);
+    if (!canOpen) {
+      Alert.alert(
+        "Cannot open link",
+        "Please check the registration link and try again."
+      );
+      return;
+    }
+
+    Linking.openURL(registrationLink);
   };
 
   return {
@@ -141,11 +134,7 @@ export const useActivityDetailViewModel = (
     showSaveModal,
     setShowSaveModal,
 
-    showLinkModal,
-    setShowLinkModal,
-
     handleSave,
     handleRegister,
-    confirmRegister,
   };
 };

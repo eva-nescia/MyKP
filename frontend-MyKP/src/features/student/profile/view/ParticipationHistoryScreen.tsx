@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   View,
   Text,
   FlatList,
@@ -15,9 +14,12 @@ import styles from "../view/styles/ParticipationHistory.styles";
 import ParticipationHistoryHeader from "../components/ParticipationHistoryHeader";
 import ParticipationProgressCard from "../components/ParticipationProgressCard";
 import EmptyParticipationState from "../components/EmptyParticipationState";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function ParticipationHistoryScreen() {
   const vm = useParticipationHistoryViewModel();
+
+  useGlobalLoading(vm.loading);
 
   return (
     <View style={styles.container}>
@@ -37,16 +39,7 @@ export default function ParticipationHistoryScreen() {
         Participation History
       </Text>
 
-      {vm.loading ? (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-          }}
-        >
-          <ActivityIndicator size="large" />
-        </View>
-      ) : vm.error ? (
+      {vm.loading ? null : vm.error ? (
         <View
           style={{
             flex: 1,

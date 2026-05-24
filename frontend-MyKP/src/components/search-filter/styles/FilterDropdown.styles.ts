@@ -10,6 +10,8 @@ export const styles = StyleSheet.create({
 
   backdrop: {
     ...StyleSheet.absoluteFillObject,
+
+    backgroundColor: "rgba(15, 23, 42, 0.45)",
   },
 
   container: {

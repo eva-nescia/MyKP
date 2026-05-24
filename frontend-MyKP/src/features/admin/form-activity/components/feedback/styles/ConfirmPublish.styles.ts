@@ -4,7 +4,7 @@ import { COLORS } from "@/constants/colors";
 export default StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)",
+    backgroundColor: "rgba(15, 23, 42, 0.45)",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 24,

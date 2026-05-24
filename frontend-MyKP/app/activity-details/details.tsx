@@ -1,3 +1,3 @@
-import ActivityDetailScreen from "@/features/student/activityDetail//view/ActivityDetailScreen";
+import ActivityDetailScreen from "@/features/student/activity-detail/view/ActivityDetailScreen";
 
 export default ActivityDetailScreen;
