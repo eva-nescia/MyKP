@@ -32,6 +32,7 @@ export default function SwipeAction({
         <Pencil
           size={20}
           color="white"
+          style={{ marginLeft: 6 }}
         />
       </TouchableOpacity>
 
@@ -46,6 +47,7 @@ export default function SwipeAction({
         <Trash2
           size={20}
           color="white"
+          style={{ marginLeft: 6 }}
         />
       </TouchableOpacity>
     </View>

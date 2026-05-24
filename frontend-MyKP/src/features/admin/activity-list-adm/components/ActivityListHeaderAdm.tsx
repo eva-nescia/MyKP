@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 
-import styles from "src/features/admin/activityList/components/styles/ActivityListHeaderAdm.styles";
+import styles from "@/features/admin/activity-list-adm/components/styles/ActivityListHeaderAdm.styles";
 
 type Props = {
   count: number;

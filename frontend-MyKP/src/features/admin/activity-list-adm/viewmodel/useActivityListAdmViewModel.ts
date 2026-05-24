@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 
-import { deleteAdminActivity, getAdminActivities } from "src/features/admin/activityList/services/activityListAdmService";
+import { deleteAdminActivity, getAdminActivities } from "@/features/admin/activity-list-adm/services/activityListAdmService";
 
 export function useActivityListAdminViewModel() {
   const [search, setSearch] =

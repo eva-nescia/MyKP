@@ -1,3 +1,3 @@
-import ActivityListAdminScreen from "../../src/features/admin/activityList/view/ActivityListAdmScreen";
+import ActivityListAdminScreen from "../../src/features/admin/activity-list-adm/view/ActivityListAdmScreen";
 
 export default ActivityListAdminScreen;

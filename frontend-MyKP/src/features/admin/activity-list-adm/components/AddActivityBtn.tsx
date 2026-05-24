@@ -4,7 +4,7 @@ import { Plus } from "lucide-react-native";
 
 import { COLORS } from "@/constants/colors";
 
-import styles from "src/features/admin/activityList/components/styles/AddBtn.styles";
+import styles from "@/features/admin/activity-list-adm/components/styles/AddBtn.styles";
 
 type Props = {
   onPress: () => void;

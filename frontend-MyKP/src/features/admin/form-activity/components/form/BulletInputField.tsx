@@ -53,6 +53,12 @@ export default function BulletInputField({
         {label}
       </Text>
 
+      {label === "Requirements" && (
+        <Text style={styles.helperText}>
+          List the requirements needed to join this activity.
+        </Text>
+      )}
+
       {values.map((item, index) => (
         <View
           key={index}

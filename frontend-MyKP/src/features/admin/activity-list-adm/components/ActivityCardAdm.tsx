@@ -18,7 +18,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import Badge from "@/components/badge/Badge";
-import SwipeAction from "src/features/admin/activityList/components/SwipeAction";
+import SwipeAction from "@/features/admin/activity-list-adm/components/SwipeAction";
 
 import styles from "./styles/ActivityCardAdm.styles";
 

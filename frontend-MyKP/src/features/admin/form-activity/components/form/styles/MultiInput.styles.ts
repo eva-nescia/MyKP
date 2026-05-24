@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 18,
-    fontWeight: FONT_WEIGHT.medium,
+    fontSize: 20,
+    fontWeight: FONT_WEIGHT.bold,
     marginBottom: 10,
 
     color: COLORS.text,

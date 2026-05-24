@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { COLORS } from "@/constants/colors";
 
-import styles from "src/features/admin/activityList/components/styles/EmptyActivityListAdm.styles";
+import styles from "@/features/admin/activity-list-adm/components/styles/EmptyActivityListAdm.styles";
 
 export default function EmptyActivityListAdm() {
   return (

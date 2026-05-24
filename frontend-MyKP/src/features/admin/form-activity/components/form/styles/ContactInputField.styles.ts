@@ -4,26 +4,58 @@ import { COLORS } from "@/constants/colors";
 import { FONT_WEIGHT } from "@/constants/typography";
 
 export const styles = StyleSheet.create({
-    contactPrefix: {
-            height: 50,
+  contactCard: {
+    marginBottom: 14,
+  },
 
-            paddingHorizontal: 14,
+  contactHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
 
-            borderRadius: 999,
+    marginBottom: 10,
+  },
 
-            backgroundColor: "#FFF7ED",
+  contactTitle: {
+    fontSize: 14,
+    fontWeight: FONT_WEIGHT.semiBold,
 
-            justifyContent: "center",
-            alignItems: "center",
+    color: COLORS.text,
+  },
 
-            marginRight: 10,
-        },
+  phoneRow: {
+    flexDirection: "row",
+    alignItems: "center",
 
-        contactPrefixText: {
-            fontSize: 14,
-            fontWeight: FONT_WEIGHT.semiBold,
+    marginTop: 10,
+  },
 
-            color: COLORS.primary,
-        },
+  contactPrefix: {
+    width: 50,
+    height: 50,
+
+    borderRadius: 999,
+
+    backgroundColor: "#DCFCE7",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginRight: 10,
     },
-)
+
+  contactPrefixText: {
+    fontSize: 14,
+    fontWeight: FONT_WEIGHT.semiBold,
+
+    color: "#16A34A",
+    },
+
+  helperText: {
+    fontSize: 13,
+    lineHeight: 20,
+    color: "#64748B",
+    marginTop: -4,
+    marginBottom: 12,
+    },
+});
