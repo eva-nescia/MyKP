@@ -43,3 +43,15 @@ export const UC_LOCATIONS = [
     items: ["Prefunction", "Auditorium"],
   },
 ];
+
+export const formatUcLocationWithFloor = (location?: string): string => {
+  if (!location) return "TBA";
+
+  const floor = UC_LOCATIONS.find(({ items }) =>
+    items.includes(location)
+  )?.floor;
+
+  if (!floor || floor === "General") return location;
+
+  return `${location}, ${floor}`;
+};
