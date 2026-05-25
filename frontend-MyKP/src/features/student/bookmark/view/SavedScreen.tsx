@@ -10,12 +10,9 @@ import { useSavedActivitiesViewModel } from "../viewmodel/useSavedActivitiesView
 
 import styles from "src/features/student/bookmark/view/styles/Saved.styles";
 import SavedHeader from "../components/SavedHeader";
-import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 export default function SavedScreen() {
   const { data, loading, error } = useSavedActivitiesViewModel();
-
-  useGlobalLoading(loading);
 
   const hasSaved = data.length > 0;
 
