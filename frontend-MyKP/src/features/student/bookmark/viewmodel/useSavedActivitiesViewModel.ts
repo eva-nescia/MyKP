@@ -11,8 +11,10 @@ export const useSavedActivitiesViewModel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Only the initial useState(true) flags loading; on subsequent focus-driven
+  // refetches we leave `loading` alone so the existing list stays on screen
+  // instead of flashing the global spinner every time the tab regains focus.
   const load = useCallback(async () => {
-    setLoading(true);
     setError(null);
     try {
       const res = await fetchBookmarks();
