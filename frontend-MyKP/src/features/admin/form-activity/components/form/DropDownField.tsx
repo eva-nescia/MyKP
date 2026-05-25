@@ -29,13 +29,18 @@ export default function DropdownField({
   items,
   onSelect,
 }: Props) {
+  const displayedItems =
+    value && !items.includes(value)
+      ? [value, ...items]
+      : items;
+
   return (
     <View style={styles.fieldContainer}>
       <Text style={styles.label}>
         {label}
       </Text>
 
-      {items.map((item) => {
+      {displayedItems.map((item) => {
         const active = value === item;
 
         return (

@@ -13,7 +13,7 @@ export interface Activity {
   organizer?: string;
   location?: string;
   eligibleStudyProgram?: string; // e.g., "All Prodi"
-  eligibleCohort?: string; // e.g., "All Gen"
+  eligibleCohort?: string; // e.g., "2023, 2024", displayed as "Gen 3 - 4"
 
   description?: string;
   requirement?: string[];

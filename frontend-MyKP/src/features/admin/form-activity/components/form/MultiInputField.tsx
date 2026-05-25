@@ -20,6 +20,11 @@ export default function MultiInputField({
   selected,
   onToggle,
 }: Props) {
+  const displayedItems = [
+    ...selected.filter((item) => !items.includes(item)),
+    ...items,
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
@@ -27,7 +32,7 @@ export default function MultiInputField({
       </Text>
 
       <View style={styles.wrapper}>
-        {items.map((item) => (
+        {displayedItems.map((item) => (
           <SelectableChip
             key={item}
             label={item}
