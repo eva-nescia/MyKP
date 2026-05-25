@@ -3,9 +3,12 @@ import { Platform } from "react-native";
 import { getToken } from '../../../auth/services/session';
 import { API_URL } from '../../../../constants/apiConfig';
 import {
-  GENERATIONS,
   STUDY_PROGRAMS,
 } from "../model/constants";
+import {
+  ALL_GENERATIONS,
+  getGenerationOptions,
+} from "@/constants/generations";
 
 export type ActivityFormMode = "create" | "edit";
 
@@ -157,22 +160,22 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
  toggleGeneration: (value) => {
   const current = get().generations;
 
-  if (value === "All Gen") {
+  if (value === ALL_GENERATIONS) {
     set({
-      generations: current.includes("All Gen")
+      generations: current.includes(ALL_GENERATIONS)
         ? []
-        : ["All Gen"],
+        : [ALL_GENERATIONS],
     });
 
     return;
   }
 
-  const nonAllItems = GENERATIONS.filter(
-    (item: string) => item !== "All Gen"
+  const nonAllItems = getGenerationOptions().filter(
+    (item: string) => item !== ALL_GENERATIONS
   );
 
   let updated = current.filter(
-    (item) => item !== "All Gen"
+    (item) => item !== ALL_GENERATIONS
   );
 
   if (updated.includes(value)) {
@@ -190,7 +193,7 @@ export const useAddActivityStore = create<AddActivityState>((set, get) => ({
 
   set({
     generations: selectedAllIndividuals
-      ? ["All Gen"]
+      ? [ALL_GENERATIONS]
       : updated,
   });
 },

@@ -7,6 +7,128 @@ import { useAddActivityStore } from "../store/useAddActivityStore";
 import { API_URL } from "../../../../constants/apiConfig";
 import { getToken } from "../../../auth/services/session";
 import { useGlobalLoading } from "@/hooks/useGlobalLoading";
+import { normalizeEligibleGenerationYears } from "@/constants/generations";
+
+const MONTH_NAMES = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+];
+
+const toSelectionList = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string");
+  }
+
+  if (typeof value !== "string") return [];
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const toTextLines = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string");
+  }
+
+  if (typeof value !== "string") return [];
+
+  return value
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const normalizeCategory = (value: unknown): string => {
+  if (typeof value !== "string") return "";
+
+  return value === "Organisasi Kemahasiswaan"
+    ? "Organisasi"
+    : value;
+};
+
+const normalizeStudyPrograms = (value: unknown): string[] =>
+  toSelectionList(value).map((program) =>
+    program === "All Prodi" ? "All Study Program" : program
+  );
+
+const createLocalDate = (
+  year: number,
+  month: number,
+  day: number
+): Date | null => {
+  const date = new Date(year, month, day);
+
+  return date.getFullYear() === year &&
+    date.getMonth() === month &&
+    date.getDate() === day
+    ? date
+    : null;
+};
+
+const parseCalendarDate = (value: unknown): Date | null => {
+  if (typeof value !== "string" || !value.trim()) return null;
+
+  const dateString = value.trim();
+  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateString);
+
+  if (isoMatch) {
+    return createLocalDate(
+      Number(isoMatch[1]),
+      Number(isoMatch[2]) - 1,
+      Number(isoMatch[3])
+    );
+  }
+
+  const fullDateMatch = /^(?:[A-Za-z]+,\s*)?(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/.exec(
+    dateString
+  );
+
+  if (fullDateMatch) {
+    const monthValue = fullDateMatch[2].toLowerCase();
+    const month = MONTH_NAMES.findIndex((name) =>
+      name.startsWith(monthValue)
+    );
+
+    if (month !== -1) {
+      return createLocalDate(
+        Number(fullDateMatch[3]),
+        month,
+        Number(fullDateMatch[1])
+      );
+    }
+  }
+
+  return null;
+};
+
+const parseTime = (value: unknown): Date | null => {
+  if (typeof value !== "string") return null;
+
+  const timeMatch = /^(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(value);
+  if (!timeMatch) return null;
+
+  const date = new Date(2000, 0, 1);
+  date.setHours(
+    Number(timeMatch[1]),
+    Number(timeMatch[2]),
+    Number(timeMatch[3] ?? 0),
+    0
+  );
+
+  return date;
+};
 
 export default function EditActivityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -50,23 +172,12 @@ export default function EditActivityScreen() {
           throw new Error("Failed to fetch activity");
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.data ?? responseData;
 
         console.log("=== EDIT SCREEN DEBUG ===");
         console.log("Raw API Response:", JSON.stringify(data, null, 2));
         console.log("API Response Keys:", Object.keys(data));
-
-        // Helper to parse date formats
-        const parseDate = (dateStr: string | null): Date | null => {
-          if (!dateStr) return null;
-          const date = new Date(dateStr);
-          if (isNaN(date.getTime())) {
-            console.warn("Failed to parse date:", dateStr);
-            return null;
-          }
-          console.log("Parsed date:", dateStr, "→", date.toISOString());
-          return date;
-        };
 
         // Transform backend data to form format
         console.log("\n--- Field Extraction Debug ---");
@@ -93,42 +204,43 @@ export default function EditActivityScreen() {
           image: data.image
             ? { uri: data.image }
             : null,
-          name: data.title || "",
-          category: data.type || "",
-          kp: String(data.points || ""),
+          name: data.title ?? data.name ?? "",
+          category: normalizeCategory(data.type ?? data.kp_category),
+          kp: String(data.points ?? data.kp_amount ?? ""),
 
-          generations: data.eligibleCohort
-            ? data.eligibleCohort.split(", ").filter(Boolean)
-            : [],
-          studyPrograms: data.eligibleStudyProgram
-            ? data.eligibleStudyProgram.split(", ").filter(Boolean)
-            : [],
+          generations: normalizeEligibleGenerationYears(
+            data.eligibleCohort ?? data.eligible_generation
+          ),
+          studyPrograms: normalizeStudyPrograms(
+            data.eligibleStudyProgram ?? data.eligible_study_program
+          ),
 
           description: data.description || "",
 
-          eventDate: parseDate(data.date),
-          startTime: data.startTime
-            ? parseDate(`2000-01-01T${data.startTime}`)
-            : null,
-          endTime: data.endTime
-            ? parseDate(`2000-01-01T${data.endTime}`)
-            : null,
+          eventDate: parseCalendarDate(data.date),
+          startTime: parseTime(data.startTime ?? data.start_time),
+          endTime: parseTime(data.endTime ?? data.end_time),
 
-          registrationDeadlineDate: parseDate(
-            data.registrationDeadlineDate
+          registrationDeadlineDate: parseCalendarDate(
+            data.registrationDeadlineDate ?? data.registration_deadline_date
           ),
-          registrationDeadlineTime: data.registrationDeadlineTime
-            ? parseDate(`2000-01-01T${data.registrationDeadlineTime}`)
-            : null,
+          registrationDeadlineTime: parseTime(
+            data.registrationDeadlineTime ?? data.registration_deadline_time
+          ),
 
           location: data.location || "",
-          registrationLink: data.registrationLink || "",
+          registrationLink:
+            data.registrationLink ?? data.registration_link ?? "",
 
-          requirements: data.requirement || [],
-          contacts: data.contactPerson || [],
-          claimRequirements: data.howToClaim
-            ? data.howToClaim.join("\n")
-            : "",
+          requirements: toTextLines(
+            data.requirement ?? data.requirements
+          ),
+          contacts: toTextLines(
+            data.contactPerson ?? data.contact_person
+          ),
+          claimRequirements: toTextLines(
+            data.howToClaim ?? data.claiming_procedure
+          ).join("\n"),
         };
 
         console.log("\n--- Transformed Data ---");
