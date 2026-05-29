@@ -26,6 +26,11 @@ class Activity extends Model
         'registration_deadline_time',
         'description',
         'event_poster',
+        'archived',
+    ];
+
+    protected $casts = [
+        'archived' => 'boolean',
     ];
 
     public function user()
