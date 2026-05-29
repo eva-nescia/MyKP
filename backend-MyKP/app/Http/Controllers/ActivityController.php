@@ -79,7 +79,9 @@ class ActivityController extends Controller
         $perPage = min((int) $request->input('per_page', 20), 100); // Max 100 per page
         $page = max((int) $request->input('page', 1), 1);
 
-        $query = Activity::query();
+        // Archived (old) activities only exist to back participation history;
+        // they should never appear in the browsable list.
+        $query = Activity::query()->where('archived', false);
 
         // Search optimization: use indexed columns
         if ($request->has('search') && $request->input('search') !== '') {
@@ -657,6 +659,7 @@ class ActivityController extends Controller
         $userId = auth()->id();
 
         $activities = Activity::where('user_id', $userId)
+            ->where('archived', false)
             ->orderBy('date', 'desc')
             ->get()
             ->map(function ($activity) {

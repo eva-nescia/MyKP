@@ -76,6 +76,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ActivitySeeder::class);
         $this->call(KPProgressSeeder::class);
-        $this->call(DemoStudentProgressSeeder::class);
+        // eoctaviand demo: near-complete KP via throwaway dummy activities
+        // (every category filled except Penelitian). Replaces the old
+        // DemoStudentProgressSeeder, which credited from the real activities
+        // and left the profile sparse.
+        $this->call(EoctaviandHistorySeeder::class);
     }
 }
