@@ -21,6 +21,8 @@ import ContactItem from "../components/ContactItem";
 
 import { useActivityDetailViewModel } from "@/features/student/activity-detail/viewmodel/useActivityDetailViewModel";
 import { useGlobalLoading } from "@/hooks/useGlobalLoading";
+import { formatUcLocationWithFloor } from "@/constants/ucLocations";
+import { formatEligibleGenerations } from "@/constants/generations";
 
 export default function ActivityDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -112,7 +114,7 @@ export default function ActivityDetailScreen() {
                     style={styles.metaTagText}
                     numberOfLines={1}
                   >
-                    {activity.eligibleCohort}
+                    {formatEligibleGenerations(activity.eligibleCohort)}
                   </Text>
                 </View>
               )}
@@ -165,7 +167,7 @@ export default function ActivityDetailScreen() {
               </Text>
 
               <Text style={styles.infoText}>
-                {activity.location ?? "TBA"}
+                {formatUcLocationWithFloor(activity.location)}
               </Text>
             </View>
           </View>

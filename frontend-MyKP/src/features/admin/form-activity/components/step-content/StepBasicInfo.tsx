@@ -8,9 +8,9 @@ import ImageUploadField from "../form/ImageUploadField";
 
 import {
   CATEGORIES,
-  GENERATIONS,
   STUDY_PROGRAMS,
 } from "../../model/constants";
+import { getGenerationOptions } from "@/constants/generations";
 
 import { useAddActivityStore } from "../../store/useAddActivityStore";
 import { useState } from "react";
@@ -79,7 +79,7 @@ export default function StepBasicInfo() {
 
       <MultiInputField
         label="Eligible Generations"
-        items={GENERATIONS}
+        items={getGenerationOptions()}
         selected={generations}
         onToggle={toggleGeneration}
       />
