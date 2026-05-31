@@ -41,22 +41,32 @@ class EoctaviandHistorySeeder extends Seeder
         // [category, requirement, amount eoctaviand has earned, dummy activity name]
         // current === requirement means the category is Completed; the lone
         // partial row (Penelitian) is the "except one" the user asked for.
+        // [category, requirement, kpAmount, status, dummy activity name]
+        // 'Completed' rows credit their kpAmount to kp_progress; 'On Progress'
+        // rows show up in the history feed with their nominal KP but are NOT
+        // credited (mirrors a registered-but-not-yet-awarded activity), so the
+        // category bar stays at 0 for them.
         $plan = [
-            ['O-Week',                         6,  6,  'Orientation Week 2025'],
-            ['Upacara',                        4,  4,  'Upacara Bendera HUT RI ke-80'],
-            ['Camp Mahasiswa (CampJur)',       4,  4,  'Campus Jurusan Camp 2025'],
-            ['Pra Latihan Dasar Kepemimpinan', 4,  4,  'Pra-LDK Batch 2025'],
-            ['Organisasi Kemahasiswaan',       20, 20, 'Kepengurusan UKM Robotika 2025'],
-            ['Mentoring',                      15, 15, 'Mentoring Mahasiswa Baru 2025'],
-            ['Talkshow Wajib BMA',             6,  6,  'Talkshow Wajib BMA: Career Readiness'],
-            ['Kepanitiaan',                    10, 10, 'Panitia Dies Natalis UC Makassar'],
-            ['Kompetisi',                      2,  2,  'Hackathon Nasional 2025'],
-            ['Pengabdian Masyarakat',          8,  8,  'Bakti Sosial Desa Binaan'],
-            ['Penelitian',                     6,  3,  'Publikasi PKM (in progress)'], // the unfinished one
-            ['Lain-lain',                      15, 15, 'Webinar Pengembangan Diri'],
+            ['O-Week',                         6,  6,  'Completed',   'Orientation Week 2025'],
+            ['Upacara',                        4,  4,  'Completed',   'Upacara Bendera HUT RI ke-80'],
+            ['Camp Mahasiswa (CampJur)',       4,  4,  'Completed',   'Campus Jurusan Camp 2025'],
+            ['Pra Latihan Dasar Kepemimpinan', 4,  4,  'Completed',   'Pra-LDK Batch 2025'],
+            ['Organisasi Kemahasiswaan',       20, 20, 'Completed',   'Kepengurusan UKM Robotika 2025'],
+            ['Mentoring',                      15, 15, 'Completed',   'Mentoring Mahasiswa Baru 2025'],
+            ['Talkshow Wajib BMA',             6,  6,  'Completed',   'Talkshow Wajib BMA: Career Readiness'],
+            ['Kepanitiaan',                    10, 10, 'Completed',   'Panitia Dies Natalis UC Makassar'],
+            ['Lain-lain',                      15, 15, 'Completed',   'Webinar Pengembangan Diri'],
+            // In-progress: registered but KP not yet awarded, so uncredited.
+            ['Kompetisi',                      2,  2,  'On Progress', 'Hackathon Nasional 2025'],
+            ['Pengabdian Masyarakat',          8,  8,  'On Progress', 'Bakti Sosial Desa Binaan'],
+            ['Penelitian',                     6,  6,  'On Progress', 'Publikasi PKM 2025'],
         ];
 
-        foreach ($plan as $i => [$category, $requirement, $current, $activityName]) {
+        foreach ($plan as $i => [$category, $requirement, $kpAmount, $status, $activityName]) {
+            // On-Progress participations have not been awarded yet, so they
+            // contribute 0 to the KP total; completed ones credit in full.
+            $credited = $status === 'Completed' ? $kpAmount : 0;
+
             // Past date, spread weekly so the history feed reads chronologically.
             $eventDate = now()->subWeeks($i + 1);
 
@@ -64,7 +74,7 @@ class EoctaviandHistorySeeder extends Seeder
                 'user_id'                    => $owner->UserID,
                 'name'                       => $activityName,
                 'kp_category'                => $category,
-                'kp_amount'                  => $current,
+                'kp_amount'                  => $kpAmount,
                 'eligible_generation'        => 'Gen 3 - 5',
                 'eligible_study_program'     => 'All Prodi',
                 'date'                       => $eventDate->toDateString(),
@@ -86,22 +96,23 @@ class EoctaviandHistorySeeder extends Seeder
             ActivityClaimingProcedure::create(['activity_id' => $activity->ActivityID, 'value' => 'Auto input by BMA']);
             ActivityContactPerson::create(['activity_id' => $activity->ActivityID, 'value' => '852-0000-0000 - Panitia']);
 
-            // Record eoctaviand's participation.
+            // Record eoctaviand's participation. kp_amount shows the activity's
+            // nominal worth in history regardless of status.
             Participation::create([
                 'user_id'     => $student->UserID,
                 'activity_id' => $activity->ActivityID,
                 'kp_category' => $category,
-                'kp_amount'   => $current,
-                'status'      => 'Completed',
+                'kp_amount'   => $kpAmount,
+                'status'      => $status,
             ]);
 
-            // Bring the kp_progress row in line with what was "earned".
+            // Bring the kp_progress row in line with what was actually awarded.
             KP_Progress::query()->updateOrCreate(
                 ['user_id' => $student->UserID, 'kp_category' => $category],
                 [
-                    'kp_current_amount'     => $current,
+                    'kp_current_amount'     => $credited,
                     'kp_amount_requirement' => $requirement,
-                    'kp_status'             => $current >= $requirement ? 'Completed' : 'On Progress',
+                    'kp_status'             => $credited >= $requirement ? 'Completed' : 'On Progress',
                 ]
             );
         }
