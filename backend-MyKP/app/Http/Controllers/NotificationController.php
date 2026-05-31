@@ -39,6 +39,7 @@ class NotificationController extends Controller
         foreach ($activities as $act) {
             $rows->push([
                 'id'          => 'act-' . $act->ActivityID,
+                'activity_id' => (string) $act->ActivityID,
                 'type'        => 'notification',
                 'title'       => 'New Activity Available',
                 'description' => $act->name,
@@ -71,6 +72,7 @@ class NotificationController extends Controller
 
                 $rows->push([
                     'id'          => "bm-{$bookmark->BookmarkID}-{$daysBefore}d",
+                    'activity_id' => (string) $activity->ActivityID,
                     'type'        => 'reminder',
                     'title'       => "Registration deadline in {$label}",
                     'description' => $activity->name,
@@ -97,6 +99,7 @@ class NotificationController extends Controller
                 type: "object",
                 properties: [
                     new OA\Property(property: "id", type: "string", example: "act-1", description: "Stable ID. 'act-{ActivityID}' for new-activity notifications, 'bm-{BookmarkID}-{days}d' for deadline reminders."),
+                    new OA\Property(property: "activity_id", type: "string", example: "1", description: "ActivityID to open when the notification is tapped."),
                     new OA\Property(property: "type", type: "string", enum: ["notification", "reminder"], example: "reminder"),
                     new OA\Property(property: "title", type: "string", example: "Registration deadline in 3 days"),
                     new OA\Property(property: "description", type: "string", example: "Seminar Bela Negara & Anti Narkoba 2026"),

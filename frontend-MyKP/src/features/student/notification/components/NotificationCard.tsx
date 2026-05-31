@@ -1,4 +1,10 @@
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+} from "react-native";
+
+import { useRouter } from "expo-router";
 
 import {
   Bell,
@@ -7,20 +13,17 @@ import {
 } from "lucide-react-native";
 
 import styles from "./styles/NotificationCard.styles";
+import type { NotificationItem } from "../services/notificationService";
 
 type Props = {
-  item: {
-    id: string | number;
-    type: string;
-    title: string;
-    description: string;
-    time: string;
-  };
+  item: NotificationItem;
 };
 
 export default function NotificationCard({
   item,
 }: Props) {
+  const router = useRouter();
+
   const getTypeStyle = () => {
     if (item.type === "success") {
       return {
@@ -85,7 +88,22 @@ export default function NotificationCard({
       : "Reminder";
 
   return (
-    <View style={styles.card}>
+    <Pressable
+      style={({ pressed }) => [
+        styles.card,
+        pressed && styles.cardPressed,
+      ]}
+      disabled={!item.activityId}
+      accessibilityRole={item.activityId ? "button" : undefined}
+      onPress={() => {
+        if (!item.activityId) return;
+
+        router.push({
+          pathname: "/activity-details/details",
+          params: { id: item.activityId },
+        });
+      }}
+    >
       <View
         style={[
           styles.iconContainer,
@@ -141,6 +159,6 @@ export default function NotificationCard({
         {item.time}
       </Text>
     </View>
-    </View>
+    </Pressable>
   );
 }
