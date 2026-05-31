@@ -75,7 +75,7 @@ export default function ParticipationCard({
 
         <View style={styles.badges}>
           <Badge
-            label={`${kp} KP`}
+            label={kp}
             variant="outline"
           />
 

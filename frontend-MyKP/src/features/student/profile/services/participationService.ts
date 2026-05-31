@@ -1,5 +1,5 @@
 import { API_URL } from '../../../../constants/apiConfig';
-import { getToken } from '../../../auth/services/session';
+import { getToken, restoreSession } from '../../../auth/services/session';
 
 export interface ParticipationHistoryItem {
   id: string;
@@ -15,7 +15,11 @@ export interface ParticipationHistoryItem {
 
 const placeholder = require('../../../../../assets/images/activity-placeholder/seminarAntiNarkoba.jpeg');
 
-const authHeaders = (): Record<string, string> => {
+const authHeaders = async (): Promise<Record<string, string>> => {
+  if (!getToken()) {
+    await restoreSession();
+  }
+
   const token = getToken();
   return {
     'Content-Type': 'application/json',
@@ -42,7 +46,7 @@ export const registerForActivity = async (activityId: string): Promise<RegisterR
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: authHeaders(),
+      headers: await authHeaders(),
     });
 
     console.log('[REGISTER] API response status:', response.status);
@@ -81,7 +85,7 @@ export const fetchParticipationHistory = async (
   const qs = params.toString();
   const url = qs ? `${API_URL}/participations?${qs}` : `${API_URL}/participations`;
 
-  const response = await fetch(url, { headers: authHeaders() });
+  const response = await fetch(url, { headers: await authHeaders() });
   if (!response.ok) {
     throw new Error(`Failed to fetch participation history (HTTP ${response.status})`);
   }
