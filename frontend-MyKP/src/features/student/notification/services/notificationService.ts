@@ -8,6 +8,7 @@ export type NotificationType =
 
 export type NotificationItem = {
   id: string;
+  activityId?: string;
   type: NotificationType;
   title: string;
   description: string;
@@ -23,6 +24,7 @@ export type NotificationGroups = {
 
 type BackendRow = {
   id: string;
+  activity_id?: string | number | null;
   type: NotificationType;
   title: string;
   description: string;
@@ -101,6 +103,7 @@ export const fetchNotifications = async (): Promise<NotificationGroups> => {
     const firedAt = new Date(row.fired_at);
     const item: NotificationItem = {
       id: row.id,
+      activityId: row.activity_id != null ? String(row.activity_id) : undefined,
       type: row.type,
       title: row.title,
       description: row.description,

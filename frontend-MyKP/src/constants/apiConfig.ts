@@ -22,4 +22,4 @@ const FALLBACK_LAN_HOST = '192.168.1.7';
 
 const host = devHost ?? FALLBACK_LAN_HOST;
 
-export const API_URL = `http://10.238.178.119:${BACKEND_PORT}/api`;
+export const API_URL = `http://192.168.100.49:${BACKEND_PORT}/api`;

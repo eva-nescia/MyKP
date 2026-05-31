@@ -29,6 +29,10 @@ export default StyleSheet.create({
     elevation: 1,
   },
 
+  cardPressed: {
+    opacity: 0.82,
+  },
+
   iconContainer: {
     width: 46,
     height: 46,
