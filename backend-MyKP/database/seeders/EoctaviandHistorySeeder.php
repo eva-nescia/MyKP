@@ -26,8 +26,6 @@ class EoctaviandHistorySeeder extends Seeder
      * intentionally NOT the real seeded activities. Runs after KPProgressSeeder
      * so the kp_progress rows already exist and just need updating.
      */
-    private const PLACEHOLDER_POSTER = 'https://placehold.co/600x800?text=Dummy+Activity';
-
     public function run(): void
     {
         $student = User::query()->where('Email', 'eoctaviand@student.ciputra.ac.id')->first();
@@ -38,31 +36,30 @@ class EoctaviandHistorySeeder extends Seeder
             return;
         }
 
-        // [category, requirement, amount eoctaviand has earned, dummy activity name]
-        // current === requirement means the category is Completed; the lone
-        // partial row (Penelitian) is the "except one" the user asked for.
-        // [category, requirement, kpAmount, status, dummy activity name]
+        // [category, requirement, kpAmount, status, dummy activity name, poster]
         // 'Completed' rows credit their kpAmount to kp_progress; 'On Progress'
         // rows show up in the history feed with their nominal KP but are NOT
         // credited (mirrors a registered-but-not-yet-awarded activity), so the
         // category bar stays at 0 for them.
+        // Posters are the image1-9 placeholders dropped in public/images/; the
+        // three most generic (1/5/8) are reused since there are 12 rows.
         $plan = [
-            ['O-Week',                         6,  6,  'Completed',   'Orientation Week 2025'],
-            ['Upacara',                        4,  4,  'Completed',   'Upacara Bendera HUT RI ke-80'],
-            ['Camp Mahasiswa (CampJur)',       4,  4,  'Completed',   'Campus Jurusan Camp 2025'],
-            ['Pra Latihan Dasar Kepemimpinan', 4,  4,  'Completed',   'Pra-LDK Batch 2025'],
-            ['Organisasi Kemahasiswaan',       20, 20, 'Completed',   'Kepengurusan UKM Robotika 2025'],
-            ['Mentoring',                      15, 15, 'Completed',   'Mentoring Mahasiswa Baru 2025'],
-            ['Talkshow Wajib BMA',             6,  6,  'Completed',   'Talkshow Wajib BMA: Career Readiness'],
-            ['Kepanitiaan',                    10, 10, 'Completed',   'Panitia Dies Natalis UC Makassar'],
-            ['Lain-lain',                      15, 15, 'Completed',   'Webinar Pengembangan Diri'],
+            ['O-Week',                         6,  6,  'Completed',   'Orientation Week 2025',               'images/image1.jpg'],
+            ['Upacara',                        4,  4,  'Completed',   'Upacara Bendera HUT RI ke-80',        'images/image5.jpg'],
+            ['Camp Mahasiswa (CampJur)',       4,  4,  'Completed',   'Campus Jurusan Camp 2025',            'images/image3.jpg'],
+            ['Pra Latihan Dasar Kepemimpinan', 4,  4,  'Completed',   'Pra-LDK Batch 2025',                  'images/image7.jpg'],
+            ['Organisasi Kemahasiswaan',       20, 20, 'Completed',   'Kepengurusan UKM Robotika 2025',      'images/image2.png'],
+            ['Mentoring',                      15, 15, 'Completed',   'Mentoring Mahasiswa Baru 2025',       'images/image6.jpg'],
+            ['Talkshow Wajib BMA',             6,  6,  'Completed',   'Talkshow Wajib BMA: Career Readiness','images/image8.jpg'],
+            ['Kepanitiaan',                    10, 10, 'Completed',   'Panitia Dies Natalis UC Makassar',    'images/image10.png'],
+            ['Lain-lain',                      15, 15, 'Completed',   'Webinar Pengembangan Diri',           'images/image11.jpg'],
             // In-progress: registered but KP not yet awarded, so uncredited.
-            ['Kompetisi',                      2,  2,  'On Progress', 'Hackathon Nasional 2025'],
-            ['Pengabdian Masyarakat',          8,  8,  'On Progress', 'Bakti Sosial Desa Binaan'],
-            ['Penelitian',                     6,  6,  'On Progress', 'Publikasi PKM 2025'],
+            ['Kompetisi',                      2,  2,  'On Progress', 'Hackathon Nasional 2025',             'images/image4.jpg'],
+            ['Pengabdian Masyarakat',          8,  8,  'On Progress', 'Bakti Sosial Desa Binaan',            'images/image9.jpg'],
+            ['Penelitian',                     6,  6,  'On Progress', 'Publikasi PKM 2025',                  'images/image12.jpg'],
         ];
 
-        foreach ($plan as $i => [$category, $requirement, $kpAmount, $status, $activityName]) {
+        foreach ($plan as $i => [$category, $requirement, $kpAmount, $status, $activityName, $poster]) {
             // On-Progress participations have not been awarded yet, so they
             // contribute 0 to the KP total; completed ones credit in full.
             $credited = $status === 'Completed' ? $kpAmount : 0;
@@ -84,8 +81,8 @@ class EoctaviandHistorySeeder extends Seeder
                 'registration_link'          => 'https://forms.google.com/dummy',
                 'registration_deadline_date' => $eventDate->copy()->subDays(3)->toDateString(),
                 'registration_deadline_time' => '23:59:00',
-                'description'                => 'Dummy activity for demo/testing. Replace poster and details later.',
-                'event_poster'               => self::PLACEHOLDER_POSTER,
+                'description'                => 'Dummy activity for demo/testing.',
+                'event_poster'               => $poster,
                 // Old event: backs participation history but hidden from the
                 // browsable activity list and admin "My Activities".
                 'archived'                   => true,
