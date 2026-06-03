@@ -56,7 +56,10 @@ class DashboardController extends Controller
         $totalEarned = KP_Progress::where('user_id', $user->UserID)->sum('kp_current_amount');
         $totalRequired = 100;
 
+        // Exclude archived (old) activities — those only exist to back
+        // participation history and must not surface as live mandatory cards.
         $mandatoryActivities = Activity::where('kp_category', 'LIKE', '%Talkshow Wajib BMA%')
+                                        ->where('archived', false)
                                         ->orderBy('date', 'asc')
                                         ->get();
 
